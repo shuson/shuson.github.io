@@ -1,0 +1,30 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Nevermoi
+tagline:          'Nevermoi means never ever touch me'
+description:      '『Never』 『Moi』'
+url:              http://www.nevermoi.com
+
+author:
+  name:           'shuson'
+  email:          wlgq@hotmail.com
+
+paginate:      5
+
+# Custom vars
+version:          0.0.1
+
+# Comments
+
+comments :
+    provider : duoshuo
+    duoshuo :
+          short_name : nevermoi
+
+
