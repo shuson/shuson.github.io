@@ -4,13 +4,35 @@
  <title>Nevermoi</title>
  <link href="http://www.nevermoi.com/atom.xml" rel="self"/>
  <link href="http://www.nevermoi.com/"/>
- <updated>2015-01-17T21:06:11+08:00</updated>
+ <updated>2015-01-19T00:21:44+08:00</updated>
  <id>http://www.nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Hello World</title>
+   <link href="http://www.nevermoi.com/2015/01/18/helloworld/"/>
+   <updated>2015-01-18T00:00:00+08:00</updated>
+   <id>http://www.nevermoi.com/2015/01/18/helloworld</id>
+   <content type="html">&lt;div class=&quot;message&quot;&gt;
+&lt;small&gt;Hi there, and no more...&lt;/small&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h4&gt;This is a static markdown powered blog&lt;/h4&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;
+And this is first blog!&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+</content>
+ </entry>
  
 
 </feed>
