@@ -1,16 +1,15 @@
 ---
 layout: post
-title: Hello World
+title: How this blog starts up
 ---
 
-<div class="message">
-<small>Hi there, and no more...</small>
-</div>
-<br>
+## How does this blog start up
 
-####This is a static markdown powered blog
-<p></p>
-<br>
-And this is first blog!
+### content
+1. Install _ruby_** to Windows OS: [Ruby for Windows](http://rubyinstaller.org/)
+2. Install _gem_**, which is a ruby package manager: [Gem](https://rubygems.org/pages/download)
+⋅⋅* Update build tools using DevKit: [fast-stemmer error fixing](http://flatshaded.com/2013/05/installing-jekyll-on-windows/)
+3. Install _jekyll_**: [Jekyll](http://jekyllrb.com/docs/installation/)
+4. Config Github page: [Github Page](https://help.github.com/articles/using-jekyll-with-pages/)
 
-<br><br>
+Good luck!
