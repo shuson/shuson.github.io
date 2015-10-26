@@ -12,3 +12,6 @@ It is important in a way to master some principles of OOD: [Object Oriented Desi
 4. The Interface Segregation Principle: [Google Doc](https://drive.google.com/file/d/0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi/view)
 5. The Dependency Inversion Principle: [Google Drive](https://drive.google.com/file/d/0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz/view)
 
+
+The artical brings these to me: 
+> http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod

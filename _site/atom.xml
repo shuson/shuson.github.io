@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://www.nevermoi.com/atom.xml" rel="self"/>
  <link href="http://www.nevermoi.com/"/>
- <updated>2015-10-26T15:02:37+08:00</updated>
+ <updated>2015-10-26T15:24:15+08:00</updated>
  <id>http://www.nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -50,6 +50,12 @@
 &lt;li&gt;The Interface Segregation Principle: &lt;a href=&quot;https://drive.google.com/file/d/0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi/view&quot;&gt;Google Doc&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;The Dependency Inversion Principle: &lt;a href=&quot;https://drive.google.com/file/d/0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz/view&quot;&gt;Google Drive&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;p&gt;The artical brings these to me: &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod&lt;/p&gt;
+&lt;/blockquote&gt;
 </content>
  </entry>
  
