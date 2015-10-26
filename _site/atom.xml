@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://www.nevermoi.com/atom.xml" rel="self"/>
  <link href="http://www.nevermoi.com/"/>
- <updated>2015-10-22T12:22:16+08:00</updated>
+ <updated>2015-10-26T15:02:37+08:00</updated>
  <id>http://www.nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>How this blog starts up</title>
-   <link href="http://www.nevermoi.com/2015/01/18/helloworld/"/>
-   <updated>2015-01-18T00:00:00+08:00</updated>
-   <id>http://www.nevermoi.com/2015/01/18/helloworld</id>
+   <link href="http://www.nevermoi.com/2015/10/24/helloworld/"/>
+   <updated>2015-10-24T00:00:00+08:00</updated>
+   <id>http://www.nevermoi.com/2015/10/24/helloworld</id>
    <content type="html">&lt;h4&gt;content&lt;/h4&gt;
 
 &lt;ol&gt;
@@ -31,6 +31,25 @@
 &lt;/ol&gt;
 
 &lt;p&gt;&lt;strong&gt;Good luck!&lt;/strong&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Principles of OOD and examples</title>
+   <link href="http://www.nevermoi.com/2015/01/26/principlesofood/"/>
+   <updated>2015-01-26T00:00:00+08:00</updated>
+   <id>http://www.nevermoi.com/2015/01/26/principlesofood</id>
+   <content type="html">&lt;h3&gt;VS;PR&lt;/h3&gt;
+
+&lt;p&gt;It is important in a way to master some principles of OOD: &lt;a href=&quot;https://en.wikipedia.org/wiki/Object-oriented_design&quot;&gt;Object Oriented Design&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The Single Responsibility Principle: &lt;a href=&quot;https://drive.google.com/file/d/0ByOwmqah_nuGNHEtcU5OekdDMkk/view&quot;&gt;Google Doc&lt;/a&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;The Open Closed Principle: &lt;a href=&quot;https://drive.google.com/file/d/0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1/view&quot;&gt;Google Drive&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The Liskov Substitution Principle: &lt;a href=&quot;https://drive.google.com/file/d/0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh/view&quot;&gt;Google Doc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The Interface Segregation Principle: &lt;a href=&quot;https://drive.google.com/file/d/0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi/view&quot;&gt;Google Doc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The Dependency Inversion Principle: &lt;a href=&quot;https://drive.google.com/file/d/0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz/view&quot;&gt;Google Drive&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
 </content>
  </entry>
  
