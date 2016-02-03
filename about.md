@@ -5,7 +5,8 @@ title: About
 <br>
 
 <p class="message">
-"I am not touchable, so nevermoi"</p>
+"Aimed to be a full-stack developer"
+</p>
 
 Try these:
 
