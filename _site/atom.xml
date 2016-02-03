@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Nevermoi</title>
- <link href="http://www.nevermoi.com/atom.xml" rel="self"/>
- <link href="http://www.nevermoi.com/"/>
- <updated>2016-02-03T13:49:13+08:00</updated>
- <id>http://www.nevermoi.com</id>
+ <link href="http://nevermoi.com/atom.xml" rel="self"/>
+ <link href="http://nevermoi.com/"/>
+ <updated>2016-02-03T14:44:54+08:00</updated>
+ <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Principles of OOD and examples</title>
-   <link href="http://www.nevermoi.com/2015/01/26/principlesofood/"/>
+   <link href="http://nevermoi.com/2015/01/26/principles-of-ood/"/>
    <updated>2015-01-26T00:00:00+08:00</updated>
-   <id>http://www.nevermoi.com/2015/01/26/principlesofood</id>
+   <id>http://nevermoi.com/2015/01/26/principles-of-ood</id>
    <content type="html">&lt;h3&gt;VS;PR&lt;/h3&gt;
 
 &lt;p&gt;It is important in a way to master some principles of OOD: &lt;a href=&quot;https://en.wikipedia.org/wiki/Object-oriented_design&quot;&gt;Object Oriented Design&lt;/a&gt;&lt;/p&gt;
@@ -39,9 +39,9 @@
  
  <entry>
    <title>How this blog starts up</title>
-   <link href="http://www.nevermoi.com/2015/01/24/helloworld/"/>
+   <link href="http://nevermoi.com/2015/01/24/hello-world/"/>
    <updated>2015-01-24T00:00:00+08:00</updated>
-   <id>http://www.nevermoi.com/2015/01/24/helloworld</id>
+   <id>http://nevermoi.com/2015/01/24/hello-world</id>
    <content type="html">&lt;h4&gt;content&lt;/h4&gt;
 
 &lt;ol&gt;

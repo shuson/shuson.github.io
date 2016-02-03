@@ -4,13 +4,12 @@ highlighter:      pygments
 
 # Permalinks
 permalink:        pretty
-relative_permalinks: true
 
 # Setup
 title:            Nevermoi
 tagline:          'Nevermoi means never ever touch me'
 description:      '『Never』 『Moi』'
-url:              http://www.nevermoi.com
+url:              http://nevermoi.com
 baseurl:          ''
 paginate:         5
 
@@ -19,8 +18,6 @@ author:
   email:          wlgq@hotmail.com
   url:            https://github.com/shuson
 
-paginate:      5
-
 #theme
 theme: Lanyon
 
@@ -28,7 +25,6 @@ theme: Lanyon
 version:          0.0.2
 
 # Comments
-
 comments :
     provider : duoshuo
     duoshuo :
