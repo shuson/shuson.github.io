@@ -5,15 +5,17 @@ title: About
 <br>
 
 <p class="message">
-"Aimed to be a full-stack developer"
+"Java and JavaScript stack developer."
 </p>
 
-Try these:
+Contact me for a copy of my CV via：<br />
+[wlgq@hotmail.com](mailto:wlgq@hotmail.com)
 
-* <a href="https://github.com/shuson" target="_blank">Github</a>
-* <a href="https://twitter.com/shusonwang" target="_blank">twitter</a>
+More on:
 
-Or email：[wlgq@hotmail.com](mailto:wlgq@hotmail.com)
+<a href="https://github.com/shuson" target="_blank"><i class="fa fa-github-alt"></i> Github</a>
+<br />
+<a href="https://www.linkedin.com/in/shuson" target="_blank"><i class="fa fa-linkedin-square"></i> Linkedin</a>
 
 <br><br>
 
