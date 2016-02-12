@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-02-12T11:53:48+08:00</updated>
+ <updated>2016-02-12T13:54:20+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -12,6 +12,80 @@
  </author>
 
  
+ <entry>
+   <title>我们走一遍http中request/response head部分</title>
+   <link href="http://nevermoi.com/2016/02/13/HTTP-head-note/"/>
+   <updated>2016-02-13T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/02/13/HTTP-head-note</id>
+   <content type="html">&lt;h3 id=&quot;request-header--&quot;&gt;Request Header 解释 示例&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Accept 指定客户端能够接收的内容类型 Accept: text/plain, text/html&lt;/li&gt;
+  &lt;li&gt;Accept-Charset 浏览器可以接受的字符编码集。 Accept-Charset: iso-8859-5&lt;/li&gt;
+  &lt;li&gt;Accept-Encoding 指定浏览器可以支持的web服务器返回内容压缩编码类型。 Accept-Encoding: compress, gzip&lt;/li&gt;
+  &lt;li&gt;Accept-Language 浏览器可接受的语言 Accept-Language: en,zh&lt;/li&gt;
+  &lt;li&gt;Accept-Ranges 可以请求网页实体的一个或者多个子范围字段 Accept-Ranges: bytes&lt;/li&gt;
+  &lt;li&gt;Authorization HTTP授权的授权证书 Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==&lt;/li&gt;
+  &lt;li&gt;Cache-Control 指定请求和响应遵循的缓存机制 Cache-Control: no-cache&lt;/li&gt;
+  &lt;li&gt;Connection 表示是否需要持久连接。（HTTP 1.1默认进行持久连接） Connection: close&lt;/li&gt;
+  &lt;li&gt;Cookie HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器。 Cookie: $Version=1; Skin=new;&lt;/li&gt;
+  &lt;li&gt;Content-Length 请求的内容长度 Content-Length: 348&lt;/li&gt;
+  &lt;li&gt;Content-Type 请求的与实体对应的MIME信息 Content-Type: application/x-www-form-urlencoded&lt;/li&gt;
+  &lt;li&gt;Date 请求发送的日期和时间 Date: Tue, 15 Nov 2010 08:12:31 GMT&lt;/li&gt;
+  &lt;li&gt;Expect 请求的特定的服务器行为 Expect: 100-continue&lt;/li&gt;
+  &lt;li&gt;From 发出请求的用户的Email From: user@email.com&lt;/li&gt;
+  &lt;li&gt;Host 指定请求的服务器的域名和端口号 Host: www.zcmhi.com&lt;/li&gt;
+  &lt;li&gt;If-Match 只有请求内容与实体相匹配才有效 If-Match: “737060cd8c284d8af7ad3082f209582d”&lt;/li&gt;
+  &lt;li&gt;If-Modified-Since 如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码 If-Modified-Since: Sat, 29 Oct 2010 19:43:31 GMT&lt;/li&gt;
+  &lt;li&gt;If-None-Match 如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变 If-None-Match: “737060cd8c284d8af7ad3082f209582d”&lt;/li&gt;
+  &lt;li&gt;If-Range 如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag If-Range: “737060cd8c284d8af7ad3082f209582d”&lt;/li&gt;
+  &lt;li&gt;If-Unmodified-Since 只在实体在指定时间之后未被修改才请求成功 If-Unmodified-Since: Sat, 29 Oct 2010 19:43:31 GMT&lt;/li&gt;
+  &lt;li&gt;Max-Forwards 限制信息通过代理和网关传送的时间 Max-Forwards: 10&lt;/li&gt;
+  &lt;li&gt;Pragma 用来包含实现特定的指令 Pragma: no-cache&lt;/li&gt;
+  &lt;li&gt;Proxy-Authorization 连接到代理的授权证书 Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==&lt;/li&gt;
+  &lt;li&gt;Range 只请求实体的一部分，指定范围 Range: bytes=500-999&lt;/li&gt;
+  &lt;li&gt;Referer 先前网页的地址，当前请求网页紧随其后,即来路 Referer: http://www.zcmhi.com/archives/71.html&lt;/li&gt;
+  &lt;li&gt;TE 客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息 TE: trailers,deflate;q=0.5&lt;/li&gt;
+  &lt;li&gt;Upgrade 向服务器指定某种传输协议以便服务器进行转换（如果支持） Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11&lt;/li&gt;
+  &lt;li&gt;User-Agent User-Agent的内容包含发出请求的用户信息 User-Agent: Mozilla/5.0 (Linux; X11)&lt;/li&gt;
+  &lt;li&gt;Via 通知中间网关或代理服务器地址，通信协议 Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)&lt;/li&gt;
+  &lt;li&gt;Warning 关于消息实体的警告信息 Warn: 199 Miscellaneous warning&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;response-header--&quot;&gt;Response Header 解释 示例&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Accept-Ranges 表明服务器是否支持指定范围请求及哪种类型的分段请求 Accept-Ranges: bytes&lt;/li&gt;
+  &lt;li&gt;Age 从原始服务器到代理缓存形成的估算时间（以秒计，非负） Age: 12&lt;/li&gt;
+  &lt;li&gt;Allow 对某网络资源的有效的请求行为，不允许则返回405 Allow: GET, HEAD&lt;/li&gt;
+  &lt;li&gt;Cache-Control 告诉所有的缓存机制是否可以缓存及哪种类型 Cache-Control: no-cache&lt;/li&gt;
+  &lt;li&gt;Content-Encoding web服务器支持的返回内容压缩编码类型。 Content-Encoding: gzip&lt;/li&gt;
+  &lt;li&gt;Content-Language 响应体的语言 Content-Language: en,zh&lt;/li&gt;
+  &lt;li&gt;Content-Length 响应体的长度 Content-Length: 348&lt;/li&gt;
+  &lt;li&gt;Content-Location 请求资源可替代的备用的另一地址 Content-Location: /index.htm&lt;/li&gt;
+  &lt;li&gt;Content-MD5 返回资源的MD5校验值 Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==&lt;/li&gt;
+  &lt;li&gt;Content-Range 在整个返回体中本部分的字节位置 Content-Range: bytes 21010-47021/47022&lt;/li&gt;
+  &lt;li&gt;Content-Type 返回内容的MIME类型 Content-Type: text/html; charset=utf-8&lt;/li&gt;
+  &lt;li&gt;Date 原始服务器消息发出的时间 Date: Tue, 15 Nov 2010 08:12:31 GMT&lt;/li&gt;
+  &lt;li&gt;ETag 请求变量的实体标签的当前值 ETag: “737060cd8c284d8af7ad3082f209582d”&lt;/li&gt;
+  &lt;li&gt;Expires 响应过期的日期和时间 Expires: Thu, 01 Dec 2010 16:00:00 GMT&lt;/li&gt;
+  &lt;li&gt;Last-Modified 请求资源的最后修改时间 Last-Modified: Tue, 15 Nov 2010 12:45:26 GMT&lt;/li&gt;
+  &lt;li&gt;Location 用来重定向接收方到非请求URL的位置来完成请求或标识新的资源 Location: http://www.zcmhi.com/archives/94.html&lt;/li&gt;
+  &lt;li&gt;Pragma 包括实现特定的指令，它可应用到响应链上的任何接收方 Pragma: no-cache&lt;/li&gt;
+  &lt;li&gt;Proxy-Authenticate 它指出认证方案和可应用到代理的该URL上的参数 Proxy-Authenticate: Basic&lt;/li&gt;
+  &lt;li&gt;refresh 应用于重定向或一个新的资源被创造，在5秒之后重定向（由网景提出，被大部分浏览器支持）&lt;/li&gt;
+  &lt;li&gt;Refresh: 5; url=http://www.zcmhi.com/archives/94.html&lt;/li&gt;
+  &lt;li&gt;Retry-After 如果实体暂时不可取，通知客户端在指定时间之后再次尝试 Retry-After: 120&lt;/li&gt;
+  &lt;li&gt;Server web服务器软件名称 Server: Apache/1.3.27 (Unix) (Red-Hat/Linux)&lt;/li&gt;
+  &lt;li&gt;Set-Cookie 设置Http Cookie Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1&lt;/li&gt;
+  &lt;li&gt;Trailer 指出头域在分块传输编码的尾部存在 Trailer: Max-Forwards&lt;/li&gt;
+  &lt;li&gt;Transfer-Encoding 文件传输编码 Transfer-Encoding:chunked&lt;/li&gt;
+  &lt;li&gt;Vary 告诉下游代理是使用缓存响应还是从原始服务器请求 Vary: *&lt;/li&gt;
+  &lt;li&gt;Via 告知代理客户端响应是通过哪里发送的 Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)&lt;/li&gt;
+  &lt;li&gt;Warning 警告实体可能存在的问题 Warning: 199 Miscellaneous warning&lt;/li&gt;
+  &lt;li&gt;WWW-Authenticate 表明客户端请求实体应该使用的授权方案 WWW-Authenticate: Basic&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
+
  <entry>
    <title>二进制表示float-point</title>
    <link href="http://nevermoi.com/2016/02/12/float-point-note/"/>
@@ -42,7 +116,7 @@
     &lt;p&gt;S没啥好说的， 要么1，要么0.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;先说M，因为比E简单。我们知道M的值介于1和2之间，IEEE 754就觉得 M=1.xxxxx中的1也可以省略出来，于是只是保存xxxxx部分，读出来的时候再加上1。于是在32位计算机中，M的有效位变成了24位；64位系统中变成了53位。&lt;/p&gt;
+    &lt;p&gt;先说M，因为比E简单。我们知道M的值介于1和2之间，IEEE 754就觉得 M=1.xxxxx中的1也可以省略掉，于是就只保存xxxxx部分，读出来的时候再加上1。于是，在32位计算机中，M的有效位变成了24位；64位系统中变成了53位。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;说到E，在32位和64位计算机中，它的位数不同所以真实值也不同，但又因为其有正负之分，为了平均表示正负，IEEE 754 规定要减去一个中位数。8位E的情况下，E可以表示0～255，其中位数为 127；11位E的情况下，E可以表示0～2047，其中位数为1023。这个中位数就是正负的分界线。&lt;/p&gt;
@@ -51,9 +125,18 @@
 
 &lt;p&gt;例如：101 = (-1)^0 x 1.01 x 2^2，E=2，在保存成64位的时候会变成2+1023=1025 (1000 0000 001 );&lt;/p&gt;
 
-&lt;p&gt;接下来我解释一下为啥javascript中 &lt;code&gt;0.5-0.1=0.4&lt;/code&gt; 而 &lt;code&gt;0.4-0.1=0.30000000000...04&lt;/code&gt; 这样怪东西。&lt;/p&gt;
+&lt;p&gt;接下来我解释一下为啥javascript中 &lt;code&gt;0.5-0.25=0.25&lt;/code&gt; 而 &lt;code&gt;0.4-0.1=0.30000000000...04&lt;/code&gt; 这样怪东西。&lt;/p&gt;
 
-&lt;p&gt;一句话，因为在计算机中不能用二进制precisely表示0.3。于是就floating了。&lt;/p&gt;
+&lt;p&gt;首先呢，有两个概念，一个是定点小数，一个是浮点小数。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;定点小数有个问题是，一些小数不可能用二进制准确表达出来，比如说0.2。总有舍弃一些末位。在javascript中，能在console显示或者其他print出来的都是定点小数。&lt;/li&gt;
+  &lt;li&gt;浮点小数就相对精确一些，因为它舍弃的位更低，所以表示的范围也更大一点。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;一个非2的幂级数的倒数的数， 无论定点还是浮点小数，都不能在计算机中100%准确表示。&lt;/p&gt;
+
+&lt;p&gt;所以减出来就不是精确的了。&lt;/p&gt;
 </content>
  </entry>
  
