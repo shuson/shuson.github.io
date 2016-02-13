@@ -2,9 +2,9 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Nevermoi</title>
- <link href="http://nevermoi.com/atom.xml" rel="self"/>
- <link href="http://nevermoi.com/"/>
- <updated>2016-02-13T12:16:46+08:00</updated>
+ <link href="http://nevermoi.comhttp://www.nevermoi.com/atom.xml" rel="self"/>
+ <link href="http://nevermoi.comhttp://www.nevermoi.com/"/>
+ <updated>2016-02-13T12:37:50+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -16,7 +16,7 @@
    <title>我们走一遍http中request/response header部分</title>
    <link href="http://nevermoi.com/2016/02/13/http-header-note/"/>
    <updated>2016-02-13T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2016/02/13/http-header-note</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2016/02/13/http-header-note</id>
    <content type="html">&lt;h3 id=&quot;request-header--&quot;&gt;Request Header 解释 示例&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Accept 指定客户端能够接收的内容类型 Accept: text/plain, text/html&lt;/li&gt;
@@ -90,7 +90,7 @@
    <title>二进制表示float-point</title>
    <link href="http://nevermoi.com/2016/02/12/float-point-note/"/>
    <updated>2016-02-12T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2016/02/12/float-point-note</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2016/02/12/float-point-note</id>
    <content type="html">&lt;p&gt;在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;int i = 5;&lt;/code&gt;&lt;/p&gt;
@@ -145,7 +145,7 @@
    <title>Principles of OOD and examples</title>
    <link href="http://nevermoi.com/2015/01/26/principles-of-ood/"/>
    <updated>2015-01-26T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2015/01/26/principles-of-ood</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2015/01/26/principles-of-ood</id>
    <content type="html">&lt;h3 id=&quot;vspr&quot;&gt;VS;PR&lt;/h3&gt;
 &lt;p&gt;It is important in a way to master some principles of OOD: &lt;a href=&quot;https://en.wikipedia.org/wiki/Object-oriented_design&quot;&gt;Object Oriented Design&lt;/a&gt;&lt;/p&gt;
 
@@ -166,7 +166,7 @@
    <title>How this blog starts up</title>
    <link href="http://nevermoi.com/2015/01/24/hello-world/"/>
    <updated>2015-01-24T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2015/01/24/hello-world</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2015/01/24/hello-world</id>
    <content type="html">&lt;h4 id=&quot;content&quot;&gt;content&lt;/h4&gt;
 &lt;ol&gt;
   &lt;li&gt;Install &lt;em&gt;ruby&lt;/em&gt; to Windows OS: &lt;a href=&quot;http://rubyinstaller.org/&quot;&gt;Ruby for Windows&lt;/a&gt;&lt;/li&gt;
