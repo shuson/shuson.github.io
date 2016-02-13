@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-02-12T13:54:20+08:00</updated>
+ <updated>2016-02-13T12:16:46+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -13,10 +13,10 @@
 
  
  <entry>
-   <title>我们走一遍http中request/response head部分</title>
-   <link href="http://nevermoi.com/2016/02/13/HTTP-head-note/"/>
+   <title>我们走一遍http中request/response header部分</title>
+   <link href="http://nevermoi.com/2016/02/13/http-header-note/"/>
    <updated>2016-02-13T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2016/02/13/HTTP-head-note</id>
+   <id>http://nevermoi.com/2016/02/13/http-header-note</id>
    <content type="html">&lt;h3 id=&quot;request-header--&quot;&gt;Request Header 解释 示例&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Accept 指定客户端能够接收的内容类型 Accept: text/plain, text/html&lt;/li&gt;
@@ -85,7 +85,7 @@
 &lt;/ul&gt;
 </content>
  </entry>
-
+ 
  <entry>
    <title>二进制表示float-point</title>
    <link href="http://nevermoi.com/2016/02/12/float-point-note/"/>
@@ -93,7 +93,7 @@
    <id>http://nevermoi.com/2016/02/12/float-point-note</id>
    <content type="html">&lt;p&gt;在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;int i = 5;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;int i = 5;&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;上面的statement声明了一个int型变量 i，并赋值为 5，其二进制为101。在32位计算机中，4个字节表示int变量，所以，5被以32位二进制的方式保存在了计算机里 ”00000000 00000000 00000000 00000101“，其16进制表示为 0x00000005。&lt;/p&gt;
 
@@ -101,15 +101,16 @@
 
 &lt;p&gt;根据 ”IEEE 754“ 国际标准，任意一个二进制浮点数V可以表示为：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;V = (-1)^S x M x 2^E&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;V = (-1)^S x M x 2^E&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;S M E这三个将被存入计算机内部。 其中S是符号位，当S=0时，表示正数，S=1时，表示负数。M是有效数字，2&amp;gt;M&amp;gt;=1。E是指数位。&lt;/p&gt;
 
 &lt;p&gt;上面的例子中 i 的十进制是 5， 二进制为 101， 表示成IEEE 754形式为：(-1)^0 x 1.01 x 2^2。 则：S = 0, M = 1.01, E = 2。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;1. 在32位计算机中，最高位是S=0，接下来的8位为指数E=2 (0000 0010)，剩下的23位是M=1.01
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. 在32位计算机中，最高位是S=0，接下来的8位为指数E=2 (0000 0010)，剩下的23位是M=1.01
 2. 在64位计算机中，最高位是S=0，接下来的11位为指数E=2 (0000 0000 010)，剩下的52位是M=1.01
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;
@@ -125,7 +126,7 @@
 
 &lt;p&gt;例如：101 = (-1)^0 x 1.01 x 2^2，E=2，在保存成64位的时候会变成2+1023=1025 (1000 0000 001 );&lt;/p&gt;
 
-&lt;p&gt;接下来我解释一下为啥javascript中 &lt;code&gt;0.5-0.25=0.25&lt;/code&gt; 而 &lt;code&gt;0.4-0.1=0.30000000000...04&lt;/code&gt; 这样怪东西。&lt;/p&gt;
+&lt;p&gt;接下来我解释一下为啥javascript中 &lt;code class=&quot;highlighter-rouge&quot;&gt;0.5-0.25=0.25&lt;/code&gt; 而 &lt;code class=&quot;highlighter-rouge&quot;&gt;0.4-0.1=0.30000000000...04&lt;/code&gt; 这样怪东西。&lt;/p&gt;
 
 &lt;p&gt;首先呢，有两个概念，一个是定点小数，一个是浮点小数。&lt;/p&gt;
 

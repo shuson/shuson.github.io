@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
     <title>
-         Nevermoi &middot; Nevermoi means never ever touch me 
+         我们走一遍http中request/response header部分 &middot; Nevermoi 
     </title>
 
     <!-- CSS -->
@@ -88,18 +88,10 @@
         </div>
 
         <div class="container content">
-            <div class="posts">
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2016/02/13/http-header-note/">
-        我们走一遍http中request/response header部分
-      </a>
-    </h1>
-
-    <span class="post-date">13 Feb 2016</span>
-
-    <h3 id="request-header--">Request Header 解释 示例</h3>
+            <div class="post">
+  <h1 class="post-title">我们走一遍http中request/response header部分</h1>
+  <span class="post-date">13 Feb 2016</span>
+  <h3 id="request-header--">Request Header 解释 示例</h3>
 <ul>
   <li>Accept 指定客户端能够接收的内容类型 Accept: text/plain, text/html</li>
   <li>Accept-Charset 浏览器可以接受的字符编码集。 Accept-Charset: iso-8859-5</li>
@@ -166,126 +158,40 @@
   <li>WWW-Authenticate 表明客户端请求实体应该使用的授权方案 WWW-Authenticate: Basic</li>
 </ul>
 
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2016/02/12/float-point-note/">
-        二进制表示float-point
-      </a>
-    </h1>
-
-    <span class="post-date">12 Feb 2016</span>
-
-    <p>在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：</p>
-
-<p><code class="highlighter-rouge">int i = 5;</code></p>
-
-<p>上面的statement声明了一个int型变量 i，并赋值为 5，其二进制为101。在32位计算机中，4个字节表示int变量，所以，5被以32位二进制的方式保存在了计算机里 ”00000000 00000000 00000000 00000101“，其16进制表示为 0x00000005。</p>
-
-<p>那么当这个int型的i被转换为float型的时候，怎么表示？</p>
-
-<p>根据 ”IEEE 754“ 国际标准，任意一个二进制浮点数V可以表示为：</p>
-
-<p><code class="highlighter-rouge">V = (-1)^S x M x 2^E</code></p>
-
-<p>S M E这三个将被存入计算机内部。 其中S是符号位，当S=0时，表示正数，S=1时，表示负数。M是有效数字，2&gt;M&gt;=1。E是指数位。</p>
-
-<p>上面的例子中 i 的十进制是 5， 二进制为 101， 表示成IEEE 754形式为：(-1)^0 x 1.01 x 2^2。 则：S = 0, M = 1.01, E = 2。</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>1. 在32位计算机中，最高位是S=0，接下来的8位为指数E=2 (0000 0010)，剩下的23位是M=1.01
-2. 在64位计算机中，最高位是S=0，接下来的11位为指数E=2 (0000 0000 010)，剩下的52位是M=1.01
-</code></pre>
 </div>
 
-<ol>
-  <li>
-    <p>S没啥好说的， 要么1，要么0.</p>
-  </li>
-  <li>
-    <p>先说M，因为比E简单。我们知道M的值介于1和2之间，IEEE 754就觉得 M=1.xxxxx中的1也可以省略掉，于是就只保存xxxxx部分，读出来的时候再加上1。于是，在32位计算机中，M的有效位变成了24位；64位系统中变成了53位。</p>
-  </li>
-  <li>
-    <p>说到E，在32位和64位计算机中，它的位数不同所以真实值也不同，但又因为其有正负之分，为了平均表示正负，IEEE 754 规定要减去一个中位数。8位E的情况下，E可以表示0～255，其中位数为 127；11位E的情况下，E可以表示0～2047，其中位数为1023。这个中位数就是正负的分界线。</p>
-  </li>
-</ol>
-
-<p>例如：101 = (-1)^0 x 1.01 x 2^2，E=2，在保存成64位的时候会变成2+1023=1025 (1000 0000 001 );</p>
-
-<p>接下来我解释一下为啥javascript中 <code class="highlighter-rouge">0.5-0.25=0.25</code> 而 <code class="highlighter-rouge">0.4-0.1=0.30000000000...04</code> 这样怪东西。</p>
-
-<p>首先呢，有两个概念，一个是定点小数，一个是浮点小数。</p>
-
-<ol>
-  <li>定点小数有个问题是，一些小数不可能用二进制准确表达出来，比如说0.2。总有舍弃一些末位。在javascript中，能在console显示或者其他print出来的都是定点小数。</li>
-  <li>浮点小数就相对精确一些，因为它舍弃的位更低，所以表示的范围也更大一点。</li>
-</ol>
-
-<p>一个非2的幂级数的倒数的数， 无论定点还是浮点小数，都不能在计算机中100%准确表示。</p>
-
-<p>所以减出来就不是精确的了。</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2015/01/26/principles-of-ood/">
-        Principles of OOD and examples
-      </a>
-    </h1>
-
-    <span class="post-date">26 Jan 2015</span>
-
-    <h3 id="vspr">VS;PR</h3>
-<p>It is important in a way to master some principles of OOD: <a href="https://en.wikipedia.org/wiki/Object-oriented_design">Object Oriented Design</a></p>
-
-<ol>
-  <li>The Single Responsibility Principle: <a href="https://drive.google.com/file/d/0ByOwmqah_nuGNHEtcU5OekdDMkk/view">Google Doc</a></li>
-  <li>The Open Closed Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1/view">Google Drive</a></li>
-  <li>The Liskov Substitution Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh/view">Google Doc</a></li>
-  <li>The Interface Segregation Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi/view">Google Doc</a></li>
-  <li>The Dependency Inversion Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz/view">Google Drive</a></li>
-</ol>
-
-<p>The artical brings these to me: 
-&gt; http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2015/01/24/hello-world/">
-        How this blog starts up
-      </a>
-    </h1>
-
-    <span class="post-date">24 Jan 2015</span>
-
-    <h4 id="content">content</h4>
-<ol>
-  <li>Install <em>ruby</em> to Windows OS: <a href="http://rubyinstaller.org/">Ruby for Windows</a></li>
-  <li>Install <em>gem</em>, which is a ruby package manager: <a href="https://rubygems.org/pages/download">Gem</a>
-    <ul>
-      <li>Update build tools using its DevKit: <a href="http://flatshaded.com/2013/05/installing-jekyll-on-windows/">fast-stemmer error fixing</a></li>
-    </ul>
-  </li>
-  <li>Install <em>jekyll</em>: <a href="http://jekyllrb.com/docs/installation/">Jekyll</a></li>
-  <li>Config <em>Github</em> page: <a href="https://help.github.com/articles/using-jekyll-with-pages/">Github Page</a></li>
-</ol>
-
-<p><strong>Good luck!</strong></p>
-
-  </div>
-  
-</div>
-
-<div class="pagination">
-  
-    <span class="pagination-item older">Older</span>
-  
-  
-    <span class="pagination-item newer">Newer</span>
-  
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="//2016/02/12/float-point-note/">
+            二进制表示float-point
+            <small>12 Feb 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="//2015/01/26/principles-of-ood/">
+            Principles of OOD and examples
+            <small>26 Jan 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="//2015/01/24/hello-world/">
+            How this blog starts up
+            <small>24 Jan 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
 </div>
 
         </div>

@@ -18,6 +18,10 @@ author:
   email:          wlgq@hotmail.com
   url:            https://github.com/shuson
 
+#gems for features
+gems:
+  - jekyll-paginate
+
 #theme
 theme: Lanyon
 
@@ -29,5 +33,3 @@ comments :
     provider : duoshuo
     duoshuo :
           short_name : nevermoi
-
-
