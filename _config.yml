@@ -10,7 +10,7 @@ title:            Nevermoi
 tagline:          Nevermoi means never ever touch me
 description:      '『Never』 『Moi』'
 url:              http://nevermoi.com
-baseurl:          http://www.nevermoi.com
+baseurl:          ""
 paginate:         5
 
 author:

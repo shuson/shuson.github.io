@@ -14,16 +14,16 @@
     </title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/poole.css">
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/syntax.css">
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/lanyon.css">
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/poole.css">
+    <link rel="stylesheet" href="/public/css/syntax.css">
+    <link rel="stylesheet" href="/public/css/lanyon.css">
+    <link rel="stylesheet" href="/public/css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Icons -->
-    <link rel="logo" sizes="144x144" href="http://www.nevermoi.com/public/logo.png">
-    <link rel="shortcut icon" href="http://www.nevermoi.com/public/favicon.png">
+    <link rel="logo" sizes="144x144" href="/public/logo.png">
+    <link rel="shortcut icon" href="/public/favicon.png">
 
     <!-- RSS -->
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -43,7 +43,7 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a class="sidebar-nav-item" href="http://www.nevermoi.com/">Home</a>
+        <a class="sidebar-nav-item" href="/">Home</a>
 
 
 
@@ -82,7 +82,7 @@
         <div class="masthead">
             <div class="container">
                 <h3 class="masthead-title">
-            <a href="http://www.nevermoi.com/" title="Home">Nevermoi</a>
+            <a href="/" title="Home">Nevermoi</a>
             <small>Nevermoi means never ever touch me</small>
           </h3>
             </div>
@@ -218,29 +218,38 @@
 </tr>
 </tbody></table>
 
-<p>Here are the steps intepreted:
-1. given 2 strings: s1, s2, make them to char array:
-    <code>
-    char[] seq1 = s1.toCharArray();
-    char[] seq2 = s2.toCharArray();
-    int i = seq1.length;
-    int j = seq2.length;
-   </code>
-2. create 2 dimensional array using seq1, seq2:
-    <code>
-    char[][] matrix = new char[i][j]
-   </code>
-3. from tail to head, we do:
-    ```
-    function lcs(matrix, seq1, seq2, i, j):
-    if i == 0 or j == 0: return “ “;
-    else if seq1[i-1] == seq2[j-1]: return lcs(matrix, seq1, seq2, i, j) + seq1[i-1];
-    else:
-        if matrix[i][j-1] &gt; matrix[i-1][j]: return lcs(matrix, seq1, seq2, i, j-1)
-        else lcs(matrix, seq1, seq2, i-1, j)</p>
+<p>Here are the steps intepreted:</p>
 
-<pre><code>```
-</code></pre>
+<ul>
+  <li>given 2 strings: s1, s2, make them to char array:</li>
+</ul>
+
+<p><code>char[] seq1 = s1.toCharArray();</code></p>
+
+<p><code>char[] seq2 = s2.toCharArray();</code></p>
+
+<p><code>int i = seq1.length;</code></p>
+
+<p><code>int j = seq2.length;</code></p>
+
+<ul>
+  <li>create 2 dimensional array using seq1, seq2:</li>
+</ul>
+
+<p><code>char[][] matrix = new char[i][j]</code></p>
+
+<ul>
+  <li>from tail to head, we do:</li>
+</ul>
+
+<p><code>java
+function lcs(matrix, seq1, seq2, i, j):
+if i == 0 or j == 0: return " ";
+else if seq1[i-1] == seq2[j-1]: return lcs(matrix, seq1, seq2, i, j) + seq1[i-1];
+else:
+    if matrix[i][j-1] &gt; matrix[i-1][j]: return lcs(matrix, seq1, seq2, i, j-1)
+    else lcs(matrix, seq1, seq2, i-1, j)
+</code></p>
 
 </div>
 
@@ -250,7 +259,7 @@
 
       <li>
         <h3>
-          <a href="http://www.nevermoi.com/2016/02/13/http-header-note/">
+          <a href="/2016/02/13/http-header-note/">
             我们走一遍http中request/response header部分
             <small>13 Feb 2016</small>
           </a>
@@ -259,7 +268,7 @@
 
       <li>
         <h3>
-          <a href="http://www.nevermoi.com/2016/02/12/float-point-note/">
+          <a href="/2016/02/12/float-point-note/">
             二进制表示float-point
             <small>12 Feb 2016</small>
           </a>
@@ -268,7 +277,7 @@
 
       <li>
         <h3>
-          <a href="http://www.nevermoi.com/2015/01/26/principles-of-ood/">
+          <a href="/2015/01/26/principles-of-ood/">
             Principles of OOD and examples
             <small>26 Jan 2015</small>
           </a>
