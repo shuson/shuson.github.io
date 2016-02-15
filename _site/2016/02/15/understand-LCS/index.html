@@ -224,25 +224,26 @@
   <li>given 2 strings: s1, s2, make them to char array:</li>
 </ul>
 
-<p><code>char[] seq1 = s1.toCharArray();</code></p>
-
-<p><code>char[] seq2 = s2.toCharArray();</code></p>
-
-<p><code>int i = seq1.length;</code></p>
-
-<p><code>int j = seq2.length;</code></p>
+<p><code>
+char[] seq1 = s1.toCharArray();
+char[] seq2 = s2.toCharArray();
+int i = seq1.length;
+int j = seq2.length;
+</code></p>
 
 <ul>
   <li>create 2 dimensional array using seq1, seq2:</li>
 </ul>
 
-<p><code>char[][] matrix = new char[i][j]</code></p>
+<p><code>
+char[][] matrix = new char[i][j]
+</code></p>
 
 <ul>
   <li>from tail to head, we do:</li>
 </ul>
 
-<p><code>java
+<p><code>
 function lcs(matrix, seq1, seq2, i, j):
 if i == 0 or j == 0: return " ";
 else if seq1[i-1] == seq2[j-1]: return lcs(matrix, seq1, seq2, i, j) + seq1[i-1];

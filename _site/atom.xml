@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-02-15T15:06:50+08:00</updated>
+ <updated>2016-02-15T15:08:14+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -149,25 +149,26 @@
   &lt;li&gt;given 2 strings: s1, s2, make them to char array:&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;char[] seq1 = s1.toCharArray();&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;char[] seq2 = s2.toCharArray();&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;int i = seq1.length;&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;int j = seq2.length;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;
+char[] seq1 = s1.toCharArray();
+char[] seq2 = s2.toCharArray();
+int i = seq1.length;
+int j = seq2.length;
+&lt;/code&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;create 2 dimensional array using seq1, seq2:&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;char[][] matrix = new char[i][j]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;
+char[][] matrix = new char[i][j]
+&lt;/code&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;from tail to head, we do:&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;java
+&lt;p&gt;&lt;code&gt;
 function lcs(matrix, seq1, seq2, i, j):
 if i == 0 or j == 0: return &quot; &quot;;
 else if seq1[i-1] == seq2[j-1]: return lcs(matrix, seq1, seq2, i, j) + seq1[i-1];
