@@ -126,3 +126,26 @@ The table below shows the steps of generating LCS.
 <td style="background: yellow">4</td>
 </tr>
 </tbody></table>
+
+Here are the steps intepreted:
+1. given 2 strings: s1, s2, make them to char array:
+    ``` 
+    char[] seq1 = s1.toCharArray();
+    char[] seq2 = s2.toCharArray();
+    int i = seq1.length;
+    int j = seq2.length;
+    ```
+2. create 2 dimensional array using seq1, seq2:
+    ```
+    char[][] matrix = new char[i][j]
+    ```
+3. from tail to head, we do:
+    ```
+    function lcs(matrix, seq1, seq2, i, j):
+    if i == 0 or j == 0: return " ";
+    else if seq1[i-1] == seq2[j-1]: return lcs(matrix, seq1, seq2, i, j) + seq1[i-1];
+    else:
+        if matrix[i][j-1] > matrix[i-1][j]: return lcs(matrix, seq1, seq2, i, j-1)
+        else lcs(matrix, seq1, seq2, i-1, j)
+    
+    ```

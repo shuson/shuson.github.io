@@ -2,9 +2,9 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Nevermoi</title>
- <link href="http://nevermoi.com/atom.xml" rel="self"/>
- <link href="http://nevermoi.com/"/>
- <updated>2016-02-15T11:43:48+08:00</updated>
+ <link href="http://nevermoi.comhttp://www.nevermoi.com/atom.xml" rel="self"/>
+ <link href="http://nevermoi.comhttp://www.nevermoi.com/"/>
+ <updated>2016-02-15T14:57:34+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -16,8 +16,14 @@
    <title>Understand Longest Common Subsequence</title>
    <link href="http://nevermoi.com/2016/02/15/understand-LCS/"/>
    <updated>2016-02-15T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2016/02/15/understand-LCS</id>
-   <content type="html">&lt;table class=&quot;wikitable&quot; style=&quot;text-align: center;&quot;&gt;
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2016/02/15/understand-LCS</id>
+   <content type="html">&lt;blockquote&gt;
+  &lt;p&gt;source &lt;a href=&quot;https://en.wikipedia.org/wiki/Longest_common_subsequence_problem&quot;&gt;wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The table below shows the steps of generating LCS.&lt;/p&gt;
+
+&lt;table style=&quot;text-align: center;&quot;&gt;
 &lt;tbody&gt;&lt;tr&gt;
 &lt;th colspan=&quot;2&quot; rowspan=&quot;2&quot;&gt;&lt;/th&gt;
 &lt;th&gt;0&lt;/th&gt;
@@ -136,6 +142,30 @@
 &lt;td style=&quot;background: yellow&quot;&gt;4&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;Here are the steps intepreted:
+1. given 2 strings: s1, s2, make them to char array:
+    &lt;code&gt;
+    char[] seq1 = s1.toCharArray();
+    char[] seq2 = s2.toCharArray();
+    int i = seq1.length;
+    int j = seq2.length;
+   &lt;/code&gt;
+2. create 2 dimensional array using seq1, seq2:
+    &lt;code&gt;
+    char[][] matrix = new char[i][j]
+   &lt;/code&gt;
+3. from tail to head, we do:
+    ```
+    function lcs(matrix, seq1, seq2, i, j):
+    if i == 0 or j == 0: return “ “;
+    else if seq1[i-1] == seq2[j-1]: return lcs(matrix, seq1, seq2, i, j) + seq1[i-1];
+    else:
+        if matrix[i][j-1] &amp;gt; matrix[i-1][j]: return lcs(matrix, seq1, seq2, i, j-1)
+        else lcs(matrix, seq1, seq2, i-1, j)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;```
+&lt;/code&gt;&lt;/pre&gt;
 </content>
  </entry>
 
@@ -143,7 +173,7 @@
    <title>我们走一遍http中request/response header部分</title>
    <link href="http://nevermoi.com/2016/02/13/http-header-note/"/>
    <updated>2016-02-13T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2016/02/13/http-header-note</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2016/02/13/http-header-note</id>
    <content type="html">&lt;h3 id=&quot;request-header--&quot;&gt;Request Header 解释 示例&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Accept 指定客户端能够接收的内容类型 Accept: text/plain, text/html&lt;/li&gt;
@@ -217,7 +247,7 @@
    <title>二进制表示float-point</title>
    <link href="http://nevermoi.com/2016/02/12/float-point-note/"/>
    <updated>2016-02-12T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2016/02/12/float-point-note</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2016/02/12/float-point-note</id>
    <content type="html">&lt;p&gt;在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;int i = 5;&lt;/code&gt;&lt;/p&gt;
@@ -271,7 +301,7 @@
    <title>Principles of OOD and examples</title>
    <link href="http://nevermoi.com/2015/01/26/principles-of-ood/"/>
    <updated>2015-01-26T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2015/01/26/principles-of-ood</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2015/01/26/principles-of-ood</id>
    <content type="html">&lt;h3 id=&quot;vspr&quot;&gt;VS;PR&lt;/h3&gt;
 &lt;p&gt;It is important in a way to master some principles of OOD: &lt;a href=&quot;https://en.wikipedia.org/wiki/Object-oriented_design&quot;&gt;Object Oriented Design&lt;/a&gt;&lt;/p&gt;
 
@@ -292,7 +322,7 @@
    <title>How this blog starts up</title>
    <link href="http://nevermoi.com/2015/01/24/hello-world/"/>
    <updated>2015-01-24T00:00:00+08:00</updated>
-   <id>http://nevermoi.com/2015/01/24/hello-world</id>
+   <id>http://nevermoi.comhttp://www.nevermoi.com/2015/01/24/hello-world</id>
    <content type="html">&lt;h4 id=&quot;content&quot;&gt;content&lt;/h4&gt;
 &lt;ol&gt;
   &lt;li&gt;Install &lt;em&gt;ruby&lt;/em&gt; to Windows OS: &lt;a href=&quot;http://rubyinstaller.org/&quot;&gt;Ruby for Windows&lt;/a&gt;&lt;/li&gt;
