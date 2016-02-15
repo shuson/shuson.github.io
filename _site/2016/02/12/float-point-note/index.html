@@ -14,15 +14,15 @@
     </title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/poole.css">
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/syntax.css">
-    <link rel="stylesheet" href="http://www.nevermoi.com/public/css/lanyon.css">
+    <link rel="stylesheet" href="/public/css/poole.css">
+    <link rel="stylesheet" href="/public/css/syntax.css">
+    <link rel="stylesheet" href="/public/css/lanyon.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Icons -->
-    <link rel="logo" sizes="144x144" href="http://www.nevermoi.com/public/logo.png">
-    <link rel="shortcut icon" href="http://www.nevermoi.com/public/favicon.png">
+    <link rel="logo" sizes="144x144" href="/public/logo.png">
+    <link rel="shortcut icon" href="/public/favicon.png">
 
     <!-- RSS -->
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
@@ -42,7 +42,7 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a class="sidebar-nav-item" href="http://www.nevermoi.com/">Home</a>
+        <a class="sidebar-nav-item" href="/">Home</a>
         
         
         
@@ -81,7 +81,7 @@
         <div class="masthead">
             <div class="container">
                 <h3 class="masthead-title">
-            <a href="http://www.nevermoi.com/" title="Home">Nevermoi</a>
+            <a href="/" title="Home">Nevermoi</a>
             <small>Nevermoi means never ever touch me</small>
           </h3>
             </div>
@@ -93,7 +93,7 @@
   <span class="post-date">12 Feb 2016</span>
   <p>在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：</p>
 
-<p><code class="highlighter-rouge">int i = 5;</code></p>
+<p><code>int i = 5;</code></p>
 
 <p>上面的statement声明了一个int型变量 i，并赋值为 5，其二进制为101。在32位计算机中，4个字节表示int变量，所以，5被以32位二进制的方式保存在了计算机里 ”00000000 00000000 00000000 00000101“，其16进制表示为 0x00000005。</p>
 
@@ -101,16 +101,15 @@
 
 <p>根据 ”IEEE 754“ 国际标准，任意一个二进制浮点数V可以表示为：</p>
 
-<p><code class="highlighter-rouge">V = (-1)^S x M x 2^E</code></p>
+<p><code>V = (-1)^S x M x 2^E</code></p>
 
 <p>S M E这三个将被存入计算机内部。 其中S是符号位，当S=0时，表示正数，S=1时，表示负数。M是有效数字，2&gt;M&gt;=1。E是指数位。</p>
 
 <p>上面的例子中 i 的十进制是 5， 二进制为 101， 表示成IEEE 754形式为：(-1)^0 x 1.01 x 2^2。 则：S = 0, M = 1.01, E = 2。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1. 在32位计算机中，最高位是S=0，接下来的8位为指数E=2 (0000 0010)，剩下的23位是M=1.01
+<pre><code>1. 在32位计算机中，最高位是S=0，接下来的8位为指数E=2 (0000 0010)，剩下的23位是M=1.01
 2. 在64位计算机中，最高位是S=0，接下来的11位为指数E=2 (0000 0000 010)，剩下的52位是M=1.01
 </code></pre>
-</div>
 
 <ol>
   <li>
@@ -126,7 +125,7 @@
 
 <p>例如：101 = (-1)^0 x 1.01 x 2^2，E=2，在保存成64位的时候会变成2+1023=1025 (1000 0000 001 );</p>
 
-<p>接下来我解释一下为啥javascript中 <code class="highlighter-rouge">0.5-0.25=0.25</code> 而 <code class="highlighter-rouge">0.4-0.1=0.30000000000...04</code> 这样怪东西。</p>
+<p>接下来我解释一下为啥javascript中 <code>0.5-0.25=0.25</code> 而 <code>0.4-0.1=0.30000000000...04</code> 这样怪东西。</p>
 
 <p>首先呢，有两个概念，一个是定点小数，一个是浮点小数。</p>
 
@@ -147,7 +146,16 @@
     
       <li>
         <h3>
-          <a href="http://www.nevermoi.com/2016/02/13/http-header-note/">
+          <a href="/2016/02/15/understand-LCS/">
+            Understand Longest Common Subsequence
+            <small>15 Feb 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/02/13/http-header-note/">
             我们走一遍http中request/response header部分
             <small>13 Feb 2016</small>
           </a>
@@ -156,18 +164,9 @@
     
       <li>
         <h3>
-          <a href="http://www.nevermoi.com/2015/01/26/principles-of-ood/">
+          <a href="/2015/01/26/principles-of-ood/">
             Principles of OOD and examples
             <small>26 Jan 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="http://www.nevermoi.com/2015/01/24/hello-world/">
-            How this blog starts up
-            <small>24 Jan 2015</small>
           </a>
         </h3>
       </li>
