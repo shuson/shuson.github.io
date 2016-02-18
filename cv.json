@@ -1,0 +1,87 @@
+{
+    "title": "Sam Wang Shusen's CV",
+    "author": "nevermoi",
+    "updatedOn": "2016-02-14",
+    "firstName": "Sam",
+    "lastName": "Wang Shusen",
+    "description": "Java and JavaScript stack developer",
+    "email": "wlgq@hotmail.com",
+    "phone": "(65) 9876 5432",
+    "github": "https://github.com/shuson",
+    "linkedin": "https://sg.linkedin.com/in/shuson",
+    "website": "http://nevermoi.com",
+
+    "stacks": [
+        {
+            "primary": "Java",
+            "enum": ["Spring MVC", "Maven", "Hibernate"]
+        },
+        {
+            "primary": "JavaScript",
+            "enum": ["Nodejs", "Reactjs", "jQuery", "Vuejs"]
+        },
+        {
+            "primary": "Python",
+            "enum": ["Flask", "Beautiful Soup"]
+        },
+        {
+            "primary": "Others",
+            "enum": ["Nginx", "Linux", "Laravel"]
+        }
+    ],
+
+    "careers": [
+        {
+            "company": "Fuji Xerox Singapore Software Center",
+            "location": "Singapore",
+            "title": "Software Engineer",
+            "startDate": "Jan, 2015",
+            "endDate": "Present",
+            "contributions": [
+                "Develop client side applications, including embedded browser apps, mobile apps and web apps, using JavaScript stack techs, corresponding with automated testing, continuous integration."
+            ]
+        },
+        {
+            "company": "Crimson Logic",
+            "location": "Singapore",
+            "title": "Software Engineer",
+            "startDate": "Sept, 2013",
+            "endDate": "Dec, 2014",
+            "contributions": [
+                "Get involed of full SDLC of 2 modules, made contribution to system design and implementation using Java stack techs: Spring and Hibernate"
+            ]
+        }
+    ],
+
+    "projects": [
+        {
+            "title": "Frontier - Integrated Business Licensing System",
+            "company": "Crimson Logic",
+            "descriptions": [
+                "Get involed of full SDLC of 2 modules, made contribution to system design and implementation using Java stack techs: Spring and Hibernate",
+                "Develop using Java EE technologies and testing"
+            ]
+        },
+        {
+            "title": "Milesfair - Mileage Trade Ticketing System",
+            "company": "JJCube",
+            "descriptions": [
+                "Get involed of full SDLC of whole project.",
+                "Develop using Laravel technologies and testing"
+            ]
+        }
+    ],
+
+    "educations": [
+        {
+            "degree": "Bachelor in Information Technology",
+            "university": "CAU",
+            "grantedDate": "July, 2010"
+        },
+        {
+            "degree": "Graduate Diploma in System Analysis",
+            "university": "NUS",
+            "grantedDate": "July, 2013"
+        }
+    ]
+}
