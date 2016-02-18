@@ -8,10 +8,12 @@ title: About
 "Java and JavaScript stack developer."
 </p>
 
-Contact me for a copy of my CV via：<br />
+Here, my <a href="{{ site.baseurl }}/cv.html" target="_blank">CV</a> is presented.
+
+Or Contact me for a copy of resume via：<br />
 [wlgq@hotmail.com](mailto:wlgq@hotmail.com)
 
-More on:
+And more on:
 
 <a href="https://github.com/shuson" target="_blank"><i class="fa fa-github-alt"></i> Github</a>
 <br />
