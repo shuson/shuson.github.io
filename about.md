@@ -8,7 +8,7 @@ title: About
 "Java and JavaScript stack developer."
 </p>
 
-Here, my <a href="{{ site.baseurl }}/CV.html" target="_blank">CV</a> is presented.
+Here, my <a href="{{ site.baseurl }}/cv.html" target="_blank">CV</a> is presented.
 
 Or Contact me for a copy of resume via：<br />
 [wlgq@hotmail.com](mailto:wlgq@hotmail.com)
