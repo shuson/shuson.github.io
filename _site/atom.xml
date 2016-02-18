@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-02-15T15:08:14+08:00</updated>
+ <updated>2016-02-18T13:15:49+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -178,7 +178,7 @@ else:
 &lt;/code&gt;&lt;/p&gt;
 </content>
  </entry>
-
+ 
  <entry>
    <title>我们走一遍http中request/response header部分</title>
    <link href="http://nevermoi.com/2016/02/13/http-header-note/"/>
