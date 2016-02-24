@@ -65,6 +65,10 @@
         
             
         
+            
+                
+            
+        
         <span class="sidebar-nav-item">Currently v0.0.2</span>
     </nav>
 
@@ -90,6 +94,38 @@
 
         <div class="container content">
             <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="./2016/02/23/why-junit-cases-not-run-in-order/">
+        Why Junit Cases not run in order in JDK 7.
+      </a>
+    </h1>
+
+    <span class="post-date">23 Feb 2016</span>
+
+    <h3 id="conclusion-first">Conclusion first:</h3>
+<p>Junit uses reflection for getting and executing test methods. Junit get list of all tests using “Method[] getDeclaredMethods()” from java.lang.Class.</p>
+
+<blockquote>
+  <p><strong>The elements in the array returned by getDeclaredMethods are not sorted and are not in any particular order.</strong></p>
+</blockquote>
+
+<h3 id="how-to-make-executions-order-fixed">How to make executions order fixed</h3>
+<p>Since JUnit 4.11, you can do:</p>
+
+<p>```
+ @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+ public class MyTest {
+ }</p>
+
+<p>```</p>
+
+<p>Reference: 
+<a href="http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html">MethodSorters</a> <br />
+<a href="http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html">Annotation Type FixMethodOrder</a></p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -423,36 +459,11 @@ else:
 
   </div>
   
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2015/01/24/hello-world/">
-        How this blog starts up
-      </a>
-    </h1>
-
-    <span class="post-date">24 Jan 2015</span>
-
-    <h4 id="content">content</h4>
-<ol>
-  <li>Install <em>ruby</em> to Windows OS: <a href="http://rubyinstaller.org/">Ruby for Windows</a></li>
-  <li>Install <em>gem</em>, which is a ruby package manager: <a href="https://rubygems.org/pages/download">Gem</a>
-    <ul>
-      <li>Update build tools using its DevKit: <a href="http://flatshaded.com/2013/05/installing-jekyll-on-windows/">fast-stemmer error fixing</a></li>
-    </ul>
-  </li>
-  <li>Install <em>jekyll</em>: <a href="http://jekyllrb.com/docs/installation/">Jekyll</a></li>
-  <li>Config <em>Github</em> page: <a href="https://help.github.com/articles/using-jekyll-with-pages/">Github Page</a></li>
-</ol>
-
-<p><strong>Good luck!</strong></p>
-
-  </div>
-  
 </div>
 
 <div class="pagination">
   
-    <span class="pagination-item older">Older</span>
+    <a class="pagination-item older" href="page2">Older</a>
   
   
     <span class="pagination-item newer">Newer</span>

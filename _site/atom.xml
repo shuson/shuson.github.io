@@ -4,13 +4,41 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-02-18T13:32:27+08:00</updated>
+ <updated>2016-02-24T10:54:01+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Why Junit Cases not run in order in JDK 7.</title>
+   <link href="http://nevermoi.com/2016/02/23/why-junit-cases-not-run-in-order/"/>
+   <updated>2016-02-23T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/02/23/why-junit-cases-not-run-in-order</id>
+   <content type="html">&lt;h3 id=&quot;conclusion-first&quot;&gt;Conclusion first:&lt;/h3&gt;
+&lt;p&gt;Junit uses reflection for getting and executing test methods. Junit get list of all tests using “Method[] getDeclaredMethods()” from java.lang.Class.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;The elements in the array returned by getDeclaredMethods are not sorted and are not in any particular order.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;how-to-make-executions-order-fixed&quot;&gt;How to make executions order fixed&lt;/h3&gt;
+&lt;p&gt;Since JUnit 4.11, you can do:&lt;/p&gt;
+
+&lt;p&gt;```
+ @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+ public class MyTest {
+ }&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;Reference: 
+&lt;a href=&quot;http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html&quot;&gt;MethodSorters&lt;/a&gt; &lt;br /&gt;
+&lt;a href=&quot;http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html&quot;&gt;Annotation Type FixMethodOrder&lt;/a&gt;&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Understand Longest Common Subsequence</title>

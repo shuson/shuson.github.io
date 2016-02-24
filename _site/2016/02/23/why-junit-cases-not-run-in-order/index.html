@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
     <title>
-         How this blog starts up &middot; Nevermoi 
+         Why Junit Cases not run in order in JDK 7. &middot; Nevermoi 
     </title>
 
     <!-- CSS -->
@@ -94,36 +94,34 @@
 
         <div class="container content">
             <div class="post">
-  <h1 class="post-title">How this blog starts up</h1>
-  <span class="post-date">24 Jan 2015</span>
-  <h4 id="content">content</h4>
-<ol>
-  <li>Install <em>ruby</em> to Windows OS: <a href="http://rubyinstaller.org/">Ruby for Windows</a></li>
-  <li>Install <em>gem</em>, which is a ruby package manager: <a href="https://rubygems.org/pages/download">Gem</a>
-    <ul>
-      <li>Update build tools using its DevKit: <a href="http://flatshaded.com/2013/05/installing-jekyll-on-windows/">fast-stemmer error fixing</a></li>
-    </ul>
-  </li>
-  <li>Install <em>jekyll</em>: <a href="http://jekyllrb.com/docs/installation/">Jekyll</a></li>
-  <li>Config <em>Github</em> page: <a href="https://help.github.com/articles/using-jekyll-with-pages/">Github Page</a></li>
-</ol>
+  <h1 class="post-title">Why Junit Cases not run in order in JDK 7.</h1>
+  <span class="post-date">23 Feb 2016</span>
+  <h3 id="conclusion-first">Conclusion first:</h3>
+<p>Junit uses reflection for getting and executing test methods. Junit get list of all tests using “Method[] getDeclaredMethods()” from java.lang.Class.</p>
 
-<p><strong>Good luck!</strong></p>
+<blockquote>
+  <p><strong>The elements in the array returned by getDeclaredMethods are not sorted and are not in any particular order.</strong></p>
+</blockquote>
+
+<h3 id="how-to-make-executions-order-fixed">How to make executions order fixed</h3>
+<p>Since JUnit 4.11, you can do:</p>
+
+<p>```
+ @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+ public class MyTest {
+ }</p>
+
+<p>```</p>
+
+<p>Reference: 
+<a href="http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html">MethodSorters</a> <br />
+<a href="http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html">Annotation Type FixMethodOrder</a></p>
 
 </div>
 
 <div class="related">
   <h2>Related Posts</h2>
   <ul class="related-posts">
-    
-      <li>
-        <h3>
-          <a href="/2016/02/23/why-junit-cases-not-run-in-order/">
-            Why Junit Cases not run in order in JDK 7.
-            <small>23 Feb 2016</small>
-          </a>
-        </h3>
-      </li>
     
       <li>
         <h3>
@@ -139,6 +137,15 @@
           <a href="/2016/02/13/http-header-note/">
             我们走一遍http中request/response header部分
             <small>13 Feb 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/02/12/float-point-note/">
+            二进制表示float-point
+            <small>12 Feb 2016</small>
           </a>
         </h3>
       </li>
