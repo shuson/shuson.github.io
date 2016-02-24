@@ -9,12 +9,12 @@
     "phone": "(65) 9876 5432",
     "github": "https://github.com/shuson",
     "linkedin": "https://sg.linkedin.com/in/shuson",
-    "website": "http://nevermoi.com",
+    "website": "http://www.nevermoi.com",
 
     "stacks": [
         {
             "primary": "Java",
-            "enum": ["Spring MVC", "Maven", "Hibernate"]
+            "enum": ["Spring Framework", "Maven", "Java Native Libs"]
         },
         {
             "primary": "JavaScript",
