@@ -14,245 +14,229 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="style.css" />
     <style type="text/css">
-    
-body {
-    color: #333;
-    font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
-}
-
-/* Common styles
+        body {
+            color: #333;
+            font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+        }
+        /* Common styles
 	* --------------------------------------- */
-
-img {
-    -webkit-transition: all 0.7s ease-out;
-    -moz-transition: all 0.7s ease-out;
-    -o-transition: all 0.7s ease-out;
-    transition: all 0.7s ease-out;
-}
-
-a {
-    color: #808080;
-}
-
-a:hover {
-    color: #033649;
-}
-
-.section {
-    text-align: center;
-    overflow: hidden;
-    padding: 60px 0;
-}
-
-
-.wrap {
-    width: 80%;
-    height: 100%;
-    margin: 3% auto;
-    position: relative;
-    vertical-align: middle;
-}
-
-.box {
-    text-align: center;
-    color: #808080;
-    font-size: 1.2em;
-    line-height: 1.6em;
-    padding: 1.2em;
-}
-
-@keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-  
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
-  40%, 60% {
-    transform: translate3d(2px, 0, 0);
-  }
-}
-
-/* Section 0
+        
+        img {
+            -webkit-transition: all 0.7s ease-out;
+            -moz-transition: all 0.7s ease-out;
+            -o-transition: all 0.7s ease-out;
+            transition: all 0.7s ease-out;
+        }
+        
+        a {
+            color: #808080;
+        }
+        
+        a:hover {
+            color: #033649;
+        }
+        
+        .section {
+            text-align: center;
+            overflow: hidden;
+            padding: 60px 0;
+        }
+        
+        .wrap {
+            width: 80%;
+            height: 100%;
+            margin: 3% auto;
+            position: relative;
+            vertical-align: middle;
+        }
+        
+        .box {
+            text-align: center;
+            color: #808080;
+            font-size: 1.2em;
+            line-height: 1.6em;
+            padding: 1.2em;
+        }
+        
+        @keyframes shake {
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            40%,
+            60% {
+                transform: translate3d(2px, 0, 0);
+            }
+        }
+        /* Section 0
 	* --------------------------------------- */
-#section0 h1 {
-    font-size: 4em;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    margin-top: 10%;
-    width: auto;
-    text-decoration: underline;
-    text-decoration-color: #E8DDCB;
-    color: #594F4F;
-    text-shadow: 3px 3px #547980;
-}
-
-#first-name {
-    font-style: italic;
-    color: #7A6A53;
-}
-
-#last-name {
-
-}
-
-#section0 .contact {
-    display: inline-block;
-    padding: 10px;
-}
-
-.fa-envelope, .fa-phone {
-    display: none;
-}
-
-.email:hover i{
-    display: inline;
-}
-
-.phone:hover i{
-    display: inline;
-}
-
-#section0 img {
-    height: 100%;
-    margin: 40px 0 0 0;
-}
-
-
-/* Section 1
+        
+        #section0 h1 {
+            font-size: 4em;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            margin-top: 10%;
+            width: auto;
+            text-decoration: underline;
+            text-decoration-color: #E8DDCB;
+            color: #594F4F;
+            text-shadow: 3px 3px #547980;
+        }
+        
+        #first-name {
+            font-style: italic;
+            color: #7A6A53;
+        }
+        
+        #last-name {}
+        
+        #section0 .contact {
+            display: inline-block;
+            padding: 10px;
+        }
+        
+        .fa-envelope,
+        .fa-phone {
+            display: none;
+        }
+        
+        .email:hover i {
+            display: inline;
+        }
+        
+        .phone:hover i {
+            display: inline;
+        }
+        
+        #section0 img {
+            height: 100%;
+            margin: 40px 0 0 0;
+        }
+        /* Section 1
 	* --------------------------------------- */
-#section1 {
-
-}
-
-#section1 h1 {
-    font-size: 3em;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    margin-top: 2%;
-    width: auto;
-    color: #594F4F;
-    text-shadow: 3px 3px #547980;
-}
-
-#section1 .tag-panel {
-    margin: 0.8em auto;
-}
-
-.tag.expert{
-    font-size: 1.3em !important;
-    opacity: 1 !important;
-    background-color: #6C5B7B !important;
-}
-
-#section1 .tag {
-    font-size: 1.1em;
-    background-color: #FFFEC7;
-    color: #474747;
-    border-radius: 3px;
-    display: inline-block;
-    padding: 2px 8px;
-    margin-right: 3px;
-    margin-bottom: 3px;
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-.tag:hover {
-    animation: shake 0.4s;
-}
-
-
-/* Section 2
+        
+        #section1 {}
+        
+        #section1 h1 {
+            font-size: 3em;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            margin-top: 2%;
+            width: auto;
+            color: #594F4F;
+            text-shadow: 3px 3px #547980;
+        }
+        
+        #section1 .tag-panel {
+            margin: 0.8em auto;
+        }
+        
+        .tag.expert {
+            font-size: 1.3em !important;
+            opacity: 1 !important;
+            background-color: #6C5B7B !important;
+        }
+        
+        #section1 .tag {
+            font-size: 1.1em;
+            background-color: #FFFEC7;
+            color: #474747;
+            border-radius: 3px;
+            display: inline-block;
+            padding: 2px 8px;
+            margin-right: 3px;
+            margin-bottom: 3px;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+        
+        .tag:hover {
+            animation: shake 0.4s;
+        }
+        /* Section 2
 	* --------------------------------------- */
-
-#section2 {
-
-}
-
-#section2 h1 {
-    font-size: 3em;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    margin-top: 2%;
-    width: auto;
-    color: #111211;
-    text-shadow: 3px 3px #E8DDCB;
-}
-
-#section2 .wrap {
-
-}
-
-#section2 .entry-panel {
-    margin: 1em auto;
-    width: 70%;
-    text-align: left;
-}
-
-.entry-head {
-
-}
-
-.entry-title {
-    font-size: 1.4em;
-    color: #112;
-}
-
-.entry-company {
-    font-size: 1.2em;
-    color: #413E4A;
-}
-
-.entry-body {
-    color: #BCBCBC;
-    font-size: 1.1em;
-}
-
-.entry-body li {
-    margin: 0.6em auto;
-}
-
-/* Section 3
+        
+        #section2 {}
+        
+        #section2 h1 {
+            font-size: 3em;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            margin-top: 2%;
+            width: auto;
+            color: #111211;
+            text-shadow: 3px 3px #E8DDCB;
+        }
+        
+        #section2 .wrap {}
+        
+        #section2 .entry-panel {
+            margin: 1em auto;
+            width: 70%;
+            text-align: left;
+        }
+        
+        .entry-head {}
+        
+        .entry-title {
+            font-size: 1.4em;
+            color: #112;
+        }
+        
+        .entry-company {
+            font-size: 1.2em;
+            color: #413E4A;
+        }
+        
+        .entry-body {
+            color: #BCBCBC;
+            font-size: 1.1em;
+        }
+        
+        .entry-body li {
+            margin: 0.6em auto;
+        }
+        /* Section 3
 	* --------------------------------------- */
-#section3 h1 {
-    font-size: 3em;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    margin-top: 2%;
-    width: auto;
-    color: #594F4F;
-    text-shadow: 3px 3px #547980;
-}
-
-#section3 .record-panel {
-    text-align: center;
-    margin: 1.5em auto;
-    color: #424242;
-    font-size: 1.4em;
-}
-
-
-/* Overwriting fullPage.js tooltip color
+        
+        #section3 h1 {
+            font-size: 3em;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            margin-top: 2%;
+            width: auto;
+            color: #594F4F;
+            text-shadow: 3px 3px #547980;
+        }
+        
+        #section3 .record-panel {
+            text-align: center;
+            margin: 1.5em auto;
+            color: #424242;
+            font-size: 1.4em;
+        }
+        /* Overwriting fullPage.js tooltip color
 	* --------------------------------------- */
-
-.fp-tooltip {
-    color: #AAA;
-}
-
-#fp-nav span,
-.fp-slidesNav span {
-    border-color: #AAA;
-}
-
-#fp-nav li .active span,
-.fp-slidesNav .active span {
-    background: #AAA;
-}
-
-</style>
+        
+        .fp-tooltip {
+            color: #AAA;
+        }
+        
+        #fp-nav span,
+        .fp-slidesNav span {
+            border-color: #AAA;
+        }
+        
+        #fp-nav li .active span,
+        .fp-slidesNav .active span {
+            background: #AAA;
+        }
+    </style>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -261,7 +245,7 @@ a:hover {
 </head>
 
 <body>
-    
+
     <body>
 
         <div id="fullpage">
@@ -293,83 +277,83 @@ a:hover {
             <div class="section" id="section1">
                 <h1>Professions</h1>
                 <div class="wrap">
-                                            <div class="tag-panel">
-                            <span class="tag expert">Java</span>
-                                                            <span class="tag">Spring Framework</span>
-                                                                <span class="tag">Maven</span>
-                                                                <span class="tag">Java Native Libs</span>
-                                                        </div>
-                                                <div class="tag-panel">
-                            <span class="tag expert">JavaScript</span>
-                                                            <span class="tag">Nodejs</span>
-                                                                <span class="tag">Reactjs</span>
-                                                                <span class="tag">jQuery</span>
-                                                                <span class="tag">Vuejs</span>
-                                                        </div>
-                                                <div class="tag-panel">
-                            <span class="tag expert">Python</span>
-                                                            <span class="tag">Flask</span>
-                                                                <span class="tag">Beautiful Soup</span>
-                                                        </div>
-                                                <div class="tag-panel">
-                            <span class="tag expert">Others</span>
-                                                            <span class="tag">Nginx</span>
-                                                                <span class="tag">Linux</span>
-                                                                <span class="tag">Laravel</span>
-                                                        </div>
-                                        </div>
+                    <div class="tag-panel">
+                        <span class="tag expert">Java</span>
+                        <span class="tag">Spring Framework</span>
+                        <span class="tag">Maven</span>
+                        <span class="tag">Java Native Libs</span>
+                    </div>
+                    <div class="tag-panel">
+                        <span class="tag expert">JavaScript</span>
+                        <span class="tag">Nodejs</span>
+                        <span class="tag">Reactjs</span>
+                        <span class="tag">jQuery</span>
+                        <span class="tag">Vuejs</span>
+                    </div>
+                    <div class="tag-panel">
+                        <span class="tag expert">Python</span>
+                        <span class="tag">Flask</span>
+                        <span class="tag">Beautiful Soup</span>
+                    </div>
+                    <div class="tag-panel">
+                        <span class="tag expert">Others</span>
+                        <span class="tag">Nginx</span>
+                        <span class="tag">Linux</span>
+                        <span class="tag">Laravel</span>
+                    </div>
+                </div>
             </div>
 
             <div class="section moveDown" id="section2">
                 <h1>Careers</h1>
                 <div class="wrap">
-                                            <div class="entry-panel">
-                            <div class="entry-head">
-                                <span class="entry-title">Software Engineer</span> @ <span class="entry-company">Fuji Xerox Singapore Software Center, Singapore</%-></span>
-                            </div>
-                            <div class="entry-body">
-                                <ul>
-                                                                    <li>Develop client side applications, including embedded browser apps, mobile apps and web apps, using JavaScript stack techs, corresponding with automated testing, continuous integration.</li>
-                                                                </ul>
-                            </div>
+                    <div class="entry-panel">
+                        <div class="entry-head">
+                            <span class="entry-title">Software Engineer</span> @ <span class="entry-company">Fuji Xerox Singapore Software Center, Singapore</%-></span>
                         </div>
-                                                <div class="entry-panel">
-                            <div class="entry-head">
-                                <span class="entry-title">Software Engineer</span> @ <span class="entry-company">Crimson Logic, Singapore</%-></span>
-                            </div>
-                            <div class="entry-body">
-                                <ul>
-                                                                    <li>Get involed of full SDLC of 2 modules, made contribution to system design and implementation using Java stack techs: Spring and Hibernate</li>
-                                                                </ul>
-                            </div>
+                        <div class="entry-body">
+                            <ul>
+                                <li>Develop client side applications, including embedded browser apps, mobile apps and web apps, using JavaScript stack techs, corresponding with automated testing, continuous integration.</li>
+                            </ul>
                         </div>
-                                        </div>
+                    </div>
+                    <div class="entry-panel">
+                        <div class="entry-head">
+                            <span class="entry-title">Software Engineer</span> @ <span class="entry-company">Crimson Logic, Singapore</%-></span>
+                        </div>
+                        <div class="entry-body">
+                            <ul>
+                                <li>Get involed of full SDLC of 2 modules, made contribution to system design and implementation using Java stack techs: Spring and Hibernate</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="section moveDown" id="section3">
                 <h1>Educations</h1>
                 <div class="wrap">
-                                        <div class="record-panel">
+                    <div class="record-panel">
                         <h3>Bachelor in Information Technology</h3>
                         <div>
-                            <span>CAU</span>, &nbsp;
+                            <span><a href="http://www.cau.edu.cn">CAU</a></span>, &nbsp;
                             <span>July, 2010</span>
                         </div>
                     </div>
-                                        <div class="record-panel">
+                    <div class="record-panel">
                         <h3>Graduate Diploma in System Analysis</h3>
                         <div>
-                            <span>NUS</span>, &nbsp;
+                            <span><a href="http://www.nus.edu.sg">NUS</a></span>, &nbsp;
                             <span>July, 2013</span>
                         </div>
                     </div>
-                                    </div>
+                </div>
             </div>
         </div>
 
     </body>
 </body>
-    <script type="text/javascript">
-    $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function() {
         $('#fullpage').fullpage({
             //design
             controlArrows: true,
@@ -394,8 +378,9 @@ a:hover {
             recordHistory: true,
 
             //events
-            onLeave: function(index, nextIndex, direction){},
+            onLeave: function(index, nextIndex, direction) {},
         });
     });
 </script>
+
 </html>

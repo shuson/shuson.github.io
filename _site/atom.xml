@@ -4,13 +4,142 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-02-24T10:54:01+08:00</updated>
+ <updated>2016-06-01T16:44:41+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Let's build a simple grid system like Bootstrap</title>
+   <link href="http://nevermoi.com/2016/06/01/build-grid-system-css/"/>
+   <updated>2016-06-01T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/06/01/build-grid-system-css</id>
+   <content type="html">&lt;h3 id=&quot;what-is-a-grid-system&quot;&gt;1. What is a Grid System?&lt;/h3&gt;
+&lt;p&gt;A grid system, in the scope of css, is a structure to build stacked content vertically and horizontally.&lt;/p&gt;
+
+&lt;h3 id=&quot;two-basic-components&quot;&gt;2. Two basic components&lt;/h3&gt;
+&lt;p&gt;Grid system, at lease, has two basic components: row and column, but some grid systems have a wrapper above basic components, &lt;strong&gt;container&lt;/strong&gt; from Bootstrap, for example.&lt;/p&gt;
+
+&lt;p&gt;Additionally, the two components don’t include the padding and border within the declared width and height. To make it ready for responsiveness, we can set &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing&quot;&gt;box-sizing&lt;/a&gt; property to &lt;code&gt;border-box&lt;/code&gt; for both rows and columns:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.row, .column {
+    box-sizing: border-box;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we can leverage percentages for the widths of the columns. This allows the columns to scale upwards and downwards within different viewports while maintaining the structure.&lt;/p&gt;
+
+&lt;h3 id=&quot;make-row-clearfixed&quot;&gt;3. Make row clearfixed&lt;/h3&gt;
+&lt;p&gt;One line one row, so the row component must clear all the floating elements on both sides of it.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.row:before, .row:after {
+    content: &quot; &quot;;
+    display: table;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.row:after {
+    clear: both;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;make-column-floated-and-aesthetic&quot;&gt;4. Make column floated and aesthetic&lt;/h3&gt;
+&lt;p&gt;Since column is accommodated inside of row, it is floated horizontal alignment, and the position should be relative to allow any absolutely position content within the column to be positioned relative to that column&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column {
+    position: relative;
+    float: left;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To make columns aesthetic, a simple gutter is needed:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column + .column {
+    margin-left: 1.6%;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;calculating-column-width&quot;&gt;5. Calculating column width&lt;/h3&gt;
+&lt;p&gt;Now we need to determine the maximum amount of columns per row, before calculating the width of column. Let take Bootstrap’s choice: 12 columns per row.&lt;/p&gt;
+
+&lt;p&gt;The calculation will be based on formula:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;scw = (100 – (m * (mc – 1))) / mc&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;scw = single column width &lt;br /&gt;
+m = margin (1.6%) &lt;br /&gt;
+mc = maximum columns (12) &lt;br /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So the single column’s width is 6.86666666667%&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column-1 {
+    width: 6.86666666667%;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column-2 {
+    width: 15.3333333333%;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column-3 {
+    width: 23.8%;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column-4 {
+    width: 32.2666666667%;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+.column-5 {
+    width: 40.7333333333%;
+}
+/* omitted */
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;optimizing-for-mobile-devices&quot;&gt;6. Optimizing for mobile devices&lt;/h3&gt;
+&lt;p&gt;To adapt to various devices with smaller viewports, we need &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries&quot;&gt;Media Queries&lt;/a&gt; to set the rule:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+@media only screen and (max-width: 550px) {
+  .column-1,
+  .column-12 {
+    width: auto,
+    float: none
+  }
+  .column + .column {
+    margin-left: 0;
+  }
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;finally-put-everything-together&quot;&gt;7. Finally, put everything together.&lt;/h3&gt;
+
+&lt;p&gt;Here is a demo:&lt;/p&gt;
+
+&lt;p data-height=&quot;265&quot; data-theme-id=&quot;0&quot; data-slug-hash=&quot;QEwMyP&quot; data-default-tab=&quot;html,result&quot; data-user=&quot;nevermoi&quot; data-embed-version=&quot;2&quot; class=&quot;codepen&quot;&gt;See the Pen &lt;a href=&quot;http://codepen.io/nevermoi/pen/QEwMyP/&quot;&gt;Understanding CSS Grid Systems&lt;/a&gt; by nevermoi (&lt;a href=&quot;http://codepen.io/nevermoi&quot;&gt;@nevermoi&lt;/a&gt;) on &lt;a href=&quot;http://codepen.io&quot;&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;script async=&quot;&quot; src=&quot;//assets.codepen.io/assets/embed/ei.js&quot;&gt;&lt;/script&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Why Junit Cases not run in order in JDK 7.</title>

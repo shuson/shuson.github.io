@@ -97,6 +97,139 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="./2016/06/01/build-grid-system-css/">
+        Let's build a simple grid system like Bootstrap
+      </a>
+    </h1>
+
+    <span class="post-date">01 Jun 2016</span>
+
+    <h3 id="what-is-a-grid-system">1. What is a Grid System?</h3>
+<p>A grid system, in the scope of css, is a structure to build stacked content vertically and horizontally.</p>
+
+<h3 id="two-basic-components">2. Two basic components</h3>
+<p>Grid system, at lease, has two basic components: row and column, but some grid systems have a wrapper above basic components, <strong>container</strong> from Bootstrap, for example.</p>
+
+<p>Additionally, the two components don’t include the padding and border within the declared width and height. To make it ready for responsiveness, we can set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing">box-sizing</a> property to <code>border-box</code> for both rows and columns:</p>
+
+<p><code>
+.row, .column {
+    box-sizing: border-box;
+}
+</code></p>
+
+<p>Now we can leverage percentages for the widths of the columns. This allows the columns to scale upwards and downwards within different viewports while maintaining the structure.</p>
+
+<h3 id="make-row-clearfixed">3. Make row clearfixed</h3>
+<p>One line one row, so the row component must clear all the floating elements on both sides of it.</p>
+
+<p><code>
+.row:before, .row:after {
+    content: " ";
+    display: table;
+}
+</code></p>
+
+<p><code>
+.row:after {
+    clear: both;
+}
+</code></p>
+
+<h3 id="make-column-floated-and-aesthetic">4. Make column floated and aesthetic</h3>
+<p>Since column is accommodated inside of row, it is floated horizontal alignment, and the position should be relative to allow any absolutely position content within the column to be positioned relative to that column</p>
+
+<p><code>
+.column {
+    position: relative;
+    float: left;
+}
+</code></p>
+
+<p>To make columns aesthetic, a simple gutter is needed:</p>
+
+<p><code>
+.column + .column {
+    margin-left: 1.6%;
+}
+</code></p>
+
+<h3 id="calculating-column-width">5. Calculating column width</h3>
+<p>Now we need to determine the maximum amount of columns per row, before calculating the width of column. Let take Bootstrap’s choice: 12 columns per row.</p>
+
+<p>The calculation will be based on formula:</p>
+
+<blockquote>
+  <p><strong>scw = (100 – (m * (mc – 1))) / mc</strong></p>
+</blockquote>
+
+<blockquote>
+  <p>scw = single column width <br />
+m = margin (1.6%) <br />
+mc = maximum columns (12) <br /></p>
+</blockquote>
+
+<p>So the single column’s width is 6.86666666667%</p>
+
+<p><code>
+.column-1 {
+    width: 6.86666666667%;
+}
+</code></p>
+
+<p><code>
+.column-2 {
+    width: 15.3333333333%;
+}
+</code></p>
+
+<p><code>
+.column-3 {
+    width: 23.8%;
+}
+</code></p>
+
+<p><code>
+.column-4 {
+    width: 32.2666666667%;
+}
+</code></p>
+
+<p><code>
+.column-5 {
+    width: 40.7333333333%;
+}
+/* omitted */
+</code></p>
+
+<h3 id="optimizing-for-mobile-devices">6. Optimizing for mobile devices</h3>
+<p>To adapt to various devices with smaller viewports, we need <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries">Media Queries</a> to set the rule:</p>
+
+<p><code>
+@media only screen and (max-width: 550px) {
+  .column-1,
+  .column-12 {
+    width: auto,
+    float: none
+  }
+  .column + .column {
+    margin-left: 0;
+  }
+}
+</code></p>
+
+<h3 id="finally-put-everything-together">7. Finally, put everything together.</h3>
+
+<p>Here is a demo:</p>
+
+<p data-height="265" data-theme-id="0" data-slug-hash="QEwMyP" data-default-tab="html,result" data-user="nevermoi" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/nevermoi/pen/QEwMyP/">Understanding CSS Grid Systems</a> by nevermoi (<a href="http://codepen.io/nevermoi">@nevermoi</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+<script async="" src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="./2016/02/23/why-junit-cases-not-run-in-order/">
         Why Junit Cases not run in order in JDK 7.
       </a>
@@ -431,31 +564,6 @@ else:
 <p>一个非2的幂级数的倒数的数， 无论定点还是浮点小数，都不能在计算机中100%准确表示。</p>
 
 <p>所以减出来就不是精确的了。</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2015/01/26/principles-of-ood/">
-        Principles of OOD and examples
-      </a>
-    </h1>
-
-    <span class="post-date">26 Jan 2015</span>
-
-    <h3 id="vspr">VS;PR</h3>
-<p>It is important in a way to master some principles of OOD: <a href="https://en.wikipedia.org/wiki/Object-oriented_design">Object Oriented Design</a></p>
-
-<ol>
-  <li>The Single Responsibility Principle: <a href="https://drive.google.com/file/d/0ByOwmqah_nuGNHEtcU5OekdDMkk/view">Google Doc</a></li>
-  <li>The Open Closed Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1/view">Google Drive</a></li>
-  <li>The Liskov Substitution Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh/view">Google Doc</a></li>
-  <li>The Interface Segregation Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi/view">Google Doc</a></li>
-  <li>The Dependency Inversion Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz/view">Google Drive</a></li>
-</ol>
-
-<p>The artical brings these to me: 
-&gt; http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod</p>
 
   </div>
   
