@@ -4,13 +4,39 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-06-01T16:44:41+08:00</updated>
+ <updated>2016-07-21T13:52:32+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Some tips about client-server communication</title>
+   <link href="http://nevermoi.com/2016/07/11/client-server-communication/"/>
+   <updated>2016-07-11T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/07/11/client-server-communication</id>
+   <content type="html">&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Traditional Ajax request
+This way is to set an &lt;em&gt;internal&lt;/em&gt; to make XMLHttpRequest, and it is easy to implement but not efficient for server, too heavy.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Comet (another Ajax way)
+When XMLHttpRequest is sent, the server won’t respond until server has required data or the timeout is reached, the client received the response and open another request and loop this.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Websocket (The future)
+Easy as socket&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Server Sent Event (alternative)
+Server sends the response after a connection setup&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Let's build a simple grid system like Bootstrap</title>

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
     <title>
-         Why Junit Cases not run in order in JDK 7. &middot; Nevermoi 
+         Some tips about client-server communication &middot; Nevermoi 
     </title>
 
     <!-- CSS -->
@@ -94,28 +94,26 @@
 
         <div class="container content">
             <div class="post">
-  <h1 class="post-title">Why Junit Cases not run in order in JDK 7.</h1>
-  <span class="post-date">23 Feb 2016</span>
-  <h3 id="conclusion-first">Conclusion first:</h3>
-<p>Junit uses reflection for getting and executing test methods. Junit get list of all tests using “Method[] getDeclaredMethods()” from java.lang.Class.</p>
-
-<blockquote>
-  <p><strong>The elements in the array returned by getDeclaredMethods are not sorted and are not in any particular order.</strong></p>
-</blockquote>
-
-<h3 id="how-to-make-executions-order-fixed">How to make executions order fixed</h3>
-<p>Since JUnit 4.11, you can do:</p>
-
-<p>```
- @FixMethodOrder(MethodSorters.NAME_ASCENDING)
- public class MyTest {
- }</p>
-
-<p>```</p>
-
-<p>Reference: 
-<a href="http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html">MethodSorters</a> <br />
-<a href="http://junit.org/javadoc/latest/index.html?org/junit/FixMethodOrder.html">Annotation Type FixMethodOrder</a></p>
+  <h1 class="post-title">Some tips about client-server communication</h1>
+  <span class="post-date">11 Jul 2016</span>
+  <ul>
+  <li>
+    <p>Traditional Ajax request
+This way is to set an <em>internal</em> to make XMLHttpRequest, and it is easy to implement but not efficient for server, too heavy.</p>
+  </li>
+  <li>
+    <p>Comet (another Ajax way)
+When XMLHttpRequest is sent, the server won’t respond until server has required data or the timeout is reached, the client received the response and open another request and loop this.</p>
+  </li>
+  <li>
+    <p>Websocket (The future)
+Easy as socket</p>
+  </li>
+  <li>
+    <p>Server Sent Event (alternative)
+Server sends the response after a connection setup</p>
+  </li>
+</ul>
 
 </div>
 
@@ -125,18 +123,18 @@
     
       <li>
         <h3>
-          <a href="/2016/07/11/client-server-communication/">
-            Some tips about client-server communication
-            <small>11 Jul 2016</small>
+          <a href="/2016/06/01/build-grid-system-css/">
+            Let's build a simple grid system like Bootstrap
+            <small>01 Jun 2016</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2016/06/01/build-grid-system-css/">
-            Let's build a simple grid system like Bootstrap
-            <small>01 Jun 2016</small>
+          <a href="/2016/02/23/why-junit-cases-not-run-in-order/">
+            Why Junit Cases not run in order in JDK 7.
+            <small>23 Feb 2016</small>
           </a>
         </h3>
       </li>
