@@ -2,24 +2,58 @@
 layout: default
 ---
 
-<div class="post">
-  <h1 class="post-title">{{ page.title }}</h1>
-  <span class="post-date">{{ page.date | date_to_string }}</span>
-  {{ content }}
-</div>
-
-<div class="related">
-  <h2>Related Posts</h2>
-  <ul class="related-posts">
-    {% for post in site.related_posts limit:3 %}
-      <li>
-        <h3>
-          <a href="{{ site.baseurl }}{{ post.url }}">
-            {{ post.title }}
-            <small>{{ post.date | date_to_string }}</small>
-          </a>
-        </h3>
-      </li>
+<article>
+  <section class="title">
+    <h2>{{ page.title }} </h2>
+  </section>
+  <section class="meta">
+  <span class="time">
+    <time datetime='{{ page.date | date:"%Y-%m-%d" }}'>{{ page.date | date:"%Y-%m-%d" }}</time>
+  </span>
+  {% if page.tags %}
+  <span class="tags">
+    {% for tag in page.tags %}
+    <a href="/tags.html#{{ tag }}" title="{{ tag }}">#{{ tag }}</a>
     {% endfor %}
-  </ul>
-</div>
+  </span>
+  <!-- BEGIN this would not work on any other domain -->
+  <span
+    class           = "like-wrapper"
+    like-shortname  = '{{ site.disqus }}'
+    like-identifier = '{{ page.guid }}'
+    like-name       = '{{ page.title }}'
+    like-btn        = '&#xf087;'
+    like-link       = '{{ site.atom-baseurl }}{{ page.url }}'
+    ></span>
+  <script type="text/javascript">
+    var l = document.createElement('script');
+    l.type = 'text/javascript'; l.async = true; l.src = 'http://www.like-btn.com/javascript/widget.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(l);
+  </script>
+  <!-- END this would not work on any other domain -->
+  {% endif %}
+  </section>
+  <section class="post">
+  {{ content }}
+  </section>
+  {% if page.guid %}
+  <div class="divider">
+    <span>
+    {% if page.previous %}
+    <a href="{{ page.previous.url }}"><i class="fa fa-chevron-left"></i></a>
+    {% else %}
+    <i class="fa fa-circle"></i>
+    {% endif %}
+    </span>
+
+    <span>
+    {% if page.next %}
+    <a href="{{ page.next.url }}"><i class="fa fa-chevron-right"></i></a>
+    {% else %}
+    <i class="fa fa-circle"></i>
+    {% endif %}
+    </span>
+  </div>
+
+  {% endif %}
+</article>
