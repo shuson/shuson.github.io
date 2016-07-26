@@ -1,6 +1,9 @@
 ---
 layout: post
 title: 我们走一遍http中request/response header部分
+tags:
+    - foundation
+    - web
 ---
 
 ### Request Header 解释 示例

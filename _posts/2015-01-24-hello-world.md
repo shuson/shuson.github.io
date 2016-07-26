@@ -1,6 +1,8 @@
 ---
 layout: post
 title: How this blog starts up
+tags:
+    - General
 ---
 
 #### content

@@ -1,6 +1,9 @@
 ---
 layout: post
 title: Some tips about client-server communication
+tags:
+    - foundation
+    - web
 ---
 
 * Traditional Ajax request

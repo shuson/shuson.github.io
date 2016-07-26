@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Why Junit Cases not run in order in JDK 7.
+tags:
+    - java
 ---
 
 ### Conclusion first: 

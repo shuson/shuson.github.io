@@ -1,6 +1,8 @@
 ---
 layout: post
 title: 二进制表示float-point
+tags:
+    - foundation
 ---
 
 在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：

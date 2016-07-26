@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Let's build a simple grid system like Bootstrap
+tags:
+    - css
 ---
 
 ### 1. What is a Grid System?

@@ -8,7 +8,7 @@ title: About
 "Java and JavaScript stack developer."
 </p>
 
-Here, my <a href="{{ site.baseurl }}/cv.html" target="_blank">CV</a> is presented.
+Here, my <a href="{{ site.baseUrl }}/cv.html" target="_blank">CV</a> is presented.
 
 Or Contact me for a copy of resume via：<br />
 [wlgq@hotmail.com](mailto:wlgq@hotmail.com)
@@ -26,8 +26,7 @@ And more on:
 
 * using <a href="http://jekyllrb.com" target="_blank">Jekyll</a>
 * built on <a href="https://pages.github.com" target="_blank">GitHub Pages</a>
-* themed <a href="https://github.com/poole/lanyon" target="_blank">lanyon</a>
-* coded by <a href="http://sublimetext.com" target="_blank">Sublime Text 3</a>
+* coded using <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
 
 <br>
 <br>

@@ -1,6 +1,9 @@
 ---
 layout: post
 title: Understand Longest Common Subsequence
+tags:
+    - foundation
+    - algorithm
 ---
 
 > source [wikipedia](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem)

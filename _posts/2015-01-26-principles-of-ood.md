@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Principles of OOD and examples
+tags:
+    - design
 ---
 
 ### VS;PR
