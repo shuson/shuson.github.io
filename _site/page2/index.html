@@ -1,240 +1,190 @@
 <!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-    <link href="http://gmpg.org/xfn/11" rel="profile">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-
-    <!-- Enable responsiveness on mobile devices-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-
-    <title>
-         Nevermoi &middot; Nevermoi means never ever touch me 
-    </title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="/public/css/poole.css">
-    <link rel="stylesheet" href="/public/css/syntax.css">
-    <link rel="stylesheet" href="/public/css/lanyon.css">
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="shuson" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title></title>
+    
+    <link rel="fav icon" href="/public/favicon.ico">
+    <link href="/atom.xml" rel="alternate" title="" type="application/atom+xml" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/public/css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <!-- Icons -->
-    <link rel="logo" sizes="144x144" href="/public/logo.png">
-    <link rel="shortcut icon" href="/public/favicon.png">
-
-    <!-- RSS -->
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
-</head>
-
-
-<body class="theme-base-0c sidebar-overlay">
-
-    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
-     styles, `#sidebar-checkbox` for behavior. -->
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
-
-<!-- Toggleable sidebar -->
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-item">
-        <p>『Never』 『Moi』</p>
-    </div>
-
-    <nav class="sidebar-nav">
-        <a class="sidebar-nav-item" href="/">Home</a>
-        
-        
-        
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/retina.js/1.3.0/retina.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script type="text/javascript"> hljs.initHighlightingOnLoad(); </script>
+  </head>
+  <body>
+      <div id="main" role="main">
+        <header>
+          <div id="header">
+            <h1><a title="Nevermoi" class="" href="/">Nevermoi</a></h1>
+          </div>
+          <nav>
             
-                
+            <span><a title="Archive" href="/archive.html"><i class="fa fa-list-ul"></i></a></span>
             
-        
+            <span><a title="Tags" href="/tags.html"><i class="fa fa-tags"></i></a></span>
             
-                
+            <span><a title="About" href="/about.html"><i class="fa fa-user"></i></a></span>
             
-        
+            <span><a title="Subscribe" href="/atom.xml"><i class="fa fa-rss"></i></a></span>
             
-                
-                    <a class="sidebar-nav-item" href="/about/">About</a>
-                
-            
-        
-            
-        
-            
-        
-            
-                
-            
-        
-        <span class="sidebar-nav-item">Currently v0.0.2</span>
-    </nav>
-
-    <div class="sidebar-item">
-        <p>
-            &copy; 2016. All rights reserved.
-        </p>
-    </div>
-</div>
-
-
-    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-        <div class="masthead">
-            <div class="container">
-                <h3 class="masthead-title">
-            <a href="/" title="Home">Nevermoi</a>
-            <small>Nevermoi means never ever touch me</small>
-          </h3>
-            </div>
-        </div>
-
-        <div class="container content">
-            <div class="posts">
+          </nav>
+        </header>
+        <div id="content">
+        <div>
+  <ul class="listing">
   
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2016/02/12/float-point-note/">
-        二进制表示float-point
-      </a>
-    </h1>
-
-    <span class="post-date">12 Feb 2016</span>
-
-    <p>在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：</p>
-
-<p><code>int i = 5;</code></p>
-
-<p>上面的statement声明了一个int型变量 i，并赋值为 5，其二进制为101。在32位计算机中，4个字节表示int变量，所以，5被以32位二进制的方式保存在了计算机里 ”00000000 00000000 00000000 00000101“，其16进制表示为 0x00000005。</p>
-
-<p>那么当这个int型的i被转换为float型的时候，怎么表示？</p>
-
-<p>根据 ”IEEE 754“ 国际标准，任意一个二进制浮点数V可以表示为：</p>
-
-<p><code>V = (-1)^S x M x 2^E</code></p>
-
-<p>S M E这三个将被存入计算机内部。 其中S是符号位，当S=0时，表示正数，S=1时，表示负数。M是有效数字，2&gt;M&gt;=1。E是指数位。</p>
-
-<p>上面的例子中 i 的十进制是 5， 二进制为 101， 表示成IEEE 754形式为：(-1)^0 x 1.01 x 2^2。 则：S = 0, M = 1.01, E = 2。</p>
-
-<pre><code>1. 在32位计算机中，最高位是S=0，接下来的8位为指数E=2 (0000 0010)，剩下的23位是M=1.01
-2. 在64位计算机中，最高位是S=0，接下来的11位为指数E=2 (0000 0000 010)，剩下的52位是M=1.01
-</code></pre>
-
-<ol>
-  <li>
-    <p>S没啥好说的， 要么1，要么0.</p>
-  </li>
-  <li>
-    <p>先说M，因为比E简单。我们知道M的值介于1和2之间，IEEE 754就觉得 M=1.xxxxx中的1也可以省略掉，于是就只保存xxxxx部分，读出来的时候再加上1。于是，在32位计算机中，M的有效位变成了24位；64位系统中变成了53位。</p>
-  </li>
-  <li>
-    <p>说到E，在32位和64位计算机中，它的位数不同所以真实值也不同，但又因为其有正负之分，为了平均表示正负，IEEE 754 规定要减去一个中位数。8位E的情况下，E可以表示0～255，其中位数为 127；11位E的情况下，E可以表示0～2047，其中位数为1023。这个中位数就是正负的分界线。</p>
-  </li>
-</ol>
-
-<p>例如：101 = (-1)^0 x 1.01 x 2^2，E=2，在保存成64位的时候会变成2+1023=1025 (1000 0000 001 );</p>
-
-<p>接下来我解释一下为啥javascript中 <code>0.5-0.25=0.25</code> 而 <code>0.4-0.1=0.30000000000...04</code> 这样怪东西。</p>
-
-<p>首先呢，有两个概念，一个是定点小数，一个是浮点小数。</p>
-
-<ol>
-  <li>定点小数有个问题是，一些小数不可能用二进制准确表达出来，比如说0.2。总有舍弃一些末位。在javascript中，能在console显示或者其他print出来的都是定点小数。</li>
-  <li>浮点小数就相对精确一些，因为它舍弃的位更低，所以表示的范围也更大一点。</li>
-</ol>
-
-<p>一个非2的幂级数的倒数的数， 无论定点还是浮点小数，都不能在计算机中100%准确表示。</p>
-
-<p>所以减出来就不是精确的了。</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2015/01/26/principles-of-ood/">
-        Principles of OOD and examples
-      </a>
-    </h1>
-
-    <span class="post-date">26 Jan 2015</span>
-
-    <h3 id="vspr">VS;PR</h3>
-<p>It is important in a way to master some principles of OOD: <a href="https://en.wikipedia.org/wiki/Object-oriented_design">Object Oriented Design</a></p>
-
-<ol>
-  <li>The Single Responsibility Principle: <a href="https://drive.google.com/file/d/0ByOwmqah_nuGNHEtcU5OekdDMkk/view">Google Doc</a></li>
-  <li>The Open Closed Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1/view">Google Drive</a></li>
-  <li>The Liskov Substitution Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh/view">Google Doc</a></li>
-  <li>The Interface Segregation Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi/view">Google Doc</a></li>
-  <li>The Dependency Inversion Principle: <a href="https://drive.google.com/file/d/0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz/view">Google Drive</a></li>
-</ol>
-
-<p>The artical brings these to me: 
-&gt; http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="./2015/01/24/hello-world/">
-        How this blog starts up
-      </a>
-    </h1>
-
-    <span class="post-date">24 Jan 2015</span>
-
-    <h4 id="content">content</h4>
-<ol>
-  <li>Install <em>ruby</em> to Windows OS: <a href="http://rubyinstaller.org/">Ruby for Windows</a></li>
-  <li>Install <em>gem</em>, which is a ruby package manager: <a href="https://rubygems.org/pages/download">Gem</a>
-    <ul>
-      <li>Update build tools using its DevKit: <a href="http://flatshaded.com/2013/05/installing-jekyll-on-windows/">fast-stemmer error fixing</a></li>
-    </ul>
-  </li>
-  <li>Install <em>jekyll</em>: <a href="http://jekyllrb.com/docs/installation/">Jekyll</a></li>
-  <li>Config <em>Github</em> page: <a href="https://help.github.com/articles/using-jekyll-with-pages/">Github Page</a></li>
-</ol>
-
-<p><strong>Good luck!</strong></p>
-
-  </div>
-  
-</div>
-
-<div class="pagination">
-  
-    <span class="pagination-item older">Older</span>
-  
-  
+  <article class="content">
+    <section class="title">
+      <h2><a href="/2016/07/11/client-server-communication.html">Some tips about client-server communication</a></h2>
+    </section>
+    <section class="meta">
+    <span class="time">
+      <time datetime="2016-07-11">2016-07-11</time>
+    </span>
     
-      <a class="pagination-item newer" href="/">Newer</a>
+    <span class="tags">
+      
+      <a href="/tags.html#foundation" title="foundation">#foundation</a>
+      
+      <a href="/tags.html#web" title="web">#web</a>
+      
+    </span>
     
-  
-</div>
-
-        </div>
-    </div>
-
-    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
-    <script>
-        (function (document) {
-            var toggle = document.querySelector('.sidebar-toggle');
-            var sidebar = document.querySelector('#sidebar');
-            var checkbox = document.querySelector('#sidebar-checkbox');
-            document.addEventListener('click', function (e) {
-                var target = e.target;
-                if (!checkbox.checked ||
-                    sidebar.contains(target) ||
-                    (target === checkbox || target === toggle)) return;
-                checkbox.checked = false;
-            }, false);
-        })(document);
+    <!-- BEGIN this would not work on any other domain -->
+    <span
+      class           = 'like-wrapper'
+      like-shortname  = ''
+      like-identifier = ''
+      like-name       = 'Some tips about client-server communication'
+      like-link       = '/page2/index.html'
+      like-btn        = '&#xf087;'
+    ></span>
+    <script type="text/javascript">
+      var l = document.createElement('script'); l.type = 'text/javascript'; l.async = true;
+      l.src = 'http://www.like-btn.com/javascript/widget.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(l);
     </script>
-</body>
+    <!-- END this would not work on any other domain -->
+    </section>
+    <section class="post">
+    <ul>
+  <li>
+    <p>Traditional Ajax request
+This way is to set an <em>internal</em> to make XMLHttpRequest, and it is easy to implement but not efficient for server, too heavy.</p>
+  </li>
+  <li>
+    <p>Comet (another Ajax way)
+When XMLHttpRequest is sent, the server won’t respond until server has required data or the timeout is reached, the client received the response and open another request and loop this.</p>
+  </li>
+  <li>
+    <p>Websocket (The future)
+Easy as socket</p>
+  </li>
+  <li>
+    <p>Server Sent Event (alternative)
+Server sends the response after a connection setup</p>
+  </li>
+</ul>
 
+<p>others related reading:</p>
+
+<ul>
+  <li>
+    <p>TCP: low-level, bi-directional, full-duplex, and guaranteed order transport layer. No browser support (except via plugin/Flash).</p>
+  </li>
+  <li>
+    <p>HTTP 1.0: request-response transport protocol layered on TCP. The client makes one full request, the server gives one full response, and then the connection is closed. The request methods (GET, POST, HEAD) have specific transactional meaning for resources on the server.</p>
+  </li>
+  <li>
+    <p>HTTP 1.1: maintains the request-response nature of HTTP 1.0, but allows the connection to stay open for multiple full requests/full responses (one response per request). Still has full headers in the request and response but the connection is re-used and not closed. HTTP 1.1 also added some additional request methods (OPTIONS, PUT, DELETE, TRACE, CONNECT) which also have specific transactional meanings. However, as noted in the introduction to the HTTP 2.0 draft proposal, HTTP 1.1 pipelining is not widely deployed so this greatly limits the utility of HTTP 1.1 to solve latency between browsers and servers.</p>
+  </li>
+  <li>
+    <p>Long-poll: sort of a “hack” to HTTP (either 1.0 or 1.1) where the server does not response immediately (or only responds partially with headers) to the client request. After a server response, the client immediately sends a new request (using the same connection if over HTTP 1.1).</p>
+  </li>
+  <li>
+    <p>HTTP streaming: a variety of techniques (multipart/chunked response) that allow the server to send more than one response to a single client request. The W3C is standardizing this as Server-Sent Events using a text/event-stream MIME type. The browser API (which is fairly similar to the WebSocket API) is called the EventSource API.
+Comet/server push: this is an umbrella term that includes both long-poll and HTTP streaming. Comet libraries usually support multiple techniques to try and maximize cross-browser and cross-server support.</p>
+  </li>
+  <li>
+    <p>WebSockets: a transport layer built-on TCP that uses an HTTP friendly Upgrade handshake. Unlike TCP, which is a streaming transport, WebSockets is a message based transport: messages are delimited on the wire and are re-assembled in-full before delivery to the application. WebSocket connections are bi-directional, full-duplex and long-lived. After the initial handshake request/response, there is no transactional semantics and there is very little per message overhead. The client and server may send messages at any time and must handle message receipt asynchronously.</p>
+  </li>
+  <li>
+    <p>SPDY: a Google initiated proposal to extend HTTP using a more efficient wire protocol but maintaining all HTTP semantics (request/response, cookies, encoding). SPDY introduces a new framing format (with length-prefixed frames) and specifies a way to layering HTTP request/response pairs onto the new framing layer. Headers can be compressed and new headers can be sent after the connection has been established. There are real world implementations of SPDY in browsers and servers.</p>
+  </li>
+  <li>
+    <p>HTTP 2.0: has similar goals to SPDY: reduce HTTP latency and overhead while preserving HTTP semantics. The current draft is derived from SPDY and defines an upgrade handshake and data framing that is very similar the the WebSocket standard for handshake and framing. An alternate HTTP 2.0 draft proposal (httpbis-speed-mobility) actually uses WebSockets for the transport layer and adds the SPDY multiplexing and HTTP mapping as an WebSocket extension (WebSocket extensions are negotiated during the handshake).</p>
+  </li>
+  <li>
+    <p>WebRTC/CU-WebRTC: proposals to allow peer-to-peer connectivity between browsers. This may enable lower average and maximum latency communication because as the underlying transport is SDP/datagram rather than TCP. This allows out-of-order delivery of packets/messages which avoids the TCP issue of latency spikes caused by dropped packets which delay delivery of all subsequent packets (to guarantee in-order delivery).</p>
+  </li>
+  <li>
+    <p>QUIC: is an experimental protocol aimed at reducing web latency over that of TCP. On the surface, QUIC is very similar to TCP+TLS+SPDY implemented on UDP. QUIC provides multiplexing and flow control equivalent to HTTP/2, security equivalent to TLS, and connection semantics, reliability, and congestion control equivalentto TCP. Because TCP is implemented in operating system kernels, and middlebox firmware, making significant changes to TCP is next to impossible. However, since QUIC is built on top of UDP, it suffers from no such limitations. QUIC is designed and optimised for HTTP/2 semantics.</p>
+  </li>
+</ul>
+
+    </section>
+    </article>
+  
+  </ul>
+  <div class="divider"></div>
+  <ul class="listing main-listing">
+    <li class="listing-seperator">Happend earlier this year</i>
+  
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-06-01">2016-06-01</time>
+      <a href="/2016/06/01/build-grid-system-css.html" title="Let's build a simple grid system like Bootstrap">Let's build a simple grid system like Bootstrap</a>
+    </li>
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-02-23">2016-02-23</time>
+      <a href="/2016/02/23/why-junit-cases-not-run-in-order.html" title="Why Junit Cases not run in order in JDK 7.">Why Junit Cases not run in order in JDK 7.</a>
+    </li>
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-02-15">2016-02-15</time>
+      <a href="/2016/02/15/understand-LCS.html" title="Understand Longest Common Subsequence">Understand Longest Common Subsequence</a>
+    </li>
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-02-13">2016-02-13</time>
+      <a href="/2016/02/13/http-header-note.html" title="我们走一遍http中request/response header部分">我们走一遍http中request/response header部分</a>
+    </li>
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-02-12">2016-02-12</time>
+      <a href="/2016/02/12/float-point-note.html" title="二进制表示float-point">二进制表示float-point</a>
+    </li>
+  
+    
+    
+    
+    <li class="listing-seperator"><a href="/archive.html">Previous</a></li>
+  </ul>
+</div>
+
+        </div>
+        <footer>
+          <div>
+            
+            &copy; 2015 ~ 2016 shuson | powered by jekyll | welcome fork <a href="https://github.com/shuson/shuson.github.io" title="fork me">me</a>
+          </div>
+        </footer>
+      </div> <!-- main -->
+  </body>
 </html>

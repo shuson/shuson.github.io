@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-07-25T10:12:34+08:00</updated>
+ <updated>2016-07-26T13:23:38+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -14,7 +14,7 @@
  
  <entry>
    <title>Some tips about client-server communication</title>
-   <link href="http://nevermoi.com/2016/07/11/client-server-communication/"/>
+   <link href="http://nevermoi.com/2016/07/11/client-server-communication.html"/>
    <updated>2016-07-11T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2016/07/11/client-server-communication</id>
    <content type="html">&lt;ul&gt;
@@ -76,7 +76,7 @@ Comet/server push: this is an umbrella term that includes both long-poll and HTT
  
  <entry>
    <title>Let's build a simple grid system like Bootstrap</title>
-   <link href="http://nevermoi.com/2016/06/01/build-grid-system-css/"/>
+   <link href="http://nevermoi.com/2016/06/01/build-grid-system-css.html"/>
    <updated>2016-06-01T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2016/06/01/build-grid-system-css</id>
    <content type="html">&lt;h3 id=&quot;what-is-a-grid-system&quot;&gt;1. What is a Grid System?&lt;/h3&gt;
@@ -205,7 +205,7 @@ mc = maximum columns (12) &lt;br /&gt;&lt;/p&gt;
  
  <entry>
    <title>Why Junit Cases not run in order in JDK 7.</title>
-   <link href="http://nevermoi.com/2016/02/23/why-junit-cases-not-run-in-order/"/>
+   <link href="http://nevermoi.com/2016/02/23/why-junit-cases-not-run-in-order.html"/>
    <updated>2016-02-23T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2016/02/23/why-junit-cases-not-run-in-order</id>
    <content type="html">&lt;h3 id=&quot;conclusion-first&quot;&gt;Conclusion first:&lt;/h3&gt;
@@ -233,7 +233,7 @@ mc = maximum columns (12) &lt;br /&gt;&lt;/p&gt;
  
  <entry>
    <title>Understand Longest Common Subsequence</title>
-   <link href="http://nevermoi.com/2016/02/15/understand-LCS/"/>
+   <link href="http://nevermoi.com/2016/02/15/understand-LCS.html"/>
    <updated>2016-02-15T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2016/02/15/understand-LCS</id>
    <content type="html">&lt;blockquote&gt;
@@ -400,7 +400,7 @@ else:
  
  <entry>
    <title>我们走一遍http中request/response header部分</title>
-   <link href="http://nevermoi.com/2016/02/13/http-header-note/"/>
+   <link href="http://nevermoi.com/2016/02/13/http-header-note.html"/>
    <updated>2016-02-13T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2016/02/13/http-header-note</id>
    <content type="html">&lt;h3 id=&quot;request-header--&quot;&gt;Request Header 解释 示例&lt;/h3&gt;
@@ -474,7 +474,7 @@ else:
  
  <entry>
    <title>二进制表示float-point</title>
-   <link href="http://nevermoi.com/2016/02/12/float-point-note/"/>
+   <link href="http://nevermoi.com/2016/02/12/float-point-note.html"/>
    <updated>2016-02-12T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2016/02/12/float-point-note</id>
    <content type="html">&lt;p&gt;在讨论float-point之前，我们先看int型在计算机内部是怎么表示的：&lt;/p&gt;
@@ -528,7 +528,7 @@ else:
  
  <entry>
    <title>Principles of OOD and examples</title>
-   <link href="http://nevermoi.com/2015/01/26/principles-of-ood/"/>
+   <link href="http://nevermoi.com/2015/01/26/principles-of-ood.html"/>
    <updated>2015-01-26T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2015/01/26/principles-of-ood</id>
    <content type="html">&lt;h3 id=&quot;vspr&quot;&gt;VS;PR&lt;/h3&gt;
@@ -549,7 +549,7 @@ else:
  
  <entry>
    <title>How this blog starts up</title>
-   <link href="http://nevermoi.com/2015/01/24/hello-world/"/>
+   <link href="http://nevermoi.com/2015/01/24/hello-world.html"/>
    <updated>2015-01-24T00:00:00+08:00</updated>
    <id>http://nevermoi.com/2015/01/24/hello-world</id>
    <content type="html">&lt;h4 id=&quot;content&quot;&gt;content&lt;/h4&gt;

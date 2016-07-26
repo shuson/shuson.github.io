@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="shuson" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Let's build a simple grid system like Bootstrap</title>
+    
+    <link rel="fav icon" href="/public/favicon.ico">
+    <link href="/atom.xml" rel="alternate" title="" type="application/atom+xml" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/retina.js/1.3.0/retina.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script type="text/javascript"> hljs.initHighlightingOnLoad(); </script>
+  </head>
+  <body>
+      <div id="main" role="main">
+        <header>
+          <div id="header">
+            <h1><a title="Nevermoi" class="" href="/">Nevermoi</a></h1>
+          </div>
+          <nav>
+            
+            <span><a title="Archive" href="/archive.html"><i class="fa fa-list-ul"></i></a></span>
+            
+            <span><a title="Tags" href="/tags.html"><i class="fa fa-tags"></i></a></span>
+            
+            <span><a title="About" href="/about.html"><i class="fa fa-user"></i></a></span>
+            
+            <span><a title="Subscribe" href="/atom.xml"><i class="fa fa-rss"></i></a></span>
+            
+          </nav>
+        </header>
+        <div id="content">
+        <article>
+  <section class="title">
+    <h2>Let's build a simple grid system like Bootstrap </h2>
+  </section>
+  <section class="meta">
+  <span class="time">
+    <time datetime='2016-06-01'>2016-06-01</time>
+  </span>
+  
+  <span class="tags">
+    
+    <a href="/tags.html#css" title="css">#css</a>
+    
+  </span>
+  <!-- BEGIN this would not work on any other domain -->
+  <span
+    class           = "like-wrapper"
+    like-shortname  = ''
+    like-identifier = ''
+    like-name       = 'Let's build a simple grid system like Bootstrap'
+    like-btn        = '&#xf087;'
+    like-link       = '/2016/06/01/build-grid-system-css.html'
+    ></span>
+  <script type="text/javascript">
+    var l = document.createElement('script');
+    l.type = 'text/javascript'; l.async = true; l.src = 'http://www.like-btn.com/javascript/widget.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(l);
+  </script>
+  <!-- END this would not work on any other domain -->
+  
+  </section>
+  <section class="post">
+  <h3 id="what-is-a-grid-system">1. What is a Grid System?</h3>
+<p>A grid system, in the scope of css, is a structure to build stacked content vertically and horizontally.</p>
+
+<h3 id="two-basic-components">2. Two basic components</h3>
+<p>Grid system, at lease, has two basic components: row and column, but some grid systems have a wrapper above basic components, <strong>container</strong> from Bootstrap, for example.</p>
+
+<p>Additionally, the two components don’t include the padding and border within the declared width and height. To make it ready for responsiveness, we can set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing">box-sizing</a> property to <code>border-box</code> for both rows and columns:</p>
+
+<p><code>
+.row, .column {
+    box-sizing: border-box;
+}
+</code></p>
+
+<p>Now we can leverage percentages for the widths of the columns. This allows the columns to scale upwards and downwards within different viewports while maintaining the structure.</p>
+
+<h3 id="make-row-clearfixed">3. Make row clearfixed</h3>
+<p>One line one row, so the row component must clear all the floating elements on both sides of it.</p>
+
+<p><code>
+.row:before, .row:after {
+    content: " ";
+    display: table;
+}
+</code></p>
+
+<p><code>
+.row:after {
+    clear: both;
+}
+</code></p>
+
+<h3 id="make-column-floated-and-aesthetic">4. Make column floated and aesthetic</h3>
+<p>Since column is accommodated inside of row, it is floated horizontal alignment, and the position should be relative to allow any absolutely position content within the column to be positioned relative to that column</p>
+
+<p><code>
+.column {
+    position: relative;
+    float: left;
+}
+</code></p>
+
+<p>To make columns aesthetic, a simple gutter is needed:</p>
+
+<p><code>
+.column + .column {
+    margin-left: 1.6%;
+}
+</code></p>
+
+<h3 id="calculating-column-width">5. Calculating column width</h3>
+<p>Now we need to determine the maximum amount of columns per row, before calculating the width of column. Let take Bootstrap’s choice: 12 columns per row.</p>
+
+<p>The calculation will be based on formula:</p>
+
+<blockquote>
+  <p><strong>scw = (100 – (m * (mc – 1))) / mc</strong></p>
+</blockquote>
+
+<blockquote>
+  <p>scw = single column width <br />
+m = margin (1.6%) <br />
+mc = maximum columns (12) <br /></p>
+</blockquote>
+
+<p>So the single column’s width is 6.86666666667%</p>
+
+<p><code>
+.column-1 {
+    width: 6.86666666667%;
+}
+</code></p>
+
+<p><code>
+.column-2 {
+    width: 15.3333333333%;
+}
+</code></p>
+
+<p><code>
+.column-3 {
+    width: 23.8%;
+}
+</code></p>
+
+<p><code>
+.column-4 {
+    width: 32.2666666667%;
+}
+</code></p>
+
+<p><code>
+.column-5 {
+    width: 40.7333333333%;
+}
+/* omitted */
+</code></p>
+
+<h3 id="optimizing-for-mobile-devices">6. Optimizing for mobile devices</h3>
+<p>To adapt to various devices with smaller viewports, we need <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries">Media Queries</a> to set the rule:</p>
+
+<p><code>
+@media only screen and (max-width: 550px) {
+  .column-1,
+  .column-12 {
+    width: auto,
+    float: none
+  }
+  .column + .column {
+    margin-left: 0;
+  }
+}
+</code></p>
+
+<h3 id="finally-put-everything-together">7. Finally, put everything together.</h3>
+
+<p>Here is a demo:</p>
+
+<p data-height="265" data-theme-id="0" data-slug-hash="QEwMyP" data-default-tab="html,result" data-user="nevermoi" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/nevermoi/pen/QEwMyP/">Understanding CSS Grid Systems</a> by nevermoi (<a href="http://codepen.io/nevermoi">@nevermoi</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+<script async="" src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+  </section>
+  
+</article>
+        </div>
+        <footer>
+          <div>
+            
+            &copy; 2015 ~ 2016 shuson | powered by jekyll | welcome fork <a href="https://github.com/shuson/shuson.github.io" title="fork me">me</a>
+          </div>
+        </footer>
+      </div> <!-- main -->
+  </body>
+</html>
