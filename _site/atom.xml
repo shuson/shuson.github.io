@@ -4,13 +4,71 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-08-11T11:10:05+08:00</updated>
+ <updated>2016-08-11T16:19:27+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Understanding the Event Model</title>
+   <link href="http://nevermoi.com/2016/08/12/event-model-notes.html"/>
+   <updated>2016-08-12T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/08/12/event-model-notes</id>
+   <content type="html">&lt;h1 id=&quot;what-is-an-event&quot;&gt;What is an Event?&lt;/h1&gt;
+
+&lt;p&gt;An event is a notification that occurs in response to an action, such as clicking, key pressing, or state changes in document.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-life-cycle-of-an-event&quot;&gt;The Life Cycle of an Event&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The user action or condition associated with the event occurs.&lt;/li&gt;
+  &lt;li&gt;The event object is instantly updated.&lt;/li&gt;
+  &lt;li&gt;The event fires.&lt;/li&gt;
+  &lt;li&gt;The event handler associated with the source element is called, carries out its actions, and returns.&lt;/li&gt;
+  &lt;li&gt;The event bubbles up to the next element in the hierarchy, and the event handler for that element is called. This step repeats until the event bubbles up to the window object or a handler cancels bubbling.&lt;/li&gt;
+  &lt;li&gt;The final default action, if any, is taken, but only if this action has not been canceled by a handler.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here is an example to explain event bubbling.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;html&amp;gt;
+&amp;lt;body onclick=&quot;wasClicked()&quot;&amp;gt;
+    &amp;lt;h1&amp;gt;Welcome!&amp;lt;/h1&amp;gt;
+    &amp;lt;p&amp;gt;This is a very short document.&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;script&amp;gt;
+    function wasClicked() {
+        alert(&quot;I was clicked &quot; + window.event.srcElement.tagName);
+    }
+&amp;lt;/script&amp;gt;
+&amp;lt;/html&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;event-bubbling&quot;&gt;Event Bubbling&lt;/h2&gt;
+
+&lt;p&gt;Event bubbling ensures that the event handlers for all elements in which an event occurs have an opportunity to respond to the event. Bubbling events will then trigger any additional event listeners found by following the Node’s parent chain upward, checking for any event listeners registered on each successive Node. This upward propagation will continue up to and including the Document.&lt;/p&gt;
+
+&lt;p&gt;Event handler may choose to prevent continuation of the bubbling process by calling the &lt;em&gt;preventBubble&lt;/em&gt; method of the Event interface.&lt;/p&gt;
+
+&lt;h2 id=&quot;canceling-default-actions&quot;&gt;Canceling Default Actions&lt;/h2&gt;
+
+&lt;p&gt;Cancelation is accomplished by calling the Event’s &lt;em&gt;preventDefault&lt;/em&gt; method. If one or more EventListeners call &lt;em&gt;preventDefault&lt;/em&gt; during any phase of event flow the default action will be canceled.&lt;/p&gt;
+
+&lt;p&gt;Canceling a default action is not the same as canceling event bubbling. You can cancel the default action and still allow the event to bubble up through the hierarchy.&lt;/p&gt;
+
+&lt;h2 id=&quot;event-object&quot;&gt;Event object&lt;/h2&gt;
+
+&lt;p&gt;The web browser defines many events of different kinds. Each definition includes, as the data structure passed to the handler function, an object which inherits from the &lt;em&gt;EventPrototype&lt;/em&gt; object.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;references: &lt;a href=&quot;https://www.w3.org/TR/DOM-Level-2-Events/events.html&quot;&gt;w3 event specs&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Some tips about Strict Mode of JavaScript</title>
