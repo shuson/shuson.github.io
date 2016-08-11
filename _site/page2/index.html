@@ -40,18 +40,16 @@
   
   <article class="content">
     <section class="title">
-      <h2><a href="/2016/07/11/client-server-communication.html">Some tips about client-server communication</a></h2>
+      <h2><a href="/2016/08/11/strict-mode-notes.html">Some tips about Strict Mode of JavaScript</a></h2>
     </section>
     <section class="meta">
     <span class="time">
-      <time datetime="2016-07-11">2016-07-11</time>
+      <time datetime="2016-08-11">2016-08-11</time>
     </span>
     
     <span class="tags">
       
-      <a href="/tags.html#foundation" title="foundation">#foundation</a>
-      
-      <a href="/tags.html#web" title="web">#web</a>
+      <a href="/tags.html#javascript" title="javascript">#javascript</a>
       
     </span>
     
@@ -60,7 +58,7 @@
       class           = 'like-wrapper'
       like-shortname  = ''
       like-identifier = ''
-      like-name       = 'Some tips about client-server communication'
+      like-name       = 'Some tips about Strict Mode of JavaScript'
       like-link       = '/page2/index.html'
       like-btn        = '&#xf087;'
     ></span>
@@ -72,60 +70,30 @@
     <!-- END this would not work on any other domain -->
     </section>
     <section class="post">
-    <ul>
-  <li>
-    <p>Traditional Ajax request
-This way is to set an <em>internal</em> to make XMLHttpRequest, and it is easy to implement but not efficient for server, too heavy.</p>
-  </li>
-  <li>
-    <p>Comet (another Ajax way)
-When XMLHttpRequest is sent, the server won’t respond until server has required data or the timeout is reached, the client received the response and open another request and loop this.</p>
-  </li>
-  <li>
-    <p>Websocket (The future)
-Easy as socket</p>
-  </li>
-  <li>
-    <p>Server Sent Event (alternative)
-Server sends the response after a connection setup</p>
-  </li>
-</ul>
+    <h1 id="what-does-strict-mode-bring-to-us">What does Strict Mode bring to us</h1>
 
-<p>others related reading:</p>
+<ol>
+  <li>strict mode eliminates some JavaScript silent errors by changing them to throw errors.</li>
+  <li>strict mode fixes mistakes that make it difficult for JavaScript engines to perform optimizations: strict mode code can sometimes be made to run faster than identical code that’s not strict mode</li>
+  <li>strict mode prohibits some syntax likely to be defined in future versions of ECMAScript.</li>
+</ol>
 
-<ul>
-  <li>
-    <p>TCP: low-level, bi-directional, full-duplex, and guaranteed order transport layer. No browser support (except via plugin/Flash).</p>
-  </li>
-  <li>
-    <p>HTTP 1.0: request-response transport protocol layered on TCP. The client makes one full request, the server gives one full response, and then the connection is closed. The request methods (GET, POST, HEAD) have specific transactional meaning for resources on the server.</p>
-  </li>
-  <li>
-    <p>HTTP 1.1: maintains the request-response nature of HTTP 1.0, but allows the connection to stay open for multiple full requests/full responses (one response per request). Still has full headers in the request and response but the connection is re-used and not closed. HTTP 1.1 also added some additional request methods (OPTIONS, PUT, DELETE, TRACE, CONNECT) which also have specific transactional meanings. However, as noted in the introduction to the HTTP 2.0 draft proposal, HTTP 1.1 pipelining is not widely deployed so this greatly limits the utility of HTTP 1.1 to solve latency between browsers and servers.</p>
-  </li>
-  <li>
-    <p>Long-poll: sort of a “hack” to HTTP (either 1.0 or 1.1) where the server does not response immediately (or only responds partially with headers) to the client request. After a server response, the client immediately sends a new request (using the same connection if over HTTP 1.1).</p>
-  </li>
-  <li>
-    <p>HTTP streaming: a variety of techniques (multipart/chunked response) that allow the server to send more than one response to a single client request. The W3C is standardizing this as Server-Sent Events using a text/event-stream MIME type. The browser API (which is fairly similar to the WebSocket API) is called the EventSource API.
-Comet/server push: this is an umbrella term that includes both long-poll and HTTP streaming. Comet libraries usually support multiple techniques to try and maximize cross-browser and cross-server support.</p>
-  </li>
-  <li>
-    <p>WebSockets: a transport layer built-on TCP that uses an HTTP friendly Upgrade handshake. Unlike TCP, which is a streaming transport, WebSockets is a message based transport: messages are delimited on the wire and are re-assembled in-full before delivery to the application. WebSocket connections are bi-directional, full-duplex and long-lived. After the initial handshake request/response, there is no transactional semantics and there is very little per message overhead. The client and server may send messages at any time and must handle message receipt asynchronously.</p>
-  </li>
-  <li>
-    <p>SPDY: a Google initiated proposal to extend HTTP using a more efficient wire protocol but maintaining all HTTP semantics (request/response, cookies, encoding). SPDY introduces a new framing format (with length-prefixed frames) and specifies a way to layering HTTP request/response pairs onto the new framing layer. Headers can be compressed and new headers can be sent after the connection has been established. There are real world implementations of SPDY in browsers and servers.</p>
-  </li>
-  <li>
-    <p>HTTP 2.0: has similar goals to SPDY: reduce HTTP latency and overhead while preserving HTTP semantics. The current draft is derived from SPDY and defines an upgrade handshake and data framing that is very similar the the WebSocket standard for handshake and framing. An alternate HTTP 2.0 draft proposal (httpbis-speed-mobility) actually uses WebSockets for the transport layer and adds the SPDY multiplexing and HTTP mapping as an WebSocket extension (WebSocket extensions are negotiated during the handshake).</p>
-  </li>
-  <li>
-    <p>WebRTC/CU-WebRTC: proposals to allow peer-to-peer connectivity between browsers. This may enable lower average and maximum latency communication because as the underlying transport is SDP/datagram rather than TCP. This allows out-of-order delivery of packets/messages which avoids the TCP issue of latency spikes caused by dropped packets which delay delivery of all subsequent packets (to guarantee in-order delivery).</p>
-  </li>
-  <li>
-    <p>QUIC: is an experimental protocol aimed at reducing web latency over that of TCP. On the surface, QUIC is very similar to TCP+TLS+SPDY implemented on UDP. QUIC provides multiplexing and flow control equivalent to HTTP/2, security equivalent to TLS, and connection semantics, reliability, and congestion control equivalentto TCP. Because TCP is implemented in operating system kernels, and middlebox firmware, making significant changes to TCP is next to impossible. However, since QUIC is built on top of UDP, it suffers from no such limitations. QUIC is designed and optimised for HTTP/2 semantics.</p>
-  </li>
-</ul>
+<h1 id="invoking-strict-mode">Invoking Strict Mode</h1>
+
+<ol>
+  <li>Strict mode applies to entire <strong>scripts</strong> or to individual <strong>functions</strong>. It doesn’t apply to block statements enclosed in {} braces;</li>
+  <li>It is recommended that you enable strict mode on a function-by-function basis, because concatenating strict and non-strict scripts is problematic.</li>
+</ol>
+
+<h1 id="changes-in-strict-mode">Changes in strict mode</h1>
+
+<ol>
+  <li>Converting mistakes into errors</li>
+  <li>Simplifying variable uses</li>
+  <li>Making eval and arguments simpler</li>
+  <li>“Securing” JavaScript</li>
+  <li>Paving the way for future ECMAScript versions</li>
+</ol>
 
     </section>
     </article>
@@ -135,6 +103,13 @@ Comet/server push: this is an umbrella term that includes both long-poll and HTT
   <ul class="listing main-listing">
     <li class="listing-seperator">Happend earlier this year</i>
   
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-07-11">2016-07-11</time>
+      <a href="/2016/07/11/client-server-communication.html" title="Some tips about client-server communication">Some tips about client-server communication</a>
+    </li>
   
     
     

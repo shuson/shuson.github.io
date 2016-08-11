@@ -4,13 +4,45 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-07-26T13:57:15+08:00</updated>
+ <updated>2016-08-11T11:07:14+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Some tips about Strict Mode of JavaScript</title>
+   <link href="http://nevermoi.com/2016/08/11/strict-mode-notes.html"/>
+   <updated>2016-08-11T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/08/11/strict-mode-notes</id>
+   <content type="html">&lt;h1 id=&quot;what-does-strict-mode-bring-to-us&quot;&gt;What does Strict Mode bring to us&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;strict mode eliminates some JavaScript silent errors by changing them to throw errors.&lt;/li&gt;
+  &lt;li&gt;strict mode fixes mistakes that make it difficult for JavaScript engines to perform optimizations: strict mode code can sometimes be made to run faster than identical code that’s not strict mode&lt;/li&gt;
+  &lt;li&gt;strict mode prohibits some syntax likely to be defined in future versions of ECMAScript.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;invoking-strict-mode&quot;&gt;Invoking Strict Mode&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Strict mode applies to entire &lt;strong&gt;scripts&lt;/strong&gt; or to individual &lt;strong&gt;functions&lt;/strong&gt;. It doesn’t apply to block statements enclosed in {} braces;&lt;/li&gt;
+  &lt;li&gt;It is recommended that you enable strict mode on a function-by-function basis, because concatenating strict and non-strict scripts is problematic.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;changes-in-strict-mode&quot;&gt;Changes in strict mode&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Converting mistakes into errors&lt;/li&gt;
+  &lt;li&gt;Simplifying variable uses&lt;/li&gt;
+  &lt;li&gt;Making eval and arguments simpler&lt;/li&gt;
+  &lt;li&gt;“Securing” JavaScript&lt;/li&gt;
+  &lt;li&gt;Paving the way for future ECMAScript versions&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Some tips about client-server communication</title>
