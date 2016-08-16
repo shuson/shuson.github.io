@@ -40,16 +40,16 @@
   
   <article class="content">
     <section class="title">
-      <h2><a href="/2016/08/12/event-model-notes.html">Understanding the Event Model</a></h2>
+      <h2><a href="/2016/08/16/read-tcp-segment.html">Read TCP segment by example</a></h2>
     </section>
     <section class="meta">
     <span class="time">
-      <time datetime="2016-08-12">2016-08-12</time>
+      <time datetime="2016-08-16">2016-08-16</time>
     </span>
     
     <span class="tags">
       
-      <a href="/tags.html#web" title="web">#web</a>
+      <a href="/tags.html#network" title="network">#network</a>
       
     </span>
     
@@ -58,7 +58,7 @@
       class           = 'like-wrapper'
       like-shortname  = ''
       like-identifier = ''
-      like-name       = 'Understanding the Event Model'
+      like-name       = 'Read TCP segment by example'
       like-link       = '/page2/index.html'
       like-btn        = '&#xf087;'
     ></span>
@@ -70,56 +70,111 @@
     <!-- END this would not work on any other domain -->
     </section>
     <section class="post">
-    <h1 id="what-is-an-event">What is an Event?</h1>
+    <h1 id="what-is-a-tcp-segment">What is a TCP segment?</h1>
 
-<p>An event is a notification that occurs in response to an action, such as clicking, key pressing, or state changes in document.</p>
+<p>TCP is a transport layer protocol used by applications that require guaranteed delivery. And the byte stream is transfered in segment illustrated below. 
+~~~
+0                   1                   2                   3 <br />
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |          Source Port          |       Destination Port        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                        Sequence Number                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Acknowledgment Number                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Data |           |U|A|P|R|S|F|                               |
+   | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+   |       |           |G|K|H|T|N|N|                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Checksum            |         Urgent Pointer        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Options                    |    Padding    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                             data                              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~</p>
 
-<h2 id="the-life-cycle-of-an-event">The Life Cycle of an Event</h2>
+<h2 id="explain-the-segment-by-tcpdump">Explain the segment by tcpdump</h2>
+<p>Let’s say, we have a client-server connection example, which are about to playing “echo” game.</p>
 
 <ol>
-  <li>The user action or condition associated with the event occurs.</li>
-  <li>The event object is instantly updated.</li>
-  <li>The event fires.</li>
-  <li>The event handler associated with the source element is called, carries out its actions, and returns.</li>
-  <li>The event bubbles up to the next element in the hierarchy, and the event handler for that element is called. This step repeats until the event bubbles up to the window object or a handler cancels bubbling.</li>
-  <li>The final default action, if any, is taken, but only if this action has not been canceled by a handler.</li>
+  <li>The client starts a connection to server, tcpdump will capture following segments as 3 time shake-hand:</li>
 </ol>
 
-<p>Here is an example to explain event bubbling.</p>
+<pre><code>// seg 1
+13:27:45.927137 IP (tos 0x0, ttl  64, id 304, offset 0, flags [DF], proto: TCP (6), length: 60) 127.0.0.1.60534 &gt; 127.0.0.1.6888: S, cksum 0x5f32 (correct), 2584692379:2584692379(0) win 32792 &lt;mss 16396,sackOK,timestamp 10962859 0,nop,wscale 6&gt;
 
-<pre><code class="language-html">&lt;html&gt;
-&lt;body onclick="wasClicked()"&gt;
-    &lt;h1&gt;Welcome!&lt;/h1&gt;
-    &lt;p&gt;This is a very short document.&lt;/p&gt;
-&lt;/body&gt;
-&lt;script&gt;
-    function wasClicked() {
-        alert("I was clicked " + window.event.srcElement.tagName);
-    }
-&lt;/script&gt;
-&lt;/html&gt;
+//seg 2
+13:27:45.927254 IP (tos 0x0, ttl  64, id 0, offset 0, flags [DF], proto: TCP (6), length: 60) 127.0.0.1.6888 &gt; 127.0.0.1.60534: S, cksum 0x3648 (correct), 2589673026:2589673026(0) ack 2584692380 win 32768 &lt;mss 16396,sackOK,timestamp 10962860 10962859,nop,wscale 6&gt;
 
+//seg 3
+13:27:45.927265 IP (tos 0x0, ttl  64, id 305, offset 0, flags [DF], proto: TCP (6), length: 52) 127.0.0.1.60534 &gt; 127.0.0.1.6888: ., cksum 0x1d6a (correct), 2584692380:2584692380(0) ack 2589673027 win 513 &lt;nop,nop,timestamp 10962860 10962860&gt;
 </code></pre>
 
-<h2 id="event-bubbling">Event Bubbling</h2>
+<p>Blabla:</p>
 
-<p>Event bubbling ensures that the event handlers for all elements in which an event occurs have an opportunity to respond to the event. Bubbling events will then trigger any additional event listeners found by following the Node’s parent chain upward, checking for any event listeners registered on each successive Node. This upward propagation will continue up to and including the Document.</p>
+<pre><code>1. tos: [Type of Service](https://en.wikipedia.org/wiki/Type_of_service)
+2. TTL(time - to - live): means maxium number of routers passed through, whenever this segment passes through a router, TTL minus 1.
+3. id: IP packet indentification, for the use of grouping data
+4. offset: grouping data
+5. flags: DF means no grouping, MF means multiple grouping
+6. proto: protocol in use
+7. 127.0.0.1.60534 &gt; 127.0.0.1.6888: source IP address to destination
+8. S: means new connection established, the SYN flag becomes "1" and ISN(Initial Sequence Number) is created for both client as "2584692379", for server side the ISN is "2589673026" when server responds
+9. chksum: for checking 
+10. win: TCP window for the control of congestion. Tell the other side how many data the sender can recieve.
+11: ack: tell the other side, the data is recieved.
+</code></pre>
 
-<p>Event handler may choose to prevent continuation of the bubbling process by calling the <em>preventBubble</em> method of the Event interface.</p>
+<ol>
+  <li>Client sends “a” to server side, tcpdump will capture the following segments:</li>
+</ol>
 
-<h2 id="canceling-default-actions">Canceling Default Actions</h2>
+<pre><code>// seg 1
+13:27:48.248592 IP (tos 0x0, ttl  64, id 306, offset 0, flags [DF], proto: TCP (6), length: 54) 127.0.0.1.60534 &gt; 127.0.0.1.6888: P, cksum 0xfe2a (incorrect (-&gt; 0xb344), 2584692380:2584692382(2) ack 2589673027 win 513 &lt;nop,nop,timestamp 10965181 10962860&gt;
 
-<p>Cancelation is accomplished by calling the Event’s <em>preventDefault</em> method. If one or more EventListeners call <em>preventDefault</em> during any phase of event flow the default action will be canceled.</p>
+// seg 2
+13:27:48.248739 IP (tos 0x0, ttl  64, id 495, offset 0, flags [DF], proto: TCP (6), length: 52) 127.0.0.1.6888 &gt; 127.0.0.1.60534: ., cksum 0x0b47 (correct), 2589673027:2589673027(0) ack 2584692382 win 512 &lt;nop,nop,timestamp 10965181 10965181&gt;
 
-<p>Canceling a default action is not the same as canceling event bubbling. You can cancel the default action and still allow the event to bubble up through the hierarchy.</p>
+// seg 3
+13:27:48.249061 IP (tos 0x0, ttl  64, id 496, offset 0, flags [DF], proto: TCP (6), length: 54) 127.0.0.1.6888 &gt; 127.0.0.1.60534: P, cksum 0xfe2a (incorrect (-&gt; 0xaa32), 2589673027:2589673029(2) ack 2584692382 win 512 &lt;nop,nop,timestamp 10965181 10965181&gt;
 
-<h2 id="event-object">Event object</h2>
+// seg 4
+13:27:48.249085 IP (tos 0x0, ttl  64, id 307, offset 0, flags [DF], proto: TCP (6), length: 52) 127.0.0.1.60534 &gt; 127.0.0.1.6888: ., cksum 0x0b43 (correct), 2584692382:2584692382(0) ack 2589673029 win 513 &lt;nop,nop,timestamp 10965182 10965181&gt;
+</code></pre>
 
-<p>The web browser defines many events of different kinds. Each definition includes, as the data structure passed to the handler function, an object which inherits from the <em>EventPrototype</em> object.</p>
+<p>Blabla:</p>
 
-<blockquote>
-  <p>references: <a href="https://www.w3.org/TR/DOM-Level-2-Events/events.html">w3 event specs</a></p>
-</blockquote>
+<pre><code>1. seg 1, P means PUSH, "a\n" is 2 bits, so the length is 54. If no data transfered, length should be 52
+2. seg 2, it means server ACK the data sending from client.
+3. seg 3, server responds with "a\n"
+4. seg 4, client ACK the data sending from server
+</code></pre>
+
+<ol>
+  <li>Client closes connection to server side, tcpdump will capture the following segments:</li>
+</ol>
+
+<pre><code>// seg 1
+13:38:10.081895 IP (tos 0x0, ttl  64, id 310, offset 0, flags [DF], proto: TCP (6), length: 52) 127.0.0.1.60534 &gt; 127.0.0.1.6888: F, cksum 0x897d (correct), 2584692386:2584692386(0) ack 2589673033 win 513 &lt;nop,nop,timestamp 11586913 10966477&gt;
+
+// seg 2
+13:38:10.081987 IP (tos 0x0, ttl  64, id 498, offset 0, flags [DF], proto: TCP (6), length: 52) 127.0.0.1.6888 &gt; 127.0.0.1.60534: F, cksum 0x11e0 (correct), 2589673033:2589673033(0) ack 2584692387 win 512 &lt;nop,nop,timestamp 11586913 11586913&gt;
+
+// seg 3
+13:38:10.081993 IP (tos 0x0, ttl  64, id 311, offset 0, flags [DF], proto: TCP (6), length: 52) 127.0.0.1.60534 &gt; 127.0.0.1.6888: ., cksum 0x11df (correct), 2584692387:2584692387(0) ack 2589673034 win 513 &lt;nop,nop,timestamp 11586913 11586913&gt;
+</code></pre>
+
+<p>Blabla:</p>
+
+<pre><code>1. seg 1, F means Fin, close request
+2. seg 2, server responds F to close connection
+3. seg 3, client side confirms the close request.
+</code></pre>
+
+<p>EOB
+//</p>
 
     </section>
     </article>
@@ -129,6 +184,13 @@
   <ul class="listing main-listing">
     <li class="listing-seperator">Happened earlier this year</i>
   
+  
+    
+    
+    <li class="listing-item">
+      <time datetime="2016-08-12">2016-08-12</time>
+      <a href="/2016/08/12/event-model-notes.html" title="Understanding the Event Model">Understanding the Event Model</a>
+    </li>
   
     
     
