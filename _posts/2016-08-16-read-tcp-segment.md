@@ -8,6 +8,7 @@ tags:
 # What is a TCP segment?
 
 TCP is a transport layer protocol used by applications that require guaranteed delivery. And the byte stream is transfered in segment illustrated below. 
+
 ~~~
 0                   1                   2                   3   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 

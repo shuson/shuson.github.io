@@ -72,9 +72,9 @@
     <section class="post">
     <h1 id="what-is-a-tcp-segment">What is a TCP segment?</h1>
 
-<p>TCP is a transport layer protocol used by applications that require guaranteed delivery. And the byte stream is transfered in segment illustrated below. 
-~~~
-0                   1                   2                   3 <br />
+<p>TCP is a transport layer protocol used by applications that require guaranteed delivery. And the byte stream is transfered in segment illustrated below.</p>
+
+<pre><code>0                   1                   2                   3   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |          Source Port          |       Destination Port        |
@@ -93,7 +93,7 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                             data                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~</p>
+</code></pre>
 
 <h2 id="explain-the-segment-by-tcpdump">Explain the segment by tcpdump</h2>
 <p>Let’s say, we have a client-server connection example, which are about to playing “echo” game.</p>

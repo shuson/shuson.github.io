@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-08-16T18:02:42+08:00</updated>
+ <updated>2016-08-16T18:04:24+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -19,9 +19,9 @@
    <id>http://nevermoi.com/2016/08/16/read-tcp-segment</id>
    <content type="html">&lt;h1 id=&quot;what-is-a-tcp-segment&quot;&gt;What is a TCP segment?&lt;/h1&gt;
 
-&lt;p&gt;TCP is a transport layer protocol used by applications that require guaranteed delivery. And the byte stream is transfered in segment illustrated below. 
-~~~
-0                   1                   2                   3 &lt;br /&gt;
+&lt;p&gt;TCP is a transport layer protocol used by applications that require guaranteed delivery. And the byte stream is transfered in segment illustrated below.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;0                   1                   2                   3   
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |          Source Port          |       Destination Port        |
@@ -40,7 +40,7 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                             data                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&quot;explain-the-segment-by-tcpdump&quot;&gt;Explain the segment by tcpdump&lt;/h2&gt;
 &lt;p&gt;Let’s say, we have a client-server connection example, which are about to playing “echo” game.&lt;/p&gt;
