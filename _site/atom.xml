@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-08-16T18:04:24+08:00</updated>
+ <updated>2016-08-22T10:25:11+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -212,6 +212,31 @@
   &lt;li&gt;“Securing” JavaScript&lt;/li&gt;
   &lt;li&gt;Paving the way for future ECMAScript versions&lt;/li&gt;
 &lt;/ol&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Docker and Vagrant Breifing</title>
+   <link href="http://nevermoi.com/2016/07/22/docker-vagrant-breifing.html"/>
+   <updated>2016-07-22T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/07/22/docker-vagrant-breifing</id>
+   <content type="html">&lt;h1 id=&quot;what-is-docker&quot;&gt;What is docker?&lt;/h1&gt;
+
+&lt;p&gt;Docker, previously called dotCloud and open-sourced in 2013, is a Linux-only virtual environment (VE) tool, not a VM tool. It builds on LxC (LinuX Containers), which uses the cgroups functionality to enable creation and running of multiple isolated Linux virtual environments (VE) on a single control host.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-it-works&quot;&gt;How it works&amp;gt;?&lt;/h2&gt;
+&lt;p&gt;Docker is really an extension of LxC, which is itself a sort of supercharged Linux chroot. LxC can only isolate not just your installed applications, but even the entire OS. What Docker does is give you the ability to snapshot the OS and apps you want into a common image, then easily deploy this image on other Docker hosts;&lt;/p&gt;
+
+&lt;h1 id=&quot;what-is-vagrant&quot;&gt;What is vagrant?&lt;/h1&gt;
+&lt;p&gt;Vagrant, an open-source product released in 2010, is best described as a &lt;strong&gt;VM manager&lt;/strong&gt;. It allows you to script and package the VM config and the provisioning setup. It is designed to run on top of almost any VM tool – VirtualBox, VMWare, AWS, etc.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-it-works-1&quot;&gt;How it works?&lt;/h2&gt;
+&lt;p&gt;Vagrant, on the other hand, still creates VM’s, although these are still lighter than the full-fat VM’s created by VM emulators. Vagrant provides a reproducible way to generate fully virtualized machines using Oracle’s VirtualBox, AWS or VMWare technology as providers. There is a plugin called vagrant-libvirt, which adds support for libvirt to Vagrant.&lt;/p&gt;
+
+&lt;h1 id=&quot;ve-differs-to-vm&quot;&gt;VE differs to VM&lt;/h1&gt;
+&lt;p&gt;So unlike a VM, a VE like Docker doesn’t create its own virtual computer with a distinct OS and processors and hardware emulation. A VE is VM-lite; it rides on the already existing kernel’s image of the underlying hardware, and only creates a ‘container’ in which to run your apps, and even recreate the OS if you want since the OS is also just another app running on the kernel. It places only a little extra load on the system, so unlike the traditional VM there is very little overhead when using Docker. 
+EOB
+//&lt;/p&gt;
 </content>
  </entry>
  
