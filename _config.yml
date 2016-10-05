@@ -37,9 +37,6 @@ navigations:
 gems:
   - jekyll-paginate
 
-#theme
-theme: Lanyon
-
 # Custom vars
 version:          0.0.2
 
