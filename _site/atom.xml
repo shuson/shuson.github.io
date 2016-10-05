@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-10-05T16:31:21+08:00</updated>
+ <updated>2016-10-05T16:48:19+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -120,8 +120,7 @@
 3. seg 3, client side confirms the close request.
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;EOB
-//&lt;/p&gt;
+&lt;p&gt;//EOB&lt;/p&gt;
 </content>
  </entry>
  

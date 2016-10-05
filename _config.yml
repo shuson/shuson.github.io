@@ -11,7 +11,7 @@ tagline:          'Nevermoi means never ever touch me'
 description:      '『Never』 『Moi』'
 baseUrl:          ''
 url:              'http://nevermoi.com'
-paginate:         5
+#paginate:         5
 githubRepo:       'https://github.com/shuson/shuson.github.io'
 
 author:

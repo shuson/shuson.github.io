@@ -103,5 +103,4 @@ Blabla:
     2. seg 2, server responds F to close connection
     3. seg 3, client side confirms the close request.
 
-EOB
-//
+//EOB

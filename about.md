@@ -5,7 +5,7 @@ title: About
 <br>
 
 <p class="message">
-"Java and JavaScript stack developer."
+"A Java and JavaScript stack developer."
 </p>
 
 Here, my <a href="{{ site.baseUrl }}/cv.html" target="_blank">CV</a> is presented.
