@@ -13,7 +13,7 @@ Here, my <a href="{{ site.baseUrl }}/cv.html" target="_blank">CV</a> is presente
 Or Contact me for a copy of resume via：<br />
 [wlgq@hotmail.com](mailto:wlgq@hotmail.com)
 
-And more on:
+And more going on:
 
 <a href="https://github.com/shuson" target="_blank"><i class="fa fa-github-alt"></i> Github</a>
 <br />
