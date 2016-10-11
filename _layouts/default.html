@@ -40,9 +40,11 @@
         <footer>
           <div>
             {% assign first_post = site.posts | last %}
-            &copy; {{ first_post.date | date: "%Y" }} ~ {{ site.time | date: "%Y" }} {{ site.author.name }} | powered by jekyll | welcome fork <a href="{{site.githubRepo}}" title="fork me">me</a>
+            &copy; {{ first_post.date | date: "%Y" }} ~ {{ site.time | date: "%Y" }} {{ site.author.name }} | powered by jekyll | welcome fork on <a href="{{site.githubRepo}}" title="fork me">Github</a>
           </div>
         </footer>
       </div> <!-- main -->
+      
+      <script id="dsq-count-scr" src="//nevermoi.disqus.com/count.js" async></script>
   </body>
 </html>
