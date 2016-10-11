@@ -4,7 +4,7 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-10-07T10:05:35+08:00</updated>
+ <updated>2016-10-11T15:20:22+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
@@ -223,7 +223,7 @@
 
 &lt;p&gt;Docker, previously called dotCloud and open-sourced in 2013, is a Linux-only virtual environment (VE) tool, not a VM tool. It builds on LxC (LinuX Containers), which uses the cgroups functionality to enable creation and running of multiple isolated Linux virtual environments (VE) on a single control host.&lt;/p&gt;
 
-&lt;h2 id=&quot;how-it-works&quot;&gt;How it works&amp;gt;?&lt;/h2&gt;
+&lt;h2 id=&quot;how-it-works&quot;&gt;How it works?&lt;/h2&gt;
 &lt;p&gt;Docker is really an extension of LxC, which is itself a sort of supercharged Linux chroot. LxC can only isolate not just your installed applications, but even the entire OS. What Docker does is give you the ability to snapshot the OS and apps you want into a common image, then easily deploy this image on other Docker hosts;&lt;/p&gt;
 
 &lt;h1 id=&quot;what-is-vagrant&quot;&gt;What is vagrant?&lt;/h1&gt;

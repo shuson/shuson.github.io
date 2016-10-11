@@ -9,7 +9,7 @@ tags:
 
 Docker, previously called dotCloud and open-sourced in 2013, is a Linux-only virtual environment (VE) tool, not a VM tool. It builds on LxC (LinuX Containers), which uses the cgroups functionality to enable creation and running of multiple isolated Linux virtual environments (VE) on a single control host.
 
-## How it works>?
+## How it works?
 Docker is really an extension of LxC, which is itself a sort of supercharged Linux chroot. LxC can only isolate not just your installed applications, but even the entire OS. What Docker does is give you the ability to snapshot the OS and apps you want into a common image, then easily deploy this image on other Docker hosts;
 
 # What is vagrant?
