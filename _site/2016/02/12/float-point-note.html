@@ -126,8 +126,12 @@
 
 <div id="disqus_thread"></div>
 <script>
-    var disqus_identifier = '/2016/02/12/float-point-note.html';
-    
+    var disqus_config = function () {
+        this.page.url = 'http://nevermoi.com/2016/02/12/float-point-note.html';
+        this.page.identifier = '/2016/02/12/float-point-note';
+        this.page.title = '二进制表示float-point';
+    };
+
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
         

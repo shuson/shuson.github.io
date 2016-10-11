@@ -201,8 +201,12 @@ mc = maximum columns (12) <br /></p>
 
 <div id="disqus_thread"></div>
 <script>
-    var disqus_identifier = '/2016/06/01/build-grid-system-css.html';
-    
+    var disqus_config = function () {
+        this.page.url = 'http://nevermoi.com/2016/06/01/build-grid-system-css.html';
+        this.page.identifier = '/2016/06/01/build-grid-system-css';
+        this.page.title = 'Let's build a simple grid system like Bootstrap';
+    };
+
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
         

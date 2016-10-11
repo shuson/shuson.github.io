@@ -93,8 +93,12 @@
 
 <div id="disqus_thread"></div>
 <script>
-    var disqus_identifier = '/2015/01/26/principles-of-ood.html';
-    
+    var disqus_config = function () {
+        this.page.url = 'http://nevermoi.com/2015/01/26/principles-of-ood.html';
+        this.page.identifier = '/2015/01/26/principles-of-ood';
+        this.page.title = 'Principles of OOD and examples';
+    };
+
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
         

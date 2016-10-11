@@ -104,8 +104,12 @@
 
 <div id="disqus_thread"></div>
 <script>
-    var disqus_identifier = '/2016/08/11/strict-mode-notes.html';
-    
+    var disqus_config = function () {
+        this.page.url = 'http://nevermoi.com/2016/08/11/strict-mode-notes.html';
+        this.page.identifier = '/2016/08/11/strict-mode-notes';
+        this.page.title = 'Some tips about Strict Mode of JavaScript';
+    };
+
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
         

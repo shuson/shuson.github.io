@@ -100,8 +100,12 @@
 
 <div id="disqus_thread"></div>
 <script>
-    var disqus_identifier = '/2016/02/23/why-junit-cases-not-run-in-order.html';
-    
+    var disqus_config = function () {
+        this.page.url = 'http://nevermoi.com/2016/02/23/why-junit-cases-not-run-in-order.html';
+        this.page.identifier = '/2016/02/23/why-junit-cases-not-run-in-order';
+        this.page.title = 'Why Junit Cases not run in order in JDK 7.';
+    };
+
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
         
