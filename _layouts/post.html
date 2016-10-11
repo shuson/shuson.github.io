@@ -47,7 +47,9 @@ comments: true
 
 {% if page.comments %}
 <div id="disqus_thread"></div>
-<script> 
+<script>
+    var disqus_identifier = '{{ page.url }}';
+    
     (function() {  // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
         
