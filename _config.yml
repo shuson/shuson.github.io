@@ -42,4 +42,5 @@ version:          0.0.2
 
 # Comments
 comments :
+    enabled: true
     provider : disqus
