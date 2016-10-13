@@ -4,13 +4,88 @@
  <title>Nevermoi</title>
  <link href="http://nevermoi.com/atom.xml" rel="self"/>
  <link href="http://nevermoi.com/"/>
- <updated>2016-10-11T17:49:03+08:00</updated>
+ <updated>2016-10-13T17:56:53+08:00</updated>
  <id>http://nevermoi.com</id>
  <author>
    <name>shuson</name>
    <email>wlgq@hotmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Everything I know about RSA algorithm</title>
+   <link href="http://nevermoi.com/2016/10/13/everything-i-know-about-rsa.html"/>
+   <updated>2016-10-13T00:00:00+08:00</updated>
+   <id>http://nevermoi.com/2016/10/13/everything-i-know-about-rsa</id>
+   <content type="html">&lt;h1 id=&quot;section&quot;&gt;公开密钥加密简介&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;也称作非对称密钥加密，描述为用某用户公钥加密后所得的信息，只能用该用户的私钥才能解密。如果知道了其中一个，并不能计算出另外一个。
+
+下面我们主要聊最常用的RSA加密算法。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;数学基础&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;互质
+ 两个正整数，如果出了1之外没有其他公因子，这两个数就互为质数，简称互质。&lt;/li&gt;
+  &lt;li&gt;欧拉函数
+ 任意正整数n，在小于等于n的正整数中，与n互质的数的个数可记为：&lt;img src=&quot;http://chart.googleapis.com/chart?cht=tx&amp;amp;chl=%5Cphi%20(n)&quot; style=&quot;border:none;&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;欧拉定理
+ 如果a, n互质, 则有&lt;br /&gt;
+ &lt;img src=&quot;http://chart.googleapis.com/chart?cht=tx&amp;amp;chl=a%5E%7B%5Cphi(n)%7D%5Cequiv%5C1%20(mod%5C%20n)&amp;amp;chs=60&quot; style=&quot;border:none;&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;欧拉定理的特例：费马小定理
+ 当p是质数，&lt;img src=&quot;http://chart.googleapis.com/chart?cht=tx&amp;amp;chl=%5Cphi%20(p)%20%3D%20p%20-%201&quot; style=&quot;border:none;&quot; /&gt;, 则有&lt;br /&gt;
+ &lt;img src=&quot;http://chart.googleapis.com/chart?cht=tx&amp;amp;chl=ab%20%5Cequiv%201%5C%20(mod%5C%20n)&amp;amp;chs=40&quot; style=&quot;border:none;&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;模反元素
+ 由&lt;br /&gt; &lt;img src=&quot;http://chart.googleapis.com/chart?cht=tx&amp;amp;chl=a%5E%7B%5Cphi(n)%7D%3Da%5Ctimes%20a%5E%7B%5Cphi(n)-1%7D%5Cequiv%5C%201%5C%20(mod%5C%20n)%20&amp;amp;chs=40&quot; style=&quot;border:none;&quot; /&gt; &lt;br /&gt;可以写成：&lt;br /&gt;&lt;img src=&quot;http://chart.googleapis.com/chart?cht=tx&amp;amp;chl=ab%20%5Cequiv%201%5C%20(mod%5C%20n)&amp;amp;chs=40&quot; style=&quot;border:none;&quot; /&gt;。 &lt;br /&gt;这个b叫做a的模反元素&lt;/li&gt;
+  &lt;li&gt;扩展欧几里德算法
+ 用来求解二元一次方程的整数解&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;rsa&quot;&gt;生成RSA密钥&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;RSA算法的可靠性基于一个事实：两个大质数的乘积易得，但对这个乘积因式分解很困难。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;随机选两个质数&lt;br /&gt;
+ 例如 p=13 和 q=23. 在实际情况中，这个质数特别大。&lt;/li&gt;
+  &lt;li&gt;计算乘积&lt;br /&gt;
+ n = p x q = 13 x 23 = 299&lt;/li&gt;
+  &lt;li&gt;计算欧拉函数&lt;br /&gt;
+ φ(n) = (p-1)(q-1) = 12 x 22 = 264&lt;/li&gt;
+  &lt;li&gt;随机选择一个整数e，条件是1&amp;lt; e &amp;lt; φ(n)，且e与φ(n) 互质&lt;br /&gt;
+ e = 17&lt;/li&gt;
+  &lt;li&gt;计算e对于φ(n)的模反元素d &lt;br /&gt;
+ ed ≡ 1 (mod φ(n)) 等价于 k倍的 φ(n) 加上 1 等于 ed，写作 ed = kφ(n) + 1&lt;br /&gt;
+ 变形为 ed + φ(n)(-k) = 1， 代入 e 和 φ(n) 的值，也就是二元一次方程 17d + 264(-k) = 1&lt;br /&gt;
+ 根据扩展欧几里德算法，可得 d = 233, k = 15.&lt;/li&gt;
+  &lt;li&gt;至此，我们拥有了&lt;br /&gt;
+ p = 13, q = 23, n = 299, φ(n) = 264, e = 17. d = 233. &lt;br /&gt;
+ 我们把n和e包装成公钥 (299, 17)，把n和d包装成私钥 (299, 233)&lt;/li&gt;
+  &lt;li&gt;可靠性分析&lt;br /&gt;
+ 在上面的6个数字中，我们只公布了n和e，而d是最重要的私钥，如果靠n和e计算d的话&lt;br /&gt;
+    &lt;ol&gt;
+      &lt;li&gt;ed≡1 (mod φ(n))。只有知道e和φ(n)，才能算出d。&lt;/li&gt;
+      &lt;li&gt;φ(n)=(p-1)(q-1)。只有知道p和q，才能算出φ(n)。&lt;/li&gt;
+      &lt;li&gt;想要知道p和q，就需要对n进行因子分解。那就难咯。&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;加密和解密&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;加密：有明文m，使用公钥对儿(n, e)加密得到c的过程&lt;br /&gt;
+ 根据 m&lt;sup&gt;e&lt;/sup&gt; ≡ c (mod n) 计算，20&lt;sup&gt;17&lt;/sup&gt; ≡ 76 (mode 299), c = 76 为密文。&lt;/li&gt;
+  &lt;li&gt;解密：对于密文c=76, 有&lt;br /&gt;
+ c&lt;sup&gt;d&lt;/sup&gt; ≡ m (mod n) 计算， 76&lt;sup&gt;233&lt;/sup&gt; ≡ 20 (mode 299), 解密出m=20&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;提示：windows系统自带计算器可以帮助计算。&lt;/p&gt;
+
+&lt;p&gt;//&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Read TCP segment by example</title>
