@@ -36,7 +36,7 @@ navigations:
 #gems for features
 gems:
   - jekyll-paginate
-  - jekyll-sitemap
+  #- jekyll-sitemap
 
 # Custom vars
 version:          0.0.2
