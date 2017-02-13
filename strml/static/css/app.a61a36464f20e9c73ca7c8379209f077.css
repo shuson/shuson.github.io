@@ -1,0 +1,27 @@
+
+#app[data-v-2d079afc] {
+  font-family: "Times New Roman", Times, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.code[data-v-3498393a] {
+  display: none;
+}
+
+.htmlMode[data-v-40a436ee] {
+  animation: flip 2s;
+}
+@keyframes flip {
+from {
+    opacity: 0;
+}
+to {
+    opacity: 1;
+}
+}
+*{margin: 0; padding: 0;}
+*{box-sizing: border-box;}
+*::before{box-sizing: border-box;}
+*::after{box-sizing: border-box;}
+/*# sourceMappingURL=app.a61a36464f20e9c73ca7c8379209f077.css.map*/
