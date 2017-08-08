@@ -13,7 +13,7 @@ So URL encoding converts characters into a format that can be transmitted over t
 
 ### What is the rules of URL encoding?
 
-URL can only be sent over the Internet using the [ASCII character-set](https://www.w3schools.com/charsets/ref_html_ascii.asp). 
+URL can only be sent over the Internet using the [ASCII character-set](https://www.w3schools.com/charsets/ref_html_ascii.asp). Only alphanumerics [0-9a-zA-Z], the special characters "$-_.+!*'()," [not including the quotes], and reserved characters used for their reserved purposes may be used un-encoded within a URL.
 
 When we send URL via browser from Computer, we always input characters outside of ASCII set. So URL must be converted into a valid ASCII format.
 
@@ -29,17 +29,23 @@ But this is not enough, there are categories of safe, reserved, unsafe character
 
 \* Note: Reserved characters only need encoding when not used for their defined, reserved purposes.
 
-#### Non-ASCII Characters
+refs: https://perishablepress.com/stop-using-unsafe-characters-in-urls/
 
-These characters must be encoded where ever in a URL, for example, characters in languages other than English.
+To make it clear, there are 3 rules:
 
-#### Unsafe Characters
+1. URI characters before "?", we name it address part, it is encoded by UTF-8 with Percentage Encoding. Which means a non-ascii character, for example Chinese character **春** is encoded as "%E6%98%A5"
 
-All unsafe characters must always be encoded within a URL, because different systems have their own ways of action. For example, a Browser and Tomcat server, or your Java code.
+2. URI characters after "?", we call it query part, it is encoded based by its Operation System, for Chinese characters, it might be GB2312 or UTF-8.
 
-#### Reserved Characters
+3. When GET/POST or make HTTP request in a web browser, the encoding is determined by 
 
-Depends on different situations, for example these reserved characters are used for special meanings, ``&``  is for joint of query strings. We don't encode them. But when it is not used as its reserved purpose, we must encode it.
+   ```html
+   <meta http-equiv="Content-Type" content="text/html;charset=xxxx">
+   ```
+
+As we can see, there are different browsers, OS and web page charsets. There is, indeed, a silver bullet to handle this mess. 
+
+> Encode whatever in a URL according to rule 1, 2, 3. before sending it to server side.
 
 ### Summary and Tips
 
