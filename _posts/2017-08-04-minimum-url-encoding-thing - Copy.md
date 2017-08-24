@@ -33,9 +33,9 @@ refs: https://perishablepress.com/stop-using-unsafe-characters-in-urls/
 
 To make it clear, there are 3 rules:
 
-1. URI characters before "?", we name it address part, it is encoded by UTF-8 with Percentage Encoding. Which means a non-ascii character, for example Chinese character **春** is encoded as "%E6%98%A5"
+1. URI characters before "?", it is encoded by UTF-8 with Percentage Encoding. Which means a non-ascii character, for example Chinese character **春** is encoded as "%E6%98%A5"
 
-2. URI characters after "?", we call it query part, it is encoded based by its Operation System, for Chinese characters, it might be GB2312 or UTF-8.
+2. URI characters after "?", it is encoded based by its Operation System, for Chinese characters, it might be GB2312 or UTF-8.
 
 3. When GET/POST or make HTTP request in a web browser, the encoding is determined by 
 

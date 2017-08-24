@@ -18,7 +18,7 @@ It was just because of this spared 1 bit, there were messy conflicts of using th
 
 ### Unicode Time
 
-Unicode is simply a 16-bit code where each character takes 16 bits and therefore there are 65,536 possible characters. This statement is not 100% correct.
+Unicode simply assigns integers, known as code points, to characters. It has 1.1M seats totally, till now, only 0.11M are already assigned.
 
 Let's take "A" as example:
 
