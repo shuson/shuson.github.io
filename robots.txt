@@ -1,4 +1,4 @@
-# robots.txt for http://www.nevermoi.com/
+# robots.txt for https://nevermoi.com/
 
 User-agent: *
 Allow: /
