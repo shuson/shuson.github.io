@@ -45,3 +45,5 @@ version:          0.0.2
 comments :
     enabled: true
     provider : disqus
+
+theme: jekyll-theme-minimal
