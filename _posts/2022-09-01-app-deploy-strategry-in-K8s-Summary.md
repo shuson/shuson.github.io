@@ -72,7 +72,7 @@ $ kubectl delete -f ./manifest-v1.yaml
 ```
 
 Summary:
-[img](./k8s_deploy.JPG)
+![img](./k8s_deploy.JPG)
 
 
 
