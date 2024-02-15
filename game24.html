@@ -128,8 +128,9 @@
             var numbers = document.getElementById('numbers').innerHTML.split(",").map(e => Number(e)).sort()
 
             var answer = document.getElementById('answer').value.trim();
+            console.log(answer)
 
-            if (numbers != extractNumbersFromString(answer).sort()) {
+            if (JSON.stringify(numbers) != JSON.stringify(extractNumbersFromString(answer).sort())) {
               document.getElementById('result').innerHTML = '请输入有效的表达式。';
               return
             }
