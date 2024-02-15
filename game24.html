@@ -49,10 +49,11 @@
   <br/>
     <h1 class="rainbow">24点游戏</h1>
     <br/>
+    <div>用加、减、乘、除的方法使下面的4个数字进行运算后结果成为24，每个数字只能用一次</div>
     <br/>
     <br/>
     <div class="rainbow rainbow_text_animated" id="numbers"></div>
-    <input type="text" id="answer" placeholder="Input Answer">
+    <input type="text" id="answer" placeholder="输入答案，例如：(10+2)*(5-3)">
     <button class="primary" onclick="checkAnswer()">检查答案</button>
     <button class="contrast" onclick="generateNumbers()">重新生成</button>
     <br/>
@@ -78,7 +79,9 @@
               return
             } else {
               document.getElementById('numbers').innerHTML = numbers.join(', ');
+              document.getElementById('result').innerHTML  = ""
               document.getElementById('answers').innerHTML = ""
+              document.getElementById('answer').value = "";
             }
             
 
@@ -111,9 +114,26 @@
             return results;
         }
 
+        function extractNumbersFromString(str) {
+            // Regular expression to match numbers (including decimal numbers)
+            const regex = /-?\d+(\.\d+)?/g;
+            const matches = str.match(regex); // Using match to find all matches
+
+            // Convert matches to numbers and return
+            return matches ? matches.map(Number) : [];
+        }
+
         // 检查答案
         function checkAnswer() {
+            var numbers = document.getElementById('numbers').innerHTML.split(",").map(e => Number(e)).sort()
+
             var answer = document.getElementById('answer').value.trim();
+
+            if (numbers != extractNumbersFromString(answer).sort()) {
+              document.getElementById('result').innerHTML = '请输入有效的表达式。';
+              return
+            }
+
             if(!answer) {
               document.getElementById('result').innerHTML = '请输入有效的表达式。';
               return
