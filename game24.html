@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24点游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #numbers {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #result {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .rainbow {
+            text-align: center;
+            text-decoration: underline;
+            font-size: 32px;
+            font-family: monospace;
+            letter-spacing: 5px;
+        }
+        .rainbow_text_animated {
+            background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow_animation 6s ease-in-out infinite;
+            background-size: 400% 100%;
+        }
+
+        @keyframes rainbow_animation {
+            0%,100% {
+                background-position: 0 0;
+            }
+
+            50% {
+                background-position: 100% 0;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+</head>
+<body class="container-fluid container">
+  <br/>
+    <h1 class="rainbow">24点游戏</h1>
+    <br/>
+    <br/>
+    <br/>
+    <div class="rainbow rainbow_text_animated" id="numbers"></div>
+    <input type="text" id="answer" placeholder="Input Answer">
+    <button class="primary" onclick="checkAnswer()">检查答案</button>
+    <button class="contrast" onclick="generateNumbers()">重新生成</button>
+    <br/>
+    <br/>
+    <article id="result"></article>
+
+    <br />
+    <button class="secondary" onclick="showAnswer()"> Show Answer</button>
+    <br/>
+    <br/>
+    <article class="" id="answers"></article>
+
+    <script>
+        // 生成随机数字
+        function generateNumbers() {
+            var numbers = [];
+            for (var i = 0; i < 4; i++) {
+                numbers.push(Math.floor(Math.random() * 10) + 1);
+            }
+
+            if(find24(numbers).length == 0) {
+              generateNumbers()
+              return
+            } else {
+              document.getElementById('numbers').innerHTML = numbers.join(', ');
+              document.getElementById('answers').innerHTML = ""
+            }
+            
+
+            return numbers;
+        }
+
+        function find24(numbers) {
+            let results = [];
+
+            // Helper function to recursively find combinations
+            function findCombinations(current, index) {
+                if (index === numbers.length) {
+                    // If the current expression evaluates to 24, add it to results
+                    if (eval(current) === 24) {
+                        results.push(current);
+                    }
+                    return;
+                }
+
+                // Recursively try adding, subtracting, multiplying, and dividing the next number
+                findCombinations(current + "+" + numbers[index], index + 1);
+                findCombinations(current + "-" + numbers[index], index + 1);
+                findCombinations(current + "*" + numbers[index], index + 1);
+                findCombinations(current + "/" + numbers[index], index + 1);
+            }
+
+            // Start the recursion
+            findCombinations(numbers[0].toString(), 1);
+
+            return results;
+        }
+
+        // 检查答案
+        function checkAnswer() {
+            var answer = document.getElementById('answer').value.trim();
+            if(!answer) {
+              document.getElementById('result').innerHTML = '请输入有效的表达式。';
+              return
+            }
+            try {
+                var result = eval(answer);
+                if (result === 24) {
+                    document.getElementById('result').innerHTML = '恭喜！答案正确！';
+                } else {
+                    document.getElementById('result').innerHTML = '抱歉，答案错误，请重新尝试。';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = '请输入有效的表达式。';
+            }
+        }
+
+        function showAnswer() {
+            var numbers = document.getElementById('numbers').innerHTML.split(",").map(e => Number(e))
+            
+            var results = find24(numbers)
+            if(results.length == 0) {
+              document.getElementById('answers').innerHTML = "No available combination"
+            } else {
+              document.getElementById('answers').innerHTML = results.join("<br />")
+            }
+
+            return
+
+
+        }
+
+        window.onload = generateNumbers;
+    </script>
+</body>
+</html>
