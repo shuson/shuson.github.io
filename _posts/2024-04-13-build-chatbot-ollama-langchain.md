@@ -112,7 +112,7 @@ class Rag:
 
 2. Create a bot with simple UI:
 ```
-#!/bin/env python3
+
 import os
 import tempfile
 import streamlit as st
