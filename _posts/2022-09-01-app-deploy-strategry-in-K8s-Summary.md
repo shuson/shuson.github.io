@@ -1,3 +1,11 @@
+---
+layout: post
+title: app deploy strategy in k8s
+tags:
+    - k8s
+    - devops
+---
+
 Kubernetes enables services using docker's containerization of server resouces: computing and storage, in a "Pod" conception, to isolate service and its resources.<br />
 
 Ingress layer is a layer that services wrapped, there are some controllers：
