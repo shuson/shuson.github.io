@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Let's build a simple grid system like Bootstrap
+title: Build a simple "RAG" chatbot using ollama, langchain 
 tags:
     - ollama
     - chatbot
@@ -184,7 +184,11 @@ if __name__ == "__main__":
 3. There you go, hit ``python bot.py`` to run it.
 
 ## Conclusion
+This is a simple trick, far to real world case. 
 
 RAG's key is the embedding vector backed the search accuracy. Once the context is retrieved, the base model can do understanding of given prompt by its instruction.
 
+Reference 
+1. https://medium.com/@vndee.huynh/build-your-own-rag-and-run-it-locally-langchain-ollama-streamlit-181d42805895
+2. https://medium.com/data-science-in-your-pocket/what-are-vector-databases-and-how-langchain-uses-vector-dbs-2abb18617ded
 
