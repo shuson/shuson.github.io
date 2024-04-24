@@ -6,7 +6,6 @@ tags:
     - chatbot
     - chatgpt
     - langchain
-    - mistral
 ---
 
 You don't have thousand pieces of H100, but you still can have a chatgpt alike chatbot "trained" with your own data.
