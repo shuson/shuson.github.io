@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Build a simple "RAG" chatbot using ollama, langchain 
+title: Build a simple RAG chatbot using ollama, langchain 
 tags:
     - ollama
     - chatbot
