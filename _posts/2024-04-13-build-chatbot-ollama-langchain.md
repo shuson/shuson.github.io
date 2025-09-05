@@ -26,7 +26,7 @@ From now on, I assume you have already installed ollama and pulled model, either
 To make code run in an isolation python env, do create a virtual env using any tool you feel comfortable.
 
 1. Build RAG engine, here is the code to ctrl-c:
-{% highlight python %}
+```
 import os
 
 from langchain_community.vectorstores import Chroma
@@ -104,10 +104,10 @@ class Rag:
         self.vector_store = None
         self.retriever = None
         self.chain = None
-{% endhighlight %}
+```
 
 2. Create a bot with simple UI:
-{% highlight python %}
+```
 import os
 import tempfile
 import streamlit as st
@@ -175,7 +175,7 @@ def page():
 if __name__ == "__main__":
     page()
 ```
-{% endhighlight %}
+
 3. There you go, hit ``python bot.py`` to run it.
 
 ## Conclusion
