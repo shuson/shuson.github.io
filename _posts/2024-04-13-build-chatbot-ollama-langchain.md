@@ -8,9 +8,7 @@ tags:
     - langchain
 ---
 
-You don't have thousand pieces of H100, but you still can have a chatgpt alike chatbot "trained" with your own data.
-[RAG](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/) can make it happen easily.
-
+You don't have thousand pieces of H100, but you still can have a chatgpt alike chatbot "trained" with your own data. RAG is what you need.
 
 ## TLDR;
 
@@ -188,4 +186,5 @@ RAG's key is the embedding vector backed the search accuracy. Once the context i
 Reference 
 1. https://medium.com/@vndee.huynh/build-your-own-rag-and-run-it-locally-langchain-ollama-streamlit-181d42805895
 2. https://medium.com/data-science-in-your-pocket/what-are-vector-databases-and-how-langchain-uses-vector-dbs-2abb18617ded
+
 
