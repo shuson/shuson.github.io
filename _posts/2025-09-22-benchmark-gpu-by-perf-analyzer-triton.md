@@ -9,7 +9,7 @@ tags:
     - Infra
 ---
 
-To fastly benchmark the performance of a LLM model, we can use [ollama](https://ollama.ai/) to run the model on the GPU. And Use torch to do train TFlops check
+To fastly benchmark the performance of a model, we can use [ollama](https://ollama.ai/) to run the model on the GPU. And Use torch to do train TFlops check
 
 ## TLDR;
 
