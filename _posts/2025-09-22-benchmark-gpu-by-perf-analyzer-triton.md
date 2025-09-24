@@ -23,6 +23,7 @@ Steps in short:
 ## Install Docker on Ubuntu OS with GPU support
 
 1. install driver and cuda
+
 ```
 sudo apt update
 sudo apt install -y build-essential dkms
@@ -52,7 +53,6 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 # Enable and test Docker
 sudo systemctl enable docker --now
 docker run hello-world
-
 ```
 
 3. install nvidia-container-toolkit
@@ -77,7 +77,6 @@ Then test docker is running with GPU supported by `docker run --rm --runtime=nvi
 Prepare a model repository, for example, `models` folder in current directory
 We can use example models from `git clone --depth 1 https://github.com/triton-inference-server/server`
 and `cp -r server/examples/models/simple models/`
-
 ```
 # Pull Triton (latest, optimized for CUDA 12)
 docker pull nvcr.io/nvidia/tritonserver:24.09-py3
@@ -86,7 +85,6 @@ docker pull nvcr.io/nvidia/tritonserver:24.09-py3
 docker run --gpus all --rm -p8000:8000 -p8001:8001 -p8002:8002 \
   -v $PWD/models:/models nvcr.io/nvidia/tritonserver:24.09-py3 \
   tritonserver --model-repository=/models
-
 ```
 
 ### Run perf analyzer to benchmark a GPU in docker container
