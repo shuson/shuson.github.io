@@ -71,12 +71,15 @@ sudo apt install -y nvidia-container-toolkit
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 ```
-Then test docker is running with GPU supported by `docker run --rm --runtime=nvidia --gpus all nvidia/cuda:12.4.99-base-ubuntu22.04 nvidia-smi`
+
+Then test docker is running with GPU supported by 
+```docker run --rm --runtime=nvidia --gpus all nvidia/cuda:12.4.99-base-ubuntu22.04 nvidia-smi```
 
 ## Run Triton inference server in docker container
 Prepare a model repository, for example, `models` folder in current directory
 We can use example models from `git clone --depth 1 https://github.com/triton-inference-server/server`
 and `cp -r server/examples/models/simple models/`
+
 ```
 # Pull Triton (latest, optimized for CUDA 12)
 docker pull nvcr.io/nvidia/tritonserver:24.09-py3
@@ -92,6 +95,7 @@ docker run --gpus all --rm -p8000:8000 -p8001:8001 -p8002:8002 \
 ```
 sudo docker run --gpus all --rm -it --net host nvcr.io/nvidia/tritonserver:24.09-py3-sdk
 ```
+
 In the container, run perf analyzer
 ```
 perf_analyzer -m simple
