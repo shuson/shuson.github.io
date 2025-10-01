@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>技能五子棋-Nvm版</title>
+    <!-- Tailwind CDN (用于快速样式) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React 18 UMD 与 Babel（使本页可直接以单文件运行 JSX） -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body class="min-h-screen bg-neutral-100 text-neutral-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useMemo, useState, useEffect } = React;
+
+      // —— 配置 ——
+      const N = 25; // 棋盘尺寸 25x25
+      const SKILL_LIMIT = 2; // 每人每种技能使用上限
+
+      const Player = { Black: 1, White: 2 };
+
+      function useBoardSize() {
+        const [size, setSize] = useState(480);
+        useEffect(() => {
+          const calc = () => {
+            const vw = Math.min(window.innerWidth, 900);
+            const vh = window.innerHeight;
+            const target = Math.min(vw * 0.95, vh * 0.55, 640);
+            const cell = Math.floor(target / N);
+            setSize(cell * N);
+          };
+          calc();
+          window.addEventListener('resize', calc);
+          return () => window.removeEventListener('resize', calc);
+        }, []);
+        return size;
+      }
+
+      const classNames = (...xs) => xs.filter(Boolean).join(' ');
+
+      function App() {
+        const size = useBoardSize();
+        const cell = size / N;
+
+        // 棋盘 0=空，1=黑，2=白
+        const [board, setBoard] = useState(() => Array.from({ length: N }, () => Array.from({ length: N }, () => 0)));
+        const [history, setHistory] = useState([]); // {x,y,player, converted?}
+        const [current, setCurrent] = useState(Player.Black);
+        const [winner, setWinner] = useState(0);
+        const [skills, setSkills] = useState({
+          [Player.Black]: { fly: SKILL_LIMIT, undo: SKILL_LIMIT, convert: SKILL_LIMIT },
+          [Player.White]: { fly: SKILL_LIMIT, undo: SKILL_LIMIT, convert: SKILL_LIMIT },
+        });
+
+        const lastMove = history[history.length - 1] || null;
+
+        const reset = () => {
+          setBoard(Array.from({ length: N }, () => Array.from({ length: N }, () => 0)));
+          setHistory([]);
+          setWinner(0);
+          setCurrent(Player.Black);
+          setSkills({
+            [Player.Black]: { fly: SKILL_LIMIT, undo: SKILL_LIMIT, convert: SKILL_LIMIT },
+            [Player.White]: { fly: SKILL_LIMIT, undo: SKILL_LIMIT, convert: SKILL_LIMIT },
+          });
+        };
+
+        const checkWin = (b, x, y, p) => {
+          const dirs = [ [1,0], [0,1], [1,1], [1,-1] ];
+          for (const [dx, dy] of dirs) {
+            let count = 1;
+            for (let k = 1; k < 5; k++) {
+              const nx = x + dx*k, ny = y + dy*k;
+              if (nx<0||ny<0||nx>=N||ny>=N) break;
+              if (b[ny][nx] === p) count++; else break;
+            }
+            for (let k = 1; k < 5; k++) {
+              const nx = x - dx*k, ny = y - dy*k;
+              if (nx<0||ny<0||nx>=N||ny>=N) break;
+              if (b[ny][nx] === p) count++; else break;
+            }
+            if (count >= 5) return true;
+          }
+          return false;
+        };
+
+        const place = (x, y) => {
+          if (winner) return;
+          setBoard(prev => {
+            if (prev[y][x] !== 0) return prev;
+            const next = prev.map(r => r.slice());
+            next[y][x] = current;
+            setHistory(h => [...h, { x, y, player: current }]);
+            const win = checkWin(next, x, y, current);
+            if (win) setWinner(current);
+            setCurrent(c => (c === Player.Black ? Player.White : Player.Black));
+            return next;
+          });
+        };
+
+        // —— 技能：飞沙走石（随机移除对方一粒子） ——
+        const castFly = () => {
+          if (winner) return;
+          const me = current;
+          const foe = me === Player.Black ? Player.White : Player.Black;
+          if (skills[me].fly <= 0) return;
+
+          const foeCells = [];
+          board.forEach((row, y) => row.forEach((v, x) => { if (v === foe) foeCells.push({ x, y }); }));
+          if (foeCells.length === 0) return;
+
+          const target = foeCells[Math.floor(Math.random() * foeCells.length)];
+          setBoard(prev => {
+            const next = prev.map(r => r.slice());
+            next[target.y][target.x] = 0;
+            return next;
+          });
+          setHistory(h => {
+            const idx = [...h].reverse().findIndex(m => m.x === target.x && m.y === target.y);
+            if (idx >= 0) {
+              const real = h.length - 1 - idx;
+              return h.slice(0, real).concat(h.slice(real + 1));
+            }
+            return h;
+          });
+          setSkills(s => ({ ...s, [me]: { ...s[me], fly: s[me].fly - 1 } }));
+          setCurrent(foe);
+        };
+
+        // —— 技能：啊嘞啊嘞（反悔一步棋/撤销最近一步） ——
+        const castUndo = () => {
+          if (winner) return;
+          const me = current;
+          if (skills[me].undo <= 0 || history.length === 0) return;
+
+          const last = history[history.length - 1];
+          setBoard(prev => {
+            const next = prev.map(r => r.slice());
+            next[last.y][last.x] = 0;
+            return next;
+          });
+          setHistory(h => h.slice(0, -1));
+          const foe = me === Player.Black ? Player.White : Player.Black;
+          setSkills(s => ({ ...s, [me]: { ...s[me], undo: s[me].undo - 1 } }));
+          setCurrent(foe);
+          setWinner(0);
+        };
+
+        // —— 技能：你畜生啊（把对方刚落子变己方子） ——
+        const castConvert = () => {
+          if (winner) return;
+          const me = current;
+          const foe = me === Player.Black ? Player.White : Player.Black;
+          if (skills[me].convert <= 0 || !lastMove) return;
+          if (lastMove.player !== foe) return; // 仅能转换对方刚下的一步
+
+          setBoard(prev => {
+            const next = prev.map(r => r.slice());
+            next[lastMove.y][lastMove.x] = me;
+            return next;
+          });
+          setHistory(h => {
+            const nh = h.slice();
+            nh[nh.length - 1] = { ...nh[nh.length - 1], player: me, converted: true };
+            return nh;
+          });
+          setSkills(s => ({ ...s, [me]: { ...s[me], convert: s[me].convert - 1 } }));
+          setCurrent(foe);
+
+          // 基于当前闭包中的 board 做一次即时胜负检查
+          const b = board.map(r => r.slice());
+          b[lastMove.y][lastMove.x] = me;
+          if (checkWin(b, lastMove.x, lastMove.y, me)) setWinner(me);
+        };
+
+        const playerName = p => (p === Player.Black ? '黑' : '白');
+        const canPlace = (x, y) => !winner && board[y][x] === 0;
+
+        const boardStyle = {
+          width: size + 'px',
+          height: size + 'px',
+          backgroundColor: '#deb887', // 原木色
+          backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.9) 1px, transparent 1px),\n                            linear-gradient(to bottom, rgba(0,0,0,0.9) 1px, transparent 1px)`,
+          backgroundSize: `${cell}px ${cell}px, ${cell}px ${cell}px`,
+          boxShadow: '0 6px 30px rgba(0,0,0,0.25)',
+          borderRadius: '16px',
+          position: 'relative',
+          overflow: 'hidden',
+        };
+        const cellStyle = { width: cell + 'px', height: cell + 'px' };
+        const pieceStyle = (p) => ({
+          width: Math.floor(cell * 0.75) + 'px',
+          height: Math.floor(cell * 0.75) + 'px',
+          borderRadius: '9999px',
+          background: p === Player.Black ? '#111' : '#f7f7f7',
+          border: p === Player.Black ? '1px solid #000' : '1px solid #aaa',
+          boxShadow: p === Player.Black
+            ? 'inset 0 -2px 4px rgba(255,255,255,0.08), inset 0 2px 6px rgba(0,0,0,0.3)'
+            : 'inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 6px rgba(255,255,255,0.6)',
+        });
+
+        const coords = useMemo(() => Array.from({ length: N*N }, (_, i) => ({ x: i % N, y: Math.floor(i / N) })), []);
+
+        return (
+          <div className="min-h-screen w-full flex flex-col items-center">
+            {/* 顶部标题 */}
+            <header className="w-full sticky top-0 z-10 backdrop-blur bg-white/80 border-b border-black/5">
+              <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">技能五子棋</h1>
+                <div className="text-sm md:text-base font-medium">
+                  轮到：
+                  <span className={classNames(
+                    'inline-flex items-center px-2.5 py-1 rounded-full',
+                    current === Player.Black ? 'bg-black text-white' : 'bg-white text-black border border-neutral-300'
+                  )}>{playerName(current)}</span>
+                </div>
+              </div>
+            </header>
+
+            {/* 棋盘区域 */}
+            <main className="w-full flex-1 flex flex-col items-center gap-4 py-4 px-3">
+              {winner ? (
+                <div className="px-4 py-2 rounded-xl bg-emerald-500 text-white shadow text-sm md:text-base">
+                  {playerName(winner)} 方胜利！
+                </div>
+              ) : lastMove ? (
+                <div className="px-3 py-1.5 rounded-lg bg-white border border-neutral-200 shadow-sm text-xs md:text-sm">
+                  上一步：{playerName(lastMove.player)} @ ({lastMove.x + 1}, {lastMove.y + 1}){lastMove.converted ? '（被转换）' : ''}
+                </div>
+              ) : (
+                <div className="h-8" />
+              )}
+
+              <div style={boardStyle} className="select-none touch-none">
+                <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${N}, 1fr)`, gridTemplateRows: `repeat(${N}, 1fr)` }}>
+                  {coords.map(({ x, y }) => (
+                    <button
+                      key={`${x}-${y}`}
+                      aria-label={`cell-${x}-${y}`}
+                      className={classNames('relative flex items-center justify-center', canPlace(x, y) ? 'hover:bg-black/5 active:bg-black/10' : '')}
+                      style={cellStyle}
+                      onClick={() => place(x, y)}
+                    >
+                      {board[y][x] !== 0 && (<div style={pieceStyle(board[y][x])} />)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 控制与技能区 */}
+              <section className="w-full max-w-5xl mt-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="bg-white rounded-2xl p-3 border border-neutral-200 shadow-sm">
+                    <div className="font-semibold mb-2">对局</div>
+                    <div className="flex flex-wrap gap-2">
+                      <button className="px-3 py-1.5 rounded-lg bg-neutral-900 text-white hover:opacity-90 active:opacity-80" onClick={reset}>重新开始</button>
+                      <div className="text-sm text-neutral-600 self-center">{`棋盘 ${N}×${N}`}</div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-3 border border-neutral-200 shadow-sm">
+                    <div className="font-semibold mb-2">技能（使用会消耗本回合）</div>
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={castFly} disabled={skills[current].fly <= 0 || winner}
+                        className={classNames('px-3 py-1.5 rounded-lg border text-sm',
+                          skills[current].fly > 0 && !winner ? 'bg-amber-50 border-amber-300 hover:bg-amber-100' : 'bg-neutral-100 border-neutral-200 text-neutral-400 cursor-not-allowed')}
+                      >
+                        飞沙走石
+                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-black/5">余 {skills[current].fly}</span>
+      </button>
+
+                      <button onClick={castUndo} disabled={skills[current].undo <= 0 || history.length === 0 || winner}
+                        className={classNames('px-3 py-1.5 rounded-lg border text-sm',
+                          skills[current].undo > 0 && history.length > 0 && !winner ? 'bg-sky-50 border-sky-300 hover:bg-sky-100' : 'bg-neutral-100 border-neutral-200 text-neutral-400 cursor-not-allowed')}
+                      >
+                        啊嘞啊嘞
+                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-black/5">余 {skills[current].undo}</span>
+                      </button>
+
+                      <button onClick={castConvert} disabled={skills[current].convert <= 0 || !lastMove || lastMove.player === current || winner}
+                        className={classNames('px-3 py-1.5 rounded-lg border text-sm',
+                          skills[current].convert > 0 && lastMove && lastMove.player !== current && !winner ? 'bg-rose-50 border-rose-300 hover:bg-rose-100' : 'bg-neutral-100 border-neutral-200 text-neutral-400 cursor-not-allowed')}
+                      >
+                        你畜生啊
+                        <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-black/5">余 {skills[current].convert}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-3 border border-neutral-200 shadow-sm">
+                    <div className="font-semibold mb-2">说明</div>
+                    <ul className="text-sm leading-6 list-disc pl-5 text-neutral-700">
+                      <li>黑棋先手，点击空格落子。</li>
+                      <li>任一方五连即胜。</li>
+                      <li>每名玩家每种技能各 {SKILL_LIMIT} 次；使用技能会直接结束本回合。</li>
+                      <li>“飞沙走石”：随机移除对方一枚棋子。</li>
+                      <li>“啊嘞啊嘞”：撤销最近的一步棋（无论谁下的）。</li>
+                      <li>“你畜生啊”：将对方刚刚落下的那一子转换为己方。</li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+
+              <footer className="py-8 text-center text-xs text-neutral-500 select-none">
+                © {new Date().getFullYear()} 技能五子棋 · Nevermoi
+              </footer>
+            </main>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
