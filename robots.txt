@@ -1,4 +1,4 @@
-# robots.txt for https://nevermoi.com/
+# robots.txt for https://shuson.wang/
 
 User-agent: *
 Allow: /
