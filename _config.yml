@@ -33,9 +33,8 @@ navigations:
     class: fa fa-rss
     href: /atom.xml
 
-#gems for features
-gems:
-  - jekyll-paginate
+# Plugins
+plugins:
   - jekyll-sitemap
 
 # Custom vars
@@ -45,5 +44,3 @@ version:          0.0.2
 comments :
     enabled: true
     provider : disqus
-
-theme: jekyll-theme-minimal
