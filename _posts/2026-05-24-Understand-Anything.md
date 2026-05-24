@@ -3,11 +3,11 @@ layout: post
 title: "Trending: Understand-Anything - Interactive Knowledge Graphs for Your Codebase"
 date: 2026-05-24 00:00:00 +0800
 categories: [AI, Developer Tools, Open Source]
-tags: [knowledge-graph, codebase-analysis, claude-code, typescript, codex]
+tags: [knowledge-graph, claude-code, codex, codebase-analysis, typescript]
 ---
 
-Lum1104's Understand-Anything transforms your codebase into interactive knowledge graphs you can explore, search, and query, supporting Claude Code, Codex, Cursor, Copilot, Gemini CLI, and more.
+Turn any codebase into an interactive knowledge graph you can explore, search, and ask questions about — built to teach, not just impress.
 
-Key features and stats. Stars: 21,483 ⭐ (+2,299 today).
+Key features and stats. Stars: 23,772 ⭐ (+3,987 today).
 
-The project prioritizes graphs that teach over impress, offering deep codebase understanding through an anti-gravity skills approach. With 1,918 forks and growing community support, it bridges the gap between navigating complex codebases and truly understanding them. URL: https://github.com/Lum1104/Understand-Anything
+Works with Claude Code, Codex, Cursor, Copilot, Gemini CLI, and more. Built in TypeScript with a strong focus on making codebase understanding visual and intuitive rather than just dumping raw data into the console. URL: https://github.com/Lum1104/Understand-Anything
