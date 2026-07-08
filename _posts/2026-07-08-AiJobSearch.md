@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Trending: AiJobSearch - AI-Powered Job Application Framework on Claude Code"
+date: 2026-07-08 00:00:00 +0800
+categories: [AI, Developer Tools, Career]
+tags: [Claude Code, job-search, automation, TypeScript, career, open-source]
+---
+
+Job hunting is one of the most draining experiences in professional life — customizing CVs, writing cover letters, and tailoring every application to a specific role. **AiJobSearch**, built by Mads Lorentzen, reimagines this entire process by turning Claude Code into a full-stack job application assistant. The framework encodes career guidance best practices into a structured multi-agent workflow: profile yourself once, then let AI evaluate job fits, tailor your LaTeX CV, draft cover letters, and even critique the output — all before you hit send. In a market where AI automation is rapidly reshaping how we work, a tool that automates the search for work itself feels both inevitable and deeply practical.
+
+Technically, AiJobSearch is built primarily in TypeScript with a modular architecture that separates job scraping, profile management, and the Claude Code agent pipeline into distinct layers. At 10,787 ⭐ stars with 3,645 forks and 34 commits from a growing contributor base, the project has clearly struck a nerve. Its core innovation is the drafter-reviewer pattern: a drafter agent generates tailored CVs and cover letters, then a reviewer agent critiques them against the job description — producing a polished, iteratively improved output. The CV pipeline compiles through LaTeX (lualatex/xelatex), and an optional ATS parseability check via pdftotext ensures the final PDF won't choke HR systems. The framework is language- and country-agnostic at its core, though its job scraper plugins currently target the Danish market (Jobindex, Jobnet, LinkedIn), with the pattern explicitly designed to be swapped for any local job board.
+
+Feature highlights include: a `/setup` command that builds your professional profile into structured files; a `/scrape` command that searches job portals with automated fit ratings; and the flagship `/apply` workflow that evaluates fit, drafts tailored documents, runs reviewer critique, and compiles the final package. The framework supports multiple job search plugins via Bun-powered CLI tools, handles CV compilation through modern LaTeX engines to avoid common font errors, and recently added a `/outcome` command to track application results — closing the loop from search to outcome. It's free, MIT-licensed, and designed to be forked: drop in your own profile, swap in your local job board plugins, and you have a personalized job-seeking machine.
+
+AiJobSearch is trending because it captures a moment where developers are turning AI inward — not just building AI for others, but wielding it for their own career leverage. The idea of an AI agent that drafts, critiques, and refines job applications resonates as both a clever hack and a glimpse of how knowledge work is transforming. With nearly 11,000 stars in under four months, it's clear that thousands of developers see the same promise. URL: https://github.com/MadsLorentzen/ai-job-search
