@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Infiniband Fabric Spine-Leaf Network Calculator V3</title>
+<title> IB/RoCEv2 Fabric Spine-Leaf Network Calculator</title>
 <style>
   :root {
     --green-deep:  #1a472a;   /* primary / header / switch nodes */
@@ -222,14 +222,13 @@
       <div class="tech-circle"></div>
     </div>
     <div class="banner">
-      <div class="eyebrow">Vincent's Learning Vault</div>
-      <h1>InfiniBand Fabric Designer</h1>
+      <h1>HPN Fabric Designer</h1>
     </div>
   </header>
 
   <div class="subhead">
-    <h2 class="page-title">Advanced Infiniband Fabric Spine-Leaf Network Calculator</h2>
-    <p>Size a spine-leaf fabric, visualize the topology, and export it as PNG.</p>
+    <h2 class="page-title">HPN Spine-Leaf Network Calculator</h2>
+    <p>Size a 2-tier or 3-tier fat-tree fabric (Leaf → L1 Spine → L2 Super-Spine), visualize it, and export as PNG.</p>
   </div>
 
   <div class="container">
@@ -266,11 +265,27 @@
         <div class="input-row">
           <div class="input-col">
             <label for="numServers">Number of Servers</label>
-            <input type="number" id="numServers" min="1" value="63">
+            <input type="number" id="numServers" min="1" value="144">
           </div>
           <div class="input-col">
             <label for="numNetworkCardsPerServer">Network Cards per Server</label>
             <input type="number" id="numNetworkCardsPerServer" min="1" max="8" value="8">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-col">
+            <label for="fabricTier">Fabric Tiers</label>
+            <select id="fabricTier" onchange="calculateAndDraw()">
+              <option value="auto" selected>Auto (2-tier → 3-tier when needed)</option>
+              <option value="2">Force 2-tier (Leaf → Spine)</option>
+              <option value="3">Force 3-tier (Leaf → L1 Spine → L2 Super-Spine)</option>
+            </select>
+            <p class="form-help">2-tier max leaves ≈ switch ports. Beyond that, non-blocking designs need L2 Super-Spine.</p>
+          </div>
+          <div class="input-col">
+            <label for="superSpineDistance">L2 Super-Spine ↔ L1 Distance (px)</label>
+            <input type="number" id="superSpineDistance" min="80" max="400" value="160">
           </div>
         </div>
 
@@ -348,8 +363,8 @@ UFM-02</textarea>
           <div class="input-col">
             <label for="managementNodeConnection">Management Node Connection</label>
             <select id="managementNodeConnection">
-              <option value="spine" selected>Spine</option>
-              <option value="leaf">Leaf</option>
+              <option value="spine">Spine</option>
+              <option value="leaf" selected>Leaf</option>
             </select>
           </div>
         </div>
@@ -456,14 +471,20 @@ const PALETTE = {
    Built-in models match the original calculator exactly. Custom models are
    persisted in localStorage and merged on top.
    ========================================================================= */
+/* Built-in models follow NVIDIA fat-tree / SuperPOD sizing:
+   leafUplinks = ports/2 (non-blocking), serversPerSU = leaf downlinks,
+   spineCounts = modular spine quantities used in reference designs. */
 const BUILTIN_MODELS = {
-  'QM8700': { label: 'QM8700 (40-port)',  ports: 40,  leafUplinks: 20, serversPerSU: 20, nic: '200G', spineCounts: [1,2,4,5,10,20] },
+  'QM8700': { label: 'QM8700 (40-port)',  ports: 40,  leafUplinks: 20, serversPerSU: 20, nic: '200G', spineCounts: [1,2,4,5,8,10,20] },
   'QM9700': { label: 'QM9700 (64-port)',  ports: 64,  leafUplinks: 32, serversPerSU: 32, nic: '400G', spineCounts: [1,2,4,8,16,32] },
-  'Q3400':  { label: 'Q3400 (144-port)',  ports: 144, leafUplinks: 72, serversPerSU: 72, nic: '800G', spineCounts: [1,2,3,4,6,8,9,12,18,24,36,72] },
-  'SN5600': { label: 'SN5600 (128-port)', ports: 128, leafUplinks: 64, serversPerSU: 64, nic: '400G', spineCounts: [1,2,4,8,16,32,64] }
+  'Q3400':  { label: 'Q3400RA (144-port)',  ports: 144, leafUplinks: 72, serversPerSU: 72, nic: '800G', spineCounts: [1,2,3,4,6,8,9,12,18,24,36,72] },
+  /* SN5600/SN5610 Spectrum-4: same hardware, two port modes.
+     Native 64×800GbE, or breakout to 128×400GbE. spineCounts = divisors of leafUplinks. */
+  'SN5600-800G': { label: 'SN5600 (64×800G)',  ports: 64,  leafUplinks: 32, serversPerSU: 32, nic: '800G', spineCounts: [1,2,4,8,16,32] },
+  'SN5600-400G': { label: 'SN5600 (128×400G)', ports: 128, leafUplinks: 64, serversPerSU: 64, nic: '400G', spineCounts: [1,2,4,8,16,32,64] }
 };
 const STORAGE_KEY = 'ibCalc.customSwitchModels.v1';
-const DEFAULT_SELECTED = 'QM9700';
+const DEFAULT_SELECTED = 'Q3400';
 
 function loadCustomModels() {
   try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
@@ -491,8 +512,128 @@ function updateNetworkCardOptions() {
 }
 
 /* =========================================================================
-   Core calculation + diagram (logic preserved from original).
+   Core calculation + diagram (NVIDIA rail-optimized fat-tree / SuperPOD).
+   Supports 2-tier (Leaf→Spine) and 3-tier (Leaf→L1 Spine→L2 Super-Spine).
    ========================================================================= */
+
+/** Pick smallest allowed spine count >= required; fall back to ceil(required). */
+function pickSpineCount(required, allowed) {
+  if (!Number.isFinite(required) || required <= 0) return { count: 0, fromList: true };
+  const list = (allowed || []).filter(n => Number.isFinite(n) && n > 0).sort((a, b) => a - b);
+  const hit = list.find(c => c >= required);
+  if (hit != null) return { count: hit, fromList: true };
+  return { count: Math.ceil(required), fromList: false };
+}
+
+/**
+ * Size a non-blocking fat-tree fabric.
+ * 2-tier: GPU → Leaf → Spine → Leaf → GPU
+ * 3-tier: GPU → Leaf → L1 Spine → L2 Super-Spine → L1 Spine → Leaf → GPU
+ *
+ * Auto 3-tier when leaf count > switchPorts (2-tier non-blocking capacity).
+ * In 3-tier, L1 spines are half-split (down to leaves / up to L2), grouped into
+ * pods of size leafUplinks (= ports/2).
+ */
+function sizeFabric(model, numServers, nicsPerServer, tierMode) {
+  const switchPorts = model.ports;
+  const leafUplinks = model.leafUplinks;
+  const leafDownlinks = switchPorts - leafUplinks;
+  const serversPerSU = model.serversPerSU;
+  const spineCounts = model.spineCounts || [];
+
+  const numSU = Math.ceil(numServers / serversPerSU);
+  const leavesPerSU = nicsPerServer;
+  const numLeaf = numSU * leavesPerSU;
+
+  const maxLeaves2Tier = switchPorts;
+  const needs3Tier = numLeaf > maxLeaves2Tier;
+  let tiers = 2;
+  if (tierMode === '3') tiers = 3;
+  else if (tierMode === '2') tiers = 2;
+  else tiers = needs3Tier ? 3 : 2;
+
+  const warnings = [];
+  if (serversPerSU > leafDownlinks) {
+    warnings.push(`servers/SU (${serversPerSU}) exceeds leaf downlinks (${leafDownlinks}).`);
+  }
+  if (tierMode === '2' && needs3Tier) {
+    warnings.push(`Force 2-tier but ${numLeaf} leaves exceed 2-tier capacity (~${maxLeaves2Tier}). Fabric cannot be fully non-blocking.`);
+  }
+
+  if (tierMode === 'auto' && needs3Tier) {
+    warnings.push(`Leaf count ${numLeaf} exceeds 2-tier capacity (~${maxLeaves2Tier}); auto-escalated to 3-tier with L2 Super-Spine.`);
+  }
+
+  if (tiers === 2) {
+    const minSpine = Math.ceil(numLeaf * leafUplinks / switchPorts);
+    const picked = pickSpineCount(minSpine, spineCounts);
+    const numSpine = picked.count;
+    if (!picked.fromList) {
+      warnings.push(`Required ${minSpine} spines is outside model spineCounts; using ${numSpine}.`);
+    }
+    if (numSpine > 0 && leafUplinks % numSpine !== 0) {
+      warnings.push(`leaf uplinks (${leafUplinks}) do not divide evenly across ${numSpine} spines.`);
+    }
+    const leafSpineCables = numLeaf * leafUplinks;
+    return {
+      tiers: 2,
+      path: 'GPU → Leaf → Spine → Leaf → GPU',
+      numSU, leavesPerSU, numLeaf,
+      numL1Spine: numSpine,
+      numL2SuperSpine: 0,
+      numPods: 1,
+      leavesPerPod: numLeaf,
+      l1PerPod: numSpine,
+      minL1Required: minSpine,
+      minL2Required: 0,
+      leafDownlinks, leafUplinks, switchPorts, serversPerSU,
+      leafSpineCables,
+      spineSuperSpineCables: 0,
+      totalSwitchPorts: (numLeaf + numSpine) * switchPorts,
+      maxLeaves2Tier,
+      warnings
+    };
+  }
+
+  // 3-tier: pod size = leafUplinks leaves; each L1 uses half ports down / half up
+  const leavesPerPod = leafUplinks;
+  const numPods = Math.ceil(numLeaf / leavesPerPod);
+  const l1PerPod = leafUplinks;
+  const numL1Spine = numPods * l1PerPod;
+  const minL2 = Math.ceil(numL1Spine * leafUplinks / switchPorts);
+  const pickedL2 = pickSpineCount(minL2, spineCounts);
+  const numL2 = pickedL2.count;
+
+  if (!pickedL2.fromList) {
+    warnings.push(`Required ${minL2} L2 super-spines is outside model spineCounts; using ${numL2}.`);
+  }
+  if (numL2 > 0 && leafUplinks % numL2 !== 0) {
+    warnings.push(`L1 uplinks (${leafUplinks}) do not divide evenly across ${numL2} L2 super-spines.`);
+  }
+
+  const leafSpineCables = numLeaf * leafUplinks;
+  const spineSuperSpineCables = numL1Spine * leafUplinks;
+
+  return {
+    tiers: 3,
+    path: 'GPU → Leaf → L1 Spine → L2 Super-Spine → L1 Spine → Leaf → GPU',
+    numSU, leavesPerSU, numLeaf,
+    numL1Spine,
+    numL2SuperSpine: numL2,
+    numPods,
+    leavesPerPod,
+    l1PerPod,
+    minL1Required: l1PerPod * numPods,
+    minL2Required: minL2,
+    leafDownlinks, leafUplinks, switchPorts, serversPerSU,
+    leafSpineCables,
+    spineSuperSpineCables,
+    totalSwitchPorts: (numLeaf + numL1Spine + numL2) * switchPorts,
+    maxLeaves2Tier,
+    warnings
+  };
+}
+
 function calculateAndDraw() {
   const models = getAllModels();
   const switchType = document.getElementById('switchType').value;
@@ -502,8 +643,10 @@ function calculateAndDraw() {
   const networkCardType = document.getElementById('networkCardType').value;
   const numServers = parseInt(document.getElementById('numServers').value);
   const numNetworkCardsPerServer = parseInt(document.getElementById('numNetworkCardsPerServer').value);
+  const fabricTier = document.getElementById('fabricTier').value;
   const spineLeafDistance = parseInt(document.getElementById('spineLeafDistance').value);
   const leafNodeDistance = parseInt(document.getElementById('leafNodeDistance').value);
+  const superSpineDistance = parseInt(document.getElementById('superSpineDistance').value);
   const serversPerRow = parseInt(document.getElementById('serversPerRow').value);
   const diagramHeight = parseInt(document.getElementById('diagramHeight').value);
   const nodeRowSpacing = parseInt(document.getElementById('nodeRowSpacing').value);
@@ -514,47 +657,131 @@ function calculateAndDraw() {
   const managementNodeNics = parseInt(document.getElementById('managementNodeNics').value);
   const managementNodeConnection = document.getElementById('managementNodeConnection').value;
 
-  const switchPorts = model.ports;
-  const leafUplinks = model.leafUplinks;
-  const serversPerSU = model.serversPerSU;
-  const possibleSpineCounts = model.spineCounts;
+  if (!Number.isFinite(numServers) || numServers < 1) return;
 
-  const numSU = Math.ceil(numServers / serversPerSU);
-  const numLeafSwitchesPerSU = numNetworkCardsPerServer;
-  const numLeafSwitches = numSU * numLeafSwitchesPerSU;
-  const numSpineSwitches = possibleSpineCounts.find(c => c >= numLeafSwitches * leafUplinks / switchPorts);
-  const totalPorts = numLeafSwitches * switchPorts + numSpineSwitches * switchPorts;
-  const totalCables = numServers * numNetworkCardsPerServer + numLeafSwitches * numSpineSwitches + managementNodes.length * managementNodeNics;
-  const cablesPerLineLeafToSpine = Math.floor(leafUplinks / numSpineSwitches);
-  const cablesPerLineLeafToNode = 1;
+  const fabric = sizeFabric(model, numServers, numNetworkCardsPerServer, fabricTier);
+
+  const nodeCables = numServers * numNetworkCardsPerServer;
+  const managementCables = managementNodes.length * managementNodeNics;
+  const totalCables = nodeCables + fabric.leafSpineCables + fabric.spineSuperSpineCables + managementCables;
+
+  const denom = fabric.tiers === 2 ? fabric.numL1Spine : fabric.l1PerPod;
+  const cablesPerLeafSpinePair = denom ? fabric.leafUplinks / denom : 0;
+  const cablesPerLineLeafToSpine = Number.isInteger(cablesPerLeafSpinePair)
+    ? cablesPerLeafSpinePair
+    : `${Math.floor(cablesPerLeafSpinePair)}–${Math.ceil(cablesPerLeafSpinePair)}`;
+
+  const warningHtml = fabric.warnings.map(w =>
+    `<p style="color:#b03a2e"><strong>Warning:</strong> ${w}</p>`).join('');
+  const mgmtLeafNote = (managementNodeConnection === 'leaf' && managementCables > 0)
+    ? `<p style="color:#5d5d5d"><em>Note (NVIDIA SuperPOD): UFM/management on leaf consumes downlink ports; a full ${fabric.serversPerSU}-node SU is typically reduced (e.g. 32→31) to free those ports.</em></p>`
+    : '';
+  const tierBadge = fabric.tiers === 3
+    ? `<span style="display:inline-block;background:#1a472a;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.8em;">3-tier</span>`
+    : `<span style="display:inline-block;background:#2a623d;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.8em;">2-tier</span>`;
+
+  const l2Block = fabric.tiers === 3 ? `
+    <p><strong>Number of L2 Super-Spine Switches:</strong> ${fabric.numL2SuperSpine}
+      <span style="color:#5d5d5d;font-weight:normal">(min required ${fabric.minL2Required})</span></p>
+    <p><strong>Pods (L1 groups):</strong> ${fabric.numPods}
+      <span style="color:#5d5d5d;font-weight:normal">(≤${fabric.leavesPerPod} leaves / ${fabric.l1PerPod} L1 spines per pod)</span></p>
+  ` : '';
+
+  const cableBreakdown = `
+    <ul>
+      <li>Node → Leaf: ${nodeCables}</li>
+      <li>Leaf → L1 Spine: ${fabric.leafSpineCables}</li>
+      ${fabric.tiers === 3 ? `<li>L1 Spine → L2 Super-Spine: ${fabric.spineSuperSpineCables}</li>` : ''}
+      <li>Management: ${managementCables}</li>
+    </ul>`;
 
   document.getElementById('results').innerHTML = `
-    <p><strong>Switch Type:</strong> ${switchType}</p>
+    <p><strong>Switch Type:</strong> ${switchType} &nbsp; ${tierBadge}</p>
+    <p><strong>Fabric path:</strong> <code style="font-size:0.85em">${fabric.path}</code></p>
     <p><strong>Network Card Type:</strong> ${networkCardType}</p>
-    <p><strong>Number of Scalable Units (SUs):</strong> ${numSU}</p>
-    <p><strong>Number of Spine Switches:</strong> ${numSpineSwitches}</p>
-    <p><strong>Number of Leaf Switches:</strong> ${numLeafSwitches}</p>
+    <p><strong>Number of Scalable Units (SUs):</strong> ${fabric.numSU}</p>
+    <p><strong>Number of Leaf Switches:</strong> ${fabric.numLeaf}
+      <span style="color:#5d5d5d;font-weight:normal">(${fabric.leavesPerSU} per SU × ${fabric.numSU} SU; 2-tier max ≈ ${fabric.maxLeaves2Tier})</span></p>
+    <p><strong>Number of L1 Spine Switches:</strong> ${fabric.numL1Spine}
+      <span style="color:#5d5d5d;font-weight:normal">(min required ${fabric.minL1Required})</span></p>
+    ${l2Block}
+    <p><strong>Leaf port split:</strong> ${fabric.leafDownlinks} down / ${fabric.leafUplinks} up (of ${fabric.switchPorts})</p>
     <p><strong>Total number of servers:</strong> ${numServers}</p>
-    <p><strong>Total number of switch ports:</strong> ${totalPorts}</p>
+    <p><strong>Total number of switch ports:</strong> ${fabric.totalSwitchPorts}</p>
     <p><strong>Total number of cables:</strong> ${totalCables}</p>
+    ${cableBreakdown}
     <p><strong>Cables per line in diagram:</strong></p>
     <ul>
-      <li>Leaf to Spine: ${cablesPerLineLeafToSpine}</li>
-      <li>Leaf to Node: ${cablesPerLineLeafToNode}</li>
+      <li>Leaf to L1 Spine: ${cablesPerLineLeafToSpine}</li>
+      <li>Leaf to Node: 1</li>
     </ul>
-    <p><strong>Management Nodes:</strong> ${managementNodes.join(', ')}</p>
+    ${warningHtml}${mgmtLeafNote}
+    <p><strong>Management Nodes:</strong> ${managementNodes.join(', ') || '(none)'}</p>
     <p><strong>Management Node NICs:</strong> ${managementNodeNics}</p>
     <p><strong>Management Node Connection:</strong> ${managementNodeConnection}</p>
   `;
 
-  drawTopology(numSU, numSpineSwitches, numLeafSwitches, numServers, numNetworkCardsPerServer, serversPerSU, spineLeafDistance, leafNodeDistance, serversPerRow, diagramHeight, nodeRowSpacing, logoScale, logoCenterDistance, showLogo, managementNodes, managementNodeNics, managementNodeConnection);
+  drawTopology({
+    fabric,
+    numServers,
+    numNetworkCardsPerServer,
+    spineLeafDistance,
+    leafNodeDistance,
+    superSpineDistance,
+    serversPerRow,
+    diagramHeight,
+    nodeRowSpacing,
+    logoScale,
+    logoCenterDistance,
+    showLogo,
+    managementNodes,
+    managementNodeNics,
+    managementNodeConnection
+  });
 }
 
-function drawTopology(numSU, numSpine, numLeaf, numServers, numNetworkCardsPerServer, serversPerSU, spineLeafDistance, leafNodeDistance, serversPerRow, diagramHeight, nodeRowSpacing, logoScale, logoCenterDistance, showLogo, managementNodes, managementNodeNics, managementNodeConnection) {
+function drawLink(group, x1, y1, x2, y2, color, width) {
+  const midY = (y1 + y2) / 2;
+  group.append("path")
+    .attr("d", `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`)
+    .attr("fill", "none").attr("stroke", color).attr("stroke-width", width || 0.5);
+}
+
+function drawSwitchRow(nodesGroup, count, xFn, y, cls, labelFn, fill) {
+  nodesGroup.selectAll(`.${cls}`).data(d3.range(count)).join("rect")
+    .attr("class", cls).attr("x", d => xFn(d) - 30).attr("y", y)
+    .attr("width", 60).attr("height", 30).attr("rx", 4).attr("fill", fill);
+  nodesGroup.selectAll(`.${cls}-label`).data(d3.range(count)).join("text")
+    .attr("class", `${cls}-label`).attr("x", xFn).attr("y", y + 15)
+    .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+    .attr("font-size", "9px").attr("fill", PALETTE.white).text(labelFn);
+}
+
+function drawTopology(opts) {
+  const {
+    fabric, numServers, numNetworkCardsPerServer,
+    spineLeafDistance, leafNodeDistance, superSpineDistance,
+    serversPerRow, diagramHeight, nodeRowSpacing,
+    logoScale, logoCenterDistance, showLogo,
+    managementNodes, managementNodeNics, managementNodeConnection
+  } = opts;
+
+  const numSU = fabric.numSU;
+  const numLeaf = fabric.numLeaf;
+  const numL1 = fabric.numL1Spine;
+  const numL2 = fabric.numL2SuperSpine;
+  const is3 = fabric.tiers === 3;
+  const serversPerSU = fabric.serversPerSU;
+
+  const COMPACT_LEAF_THRESHOLD = 64;
+  const compact = numLeaf > COMPACT_LEAF_THRESHOLD;
+
   const minWidth = Math.min(window.innerWidth - 40, 1200);
-  const width = Math.max(minWidth, numLeaf * 80);
+  const width = Math.max(minWidth, Math.min(numLeaf, 48) * 80);
   const height = diagramHeight;
-  const spineY = 50;
+
+  const l2Y = 50;
+  const spineY = is3 ? l2Y + superSpineDistance : 50;
   const leafY = spineY + spineLeafDistance;
   const serverY = leafY + leafNodeDistance;
 
@@ -566,75 +793,168 @@ function drawTopology(numSU, numSpine, numLeaf, numServers, numNetworkCardsPerSe
   const connectionsGroup = svg.append("g").attr("class", "connections");
   const nodesGroup = svg.append("g").attr("class", "nodes");
 
-  const spineX = d => (width / (numSpine + 1)) * (d + 1);
-  nodesGroup.selectAll(".spine").data(d3.range(numSpine)).join("rect")
-    .attr("class", "spine").attr("x", d => spineX(d) - 30).attr("y", spineY)
-    .attr("width", 60).attr("height", 30).attr("rx", 4).attr("fill", PALETTE.greenDeep);
-  nodesGroup.selectAll(".spine-label").data(d3.range(numSpine)).join("text")
-    .attr("class", "spine-label").attr("x", spineX).attr("y", spineY + 15)
-    .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
-    .attr("font-size", "10px").attr("fill", PALETTE.white).text((d, i) => `Spine ${i + 1}`);
+  const evenly = (n) => (d) => (width / (n + 1)) * (d + 1);
+  const leafX = evenly(numLeaf);
+  const spineX = evenly(numL1);
+  const l2X = evenly(Math.max(numL2, 1));
 
-  const leafX = d => (width / (numLeaf + 1)) * (d + 1);
-  nodesGroup.selectAll(".leaf").data(d3.range(numLeaf)).join("rect")
-    .attr("class", "leaf").attr("x", d => leafX(d) - 30).attr("y", leafY)
-    .attr("width", 60).attr("height", 30).attr("rx", 4).attr("fill", PALETTE.greenDeep);
-  nodesGroup.selectAll(".leaf-label").data(d3.range(numLeaf)).join("text")
-    .attr("class", "leaf-label").attr("x", leafX).attr("y", leafY + 15)
-    .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
-    .attr("font-size", "10px").attr("fill", PALETTE.white).text((d, i) => `Leaf ${i + 1}`);
-
-  for (let l = 0; l < numLeaf; l++) {
-    for (let s = 0; s < numSpine; s++) {
-      const startX = spineX(s), startY = spineY + 30;
-      const endX = leafX(l), endY = leafY, midY = (startY + endY) / 2;
-      connectionsGroup.append("path")
-        .attr("d", `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`)
-        .attr("fill", "none").attr("stroke", PALETTE.grayMid).attr("stroke-width", 0.5);
+  if (is3 && numL2 > 0) {
+    if (compact) {
+      nodesGroup.append("rect")
+        .attr("x", width / 2 - 90).attr("y", l2Y).attr("width", 180).attr("height", 36)
+        .attr("rx", 4).attr("fill", PALETTE.black);
+      nodesGroup.append("text")
+        .attr("x", width / 2).attr("y", l2Y + 18)
+        .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+        .attr("font-size", "12px").attr("fill", PALETTE.white)
+        .text(`L2 Super-Spine × ${numL2}`);
+    } else {
+      drawSwitchRow(nodesGroup, numL2, l2X, l2Y, "l2", (d, i) => `L2-${i + 1}`, PALETTE.black);
     }
+    nodesGroup.append("text").attr("x", width / 2).attr("y", l2Y - 12)
+      .attr("text-anchor", "middle").attr("font-size", "13px").attr("font-weight", "bold")
+      .attr("fill", PALETTE.black).text("L2 Super-Spine Switches");
   }
 
+  if (compact) {
+    nodesGroup.append("rect")
+      .attr("x", width / 2 - 90).attr("y", spineY).attr("width", 180).attr("height", 36)
+      .attr("rx", 4).attr("fill", PALETTE.greenDeep);
+    nodesGroup.append("text")
+      .attr("x", width / 2).attr("y", spineY + 18)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+      .attr("font-size", "12px").attr("fill", PALETTE.white)
+      .text(`L1 Spine × ${numL1}`);
+  } else {
+    drawSwitchRow(nodesGroup, numL1, spineX, spineY, "spine",
+      (d, i) => is3 ? `L1-${i + 1}` : `Spine ${i + 1}`, PALETTE.greenDeep);
+  }
+  nodesGroup.append("text").attr("x", width / 2).attr("y", spineY - 12)
+    .attr("text-anchor", "middle").attr("font-size", "13px").attr("font-weight", "bold")
+    .attr("fill", PALETTE.black)
+    .text(is3 ? "L1 Spine Switches" : "Spine Switches");
+
+  if (compact) {
+    nodesGroup.append("rect")
+      .attr("x", width / 2 - 90).attr("y", leafY).attr("width", 180).attr("height", 36)
+      .attr("rx", 4).attr("fill", PALETTE.greenDeep);
+    nodesGroup.append("text")
+      .attr("x", width / 2).attr("y", leafY + 18)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+      .attr("font-size", "12px").attr("fill", PALETTE.white)
+      .text(`Leaf × ${numLeaf}`);
+  } else {
+    drawSwitchRow(nodesGroup, numLeaf, leafX, leafY, "leaf", (d, i) => `Leaf ${i + 1}`, PALETTE.greenDeep);
+  }
+  nodesGroup.append("text").attr("x", width / 2).attr("y", leafY - 12)
+    .attr("text-anchor", "middle").attr("font-size", "13px").attr("font-weight", "bold")
+    .attr("fill", PALETTE.black).text("Leaf Switches");
+
+  if (!compact) {
+    if (is3) {
+      for (let pod = 0; pod < fabric.numPods; pod++) {
+        const leafStart = pod * fabric.leavesPerPod;
+        const leafEnd = Math.min(leafStart + fabric.leavesPerPod, numLeaf);
+        const l1Start = pod * fabric.l1PerPod;
+        const l1End = l1Start + fabric.l1PerPod;
+        for (let l = leafStart; l < leafEnd; l++) {
+          for (let s = l1Start; s < l1End; s++) {
+            drawLink(connectionsGroup, spineX(s), spineY + 30, leafX(l), leafY, PALETTE.grayMid, 0.4);
+          }
+        }
+      }
+      for (let s = 0; s < numL1; s++) {
+        for (let c = 0; c < numL2; c++) {
+          drawLink(connectionsGroup, l2X(c), l2Y + 30, spineX(s), spineY, PALETTE.black, 0.35);
+        }
+      }
+    } else {
+      for (let l = 0; l < numLeaf; l++) {
+        for (let s = 0; s < numL1; s++) {
+          drawLink(connectionsGroup, spineX(s), spineY + 30, leafX(l), leafY, PALETTE.grayMid, 0.5);
+        }
+      }
+    }
+  } else {
+    const cx = width / 2;
+    if (is3) drawLink(connectionsGroup, cx, l2Y + 36, cx, spineY, PALETTE.black, 1.5);
+    drawLink(connectionsGroup, cx, spineY + 36, cx, leafY, PALETTE.grayMid, 1.5);
+  }
+
+  const MAX_DRAWN_SERVERS = 256;
+  const drawAllServers = numServers <= MAX_DRAWN_SERVERS;
+  const suDrawCount = drawAllServers ? numSU : 1;
+
   const serverWidth = 50, serverHeight = 20;
-  const serverSpacing = Math.min(60, width / (numSU * serversPerRow));
-  const totalRows = Math.ceil(numServers / serversPerRow);
-  const totalServerHeight = (totalRows - 1) * nodeRowSpacing;
+  const serverSpacing = Math.min(60, width / (Math.max(suDrawCount, 1) * serversPerRow));
+  const serversInFirstPass = drawAllServers
+    ? numServers
+    : Math.min(serversPerSU, numServers);
+  const totalRows = Math.ceil(Math.min(serversInFirstPass, serversPerSU) / serversPerRow);
+  const totalServerHeight = Math.max(1, (totalRows - 1) * nodeRowSpacing);
   const availableHeight = height - serverY - 60;
   const verticalScale = Math.min(1, availableHeight / totalServerHeight);
 
-  let lastNodeY = 0;
-  for (let su = 0; su < numSU; su++) {
-    for (let s = 0; s < Math.min(serversPerSU, numServers - su * serversPerSU); s++) {
-      const row = Math.floor(s / serversPerRow);
-      const col = s % serversPerRow;
-      const x = (width / numSU) * (su + 0.5) + (col - serversPerRow / 2 + 0.5) * serverSpacing;
-      const y = serverY + row * nodeRowSpacing * verticalScale;
-      lastNodeY = Math.max(lastNodeY, y);
+  let lastNodeY = serverY;
+  if (!compact || drawAllServers) {
+    for (let su = 0; su < suDrawCount; su++) {
+      const serversInSu = Math.min(serversPerSU, numServers - su * serversPerSU);
+      for (let s = 0; s < serversInSu; s++) {
+        const row = Math.floor(s / serversPerRow);
+        const col = s % serversPerRow;
+        const x = (width / suDrawCount) * (su + 0.5) + (col - serversPerRow / 2 + 0.5) * serverSpacing;
+        const y = serverY + row * nodeRowSpacing * verticalScale;
+        lastNodeY = Math.max(lastNodeY, y);
 
-      nodesGroup.append("rect")
-        .attr("x", x - serverWidth / 2).attr("y", y - serverHeight / 2)
-        .attr("width", serverWidth).attr("height", serverHeight)
-        .attr("rx", 5).attr("ry", 5).attr("fill", PALETTE.greenMid);
-      nodesGroup.append("text")
-        .attr("x", x).attr("y", y).attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle").attr("font-size", "8px")
-        .attr("fill", PALETTE.white).text(`Node ${su * serversPerSU + s + 1}`);
+        nodesGroup.append("rect")
+          .attr("x", x - serverWidth / 2).attr("y", y - serverHeight / 2)
+          .attr("width", serverWidth).attr("height", serverHeight)
+          .attr("rx", 5).attr("ry", 5).attr("fill", PALETTE.greenMid);
+        nodesGroup.append("text")
+          .attr("x", x).attr("y", y).attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle").attr("font-size", "8px")
+          .attr("fill", PALETTE.white).text(`Node ${su * serversPerSU + s + 1}`);
 
-      for (let nc = 0; nc < numNetworkCardsPerServer; nc++) {
-        const targetLeaf = su * numNetworkCardsPerServer + nc;
-        const startX = leafX(targetLeaf), startY = leafY + 30;
-        const endX = x, endY = y - serverHeight / 2, midY = (startY + endY) / 2;
-        connectionsGroup.append("path")
-          .attr("d", `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`)
-          .attr("fill", "none").attr("stroke", PALETTE.grayLight).attr("stroke-width", 0.5);
+        if (!compact) {
+          for (let nc = 0; nc < numNetworkCardsPerServer; nc++) {
+            const targetLeaf = su * numNetworkCardsPerServer + nc;
+            if (targetLeaf < numLeaf) {
+              drawLink(connectionsGroup, leafX(targetLeaf), leafY + 30, x, y - serverHeight / 2, PALETTE.grayLight, 0.5);
+            }
+          }
+        }
       }
     }
+  } else {
+    nodesGroup.append("rect")
+      .attr("x", width / 2 - 100).attr("y", serverY).attr("width", 200).attr("height", 40)
+      .attr("rx", 5).attr("fill", PALETTE.greenMid);
+    nodesGroup.append("text")
+      .attr("x", width / 2).attr("y", serverY + 20)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+      .attr("font-size", "12px").attr("fill", PALETTE.white)
+      .text(`Servers × ${numServers} (${numSU} SU)`);
+    drawLink(connectionsGroup, width / 2, leafY + 36, width / 2, serverY, PALETTE.grayLight, 1.5);
+    lastNodeY = serverY + 40;
   }
+
+  if (!drawAllServers && !compact) {
+    nodesGroup.append("text")
+      .attr("x", width / 2).attr("y", lastNodeY + 28)
+      .attr("text-anchor", "middle").attr("font-size", "11px").attr("fill", PALETTE.grayMid)
+      .text(`Showing 1 of ${numSU} SUs (${numServers} servers total) — diagram simplified`);
+    lastNodeY += 20;
+  }
+
+  nodesGroup.append("text").attr("x", width / 2).attr("y", serverY - 20)
+    .attr("text-anchor", "middle").attr("font-size", "13px").attr("font-weight", "bold")
+    .attr("fill", PALETTE.black).text("Servers");
 
   const managementNodeWidth = 70, managementNodeHeight = 30;
   const managementNodeY = lastNodeY + nodeRowSpacing;
   const totalConnections = managementNodes.length * managementNodeNics;
-  const targetSwitches = managementNodeConnection === 'spine' ? numSpine : numLeaf;
-  const switchesToConnect = Math.min(totalConnections, targetSwitches);
+  const targetSwitches = managementNodeConnection === 'spine' ? numL1 : numLeaf;
+  const switchesToConnect = Math.min(totalConnections, Math.max(targetSwitches, 1));
 
   managementNodes.forEach((nodeName, index) => {
     const x = (width / (managementNodes.length + 1)) * (index + 1);
@@ -647,38 +967,35 @@ function drawTopology(numSU, numSpine, numLeaf, numServers, numNetworkCardsPerSe
       .attr("dominant-baseline", "middle").attr("font-size", "10px")
       .attr("fill", PALETTE.white).text(nodeName);
 
-    for (let nic = 0; nic < managementNodeNics; nic++) {
-      let targetSwitch;
-      if (managementNodeConnection === 'spine')
-        targetSwitch = spineX(numSpine - switchesToConnect + index * managementNodeNics + nic);
-      else
-        targetSwitch = leafX(numLeaf - switchesToConnect + index * managementNodeNics + nic);
-      const startX = x, startY = managementNodeY - managementNodeHeight / 2;
-      const endX = targetSwitch;
-      const endY = managementNodeConnection === 'spine' ? spineY + 30 : leafY + 30;
-      const midY = (startY + endY) / 2;
-      connectionsGroup.append("path")
-        .attr("d", `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`)
-        .attr("fill", "none").attr("stroke", PALETTE.grayMid).attr("stroke-width", 1);
+    if (!compact) {
+      for (let nic = 0; nic < managementNodeNics; nic++) {
+        const off = index * managementNodeNics + nic;
+        const spineIdx = Math.max(0, Math.min(numL1 - 1, numL1 - switchesToConnect + off));
+        const leafIdx = Math.max(0, Math.min(numLeaf - 1, numLeaf - switchesToConnect + off));
+        const endX = managementNodeConnection === 'spine' ? spineX(spineIdx) : leafX(leafIdx);
+        const endY = managementNodeConnection === 'spine' ? spineY + 30 : leafY + 30;
+        drawLink(connectionsGroup, x, managementNodeY - managementNodeHeight / 2, endX, endY, PALETTE.grayMid, 1);
+      }
     }
   });
 
-  nodesGroup.append("text").attr("x", width / 2).attr("y", 30)
-    .attr("text-anchor", "middle").attr("font-size", "14px").attr("font-weight", "bold").attr("fill", PALETTE.black).text("Spine Switches");
-  nodesGroup.append("text").attr("x", width / 2).attr("y", leafY - 20)
-    .attr("text-anchor", "middle").attr("font-size", "14px").attr("font-weight", "bold").attr("fill", PALETTE.black).text("Leaf Switches");
-  nodesGroup.append("text").attr("x", width / 2).attr("y", serverY - 20)
-    .attr("text-anchor", "middle").attr("font-size", "14px").attr("font-weight", "bold").attr("fill", PALETTE.black).text("Servers");
-
-  const suWidth = width / numSU;
-  for (let su = 0; su < numSU; su++) {
-    connectionsGroup.append("rect")
-      .attr("x", suWidth * su).attr("y", 10).attr("width", suWidth)
-      .attr("height", managementNodeY + managementNodeHeight / 2 + 30)
-      .attr("fill", "none").attr("stroke", PALETTE.grayLight).attr("stroke-width", 2).attr("stroke-dasharray", "5,5");
+  if (!compact && numSU <= 16) {
+    const suWidth = width / numSU;
+    for (let su = 0; su < numSU; su++) {
+      connectionsGroup.append("rect")
+        .attr("x", suWidth * su).attr("y", 10).attr("width", suWidth)
+        .attr("height", managementNodeY + managementNodeHeight / 2 + 30 - 10)
+        .attr("fill", "none").attr("stroke", PALETTE.grayLight).attr("stroke-width", 2).attr("stroke-dasharray", "5,5");
+      nodesGroup.append("text")
+        .attr("x", suWidth * (su + 0.5)).attr("y", managementNodeY + managementNodeHeight / 2 + 25)
+        .attr("text-anchor", "middle").attr("font-size", "14px").attr("font-weight", "bold")
+        .attr("fill", PALETTE.black).text(`SU${su + 1}`);
+    }
+  } else if (is3) {
     nodesGroup.append("text")
-      .attr("x", suWidth * (su + 0.5)).attr("y", managementNodeY + managementNodeHeight / 2 + 25)
-      .attr("text-anchor", "middle").attr("font-size", "14px").attr("font-weight", "bold").attr("fill", PALETTE.black).text(`SU${su + 1}`);
+      .attr("x", width / 2).attr("y", managementNodeY + managementNodeHeight / 2 + 25)
+      .attr("text-anchor", "middle").attr("font-size", "12px").attr("fill", PALETTE.grayMid)
+      .text(`${fabric.numPods} pod(s) · ${numSU} SU · ${fabric.path}`);
   }
 
   if (showLogo) {
