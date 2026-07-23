@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPU RDMA 高速共享存储容量计算器 — WEKA / GPFS / VAST / DDN / Ceph</title>
+<style>
+  :root {
+    --bg: #f8f9fc;
+    --card: #ffffff;
+    --border: #e2e5ed;
+    --text: #1a1d26;
+    --text-secondary: #5e6273;
+    --accent: #2563eb;
+    --accent-light: #eef2ff;
+    --green: #059669;
+    --red: #dc2626;
+    --orange: #ea580c;
+    --purple: #7c3aed;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    color: var(--text);
+  }
+  body { margin: 0; background: var(--bg); min-height: 100vh; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 6px; display: flex; align-items: center; gap: 10px; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0 0 28px; }
+
+  /* cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; margin: 0 0 16px; color: var(--text); }
+
+  /* form */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+  .form-group input, .form-group select {
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 15px; font-family: inherit; color: var(--text); background: #fff;
+    transition: border-color .15s;
+  }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s;
+  }
+  .btn:hover { background: #1d4ed8; }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+  /* results */
+  .results-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+  .summary-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px;
+    border-radius: 20px; font-size: 12px; font-weight: 600;
+  }
+  .badge-blue { background: var(--accent-light); color: var(--accent); }
+  .badge-green { background: #ecfdf5; color: var(--green); }
+  .badge-purple { background: #f5f3ff; color: var(--purple); }
+  .badge-orange { background: #fff7ed; color: var(--orange); }
+  .badge-red { background: #fef2f2; color: var(--red); }
+
+  /* table */
+  .table-wrapper { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f1f5; }
+  tr:last-child td { border-bottom: none; }
+  .vendor-col { font-weight: 700; font-size: 14px; white-space: nowrap; }
+  .vendor-weka { color: #2563eb; }
+  .vendor-gpfs { color: #7c3aed; }
+  .vendor-vast { color: #059669; }
+  .vendor-ddn  { color: #ea580c; }
+  .vendor-ceph { color: #dc2626; }
+  tr.best { background: #f0fdf6; }
+  .rec-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+  .rec-best { background: #d1fae5; color: #065f46; }
+  .rec-good { background: #dbeafe; color: #1e40af; }
+
+  /* architecture section */
+  .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .arch-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 20px;
+  }
+  .arch-card h4 { font-size: 14px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 6px; }
+  .arch-card ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
+  .arch-card li { margin-bottom: 4px; }
+  .meter { height: 6px; border-radius: 3px; background: #e5e7eb; margin-top: 8px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+
+  /* quick presets */
+  .presets { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .preset {
+    padding: 5px 12px; border: 1px solid var(--border); border-radius: 16px;
+    font-size: 12px; cursor: pointer; background: #fff; color: var(--text-secondary);
+    transition: all .15s; white-space: nowrap;
+  }
+  .preset:hover { border-color: var(--accent); color: var(--accent); }
+  .preset.active { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .container { padding: 16px 12px 40px; }
+    .card { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+
+  .note { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .tooltip-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: #e5e7eb; font-size: 10px; cursor: help; margin-left: 4px; font-weight: 700; }
+  .highlight { font-weight: 700; }
+  .chart-container { height: 300px; margin: 12px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <h1>🧭 GPU RDMA 高速共享存储容量计算器</h1>
+  <p class="subtitle">
+    基于 <a href="https://docs.weka.io/planning-and-installation/bare-metal/planning-a-weka-system-installation" target="_blank">WEKA</a> /
+    <a href="https://www.ibm.com/docs/en/storage-scale-ece" target="_blank">GPFS (IBM Storage Scale ECE)</a> /
+    <a href="https://vastdata.com" target="_blank">VAST Data</a> /
+    <a href="https://www.ddn.com/products/exascaler" target="_blank">DDN EXAScaler</a> /
+    <a href="https://ceph.io" target="_blank">Ceph</a> 的容量规划公式，输入需求即可获得节点数、架构建议。
+  </p>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">📋 输入参数</div>
+
+    <div class="presets" id="presets">
+      <span style="font-size:12px;color:var(--text-secondary);line-height:28px;margin-right:4px;">快速预设：</span>
+      <button class="preset active" data-preset="medium">中型集群 (600TB)</button>
+      <button class="preset" data-preset="large">大型集群 (3PB)</button>
+      <button class="preset" data-preset="xlarge">超大规模 (10PB)</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>目标可用容量 (Usable Storage)
+          <span class="tooltip-icon" title="你需要实际存储用户数据的容量，扣除所有冗余/校验/热备后的净容量">?</span>
+        </label>
+        <input type="number" id="usableTB" value="600" min="1" step="1">
+      </div>
+      <div class="form-group">
+        <label>冗余策略 (Redundancy Policy)
+          <span class="tooltip-icon" title="数据保护方式：纠删码(EC) 如 8+3 表示 8个数据块+3个校验块；副本 如 3-way 表示每份数据存 3 份">?</span>
+        </label>
+        <select id="redundancy">
+          <optgroup label="纠删码 — 常用">
+            <option value="4+2">4+2 (66.7% 效率，2 容错)</option>
+            <option value="6+2">6+2 (75% 效率，2 容错)</option>
+            <option value="8+2" selected>8+2 (80% 效率，2 容错) ★推荐</option>
+            <option value="8+3">8+3 (72.7% 效率，3 容错)</option>
+            <option value="16+2">16+2 (88.9% 效率，2 容错)</option>
+            <option value="16+3">16+3 (84.2% 效率，3 容错)</option>
+            <option value="16+4">16+4 (80% 效率，4 容错)</option>
+          </optgroup>
+          <optgroup label="纠删码 — 高冗余">
+            <option value="9+6">9+6 (60% 效率，6 容错)</option>
+          </optgroup>
+          <optgroup label="复制 (Replication)">
+            <option value="2way">2-Way Replica (50% 效率)</option>
+            <option value="3way">3-Way Replica (33% 效率)</option>
+            <option value="4way">4-Way Replica (25% 效率)</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>每节点 NVMe 盘位数
+          <span class="tooltip-icon" title="单台存储服务器可容纳的 NVMe U.2/E3.S 盘位数量">?</span>
+        </label>
+        <input type="number" id="nvmeBays" value="24" min="2" max="48" step="1">
+      </div>
+      <div class="form-group">
+        <label>单盘 NVMe 容量 (TB)
+          <span class="tooltip-icon" title="单块 NVMe SSD 的标称容量（如 15.36TB、30.72TB）">?</span>
+        </label>
+        <select id="nvmeSize">
+          <option value="3.84">3.84 TB</option>
+          <option value="7.68">7.68 TB</option>
+          <option value="15.36" selected>15.36 TB ★推荐</option>
+          <option value="30.72" selected>30.72 TB ★推荐</option>
+          <option value="61.44">61.44 TB</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>热备数量 (Hot Spare)
+          <span class="tooltip-icon" title="预留的故障域数量，用于故障后重建。默认 1，大集群可设 2">?</span>
+        </label>
+        <input type="number" id="hotSpare" value="2" min="1" max="4" step="1">
+      </div>
+      <div class="form-group">
+        <label>故障域数量 (Failure Domains)
+          <span class="tooltip-icon" title="物理隔离的故障域（如机架数）。每个机架内的服务器共享电源/交换机，构成一个故障域。0=自动">?</span>
+        </label>
+        <input type="number" id="failureDomains" value="0" min="0" max="50" step="1" placeholder="0 = 自动">
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <span class="note">💡 提示：修改任意参数后自动重算。推荐 24 盘/节点 × 30.72TB NVMe + 8+2 EC 获得最佳性价比。</span>
+    </div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card">
+    <div class="results-header">
+      <div class="card-title" style="margin-bottom:0;">📊 计算结果对比</div>
+      <div class="summary-bages" id="summaryBadges"></div>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>存储系统</th>
+            <th>适用冗余</th>
+            <th>净效率</th>
+            <th>需裸容量 (TB)</th>
+            <th>需 NVMe 盘数</th>
+            <th>需存储节点数</th>
+            <th>每节点裸容 (TB)</th>
+            <th>推荐网络</th>
+            <th>评级</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
+    <div id="chartContainer" style="margin-top: 16px; height: 260px;">
+      <canvas id="comparisonChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Architecture Recommendations -->
+  <div class="card">
+    <div class="card-title">🏗️ 架构建议</div>
+    <div class="arch-grid" id="archGrid"></div>
+  </div>
+
+  <!-- OEM Server Model Recommendations -->
+  <div class="card">
+    <div class="card-title">🖥️ 市场主流 OEM 存储服务器型号推荐</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin:0 0 16px;" id="oemSubtitle">
+      基于当前参数的厂商机型匹配。对于计算出的节点数，以下型号均可满足 GPU RDMA 存储部署要求。
+    </p>
+    <div class="table-wrapper">
+      <table id="oemTable">
+        <thead>
+          <tr><th>厂商</th><th>型号</th><th>规格</th><th>NVMe 盘位</th><th>最大裸容/节点</th><th>CPU 平台</th><th>网络插槽</th><th>适用场景</th><th>参考估价</th></tr>
+        </thead>
+        <tbody id="oemBody"></tbody>
+      </table>
+    </div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;">
+      ⚠️ 估价为 2025-2026 年不含 SSD 的机箱+CPU+内存基础配置参考价。实际价格请咨询厂商或渠道商。
+    </div>
+  </div>
+
+  <!-- Formula Reference -->
+  <div class="card">
+    <div class="card-title">📐 计算公式参考</div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>系统</th><th>净容量计算公式</th><th>来源</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="vendor-col vendor-weka">WEKA</td>
+            <td><code>Net = Raw × D/(D+P+HotSpare) × 0.90</code></td>
+            <td><a href="https://docs.weka.io/weka-system-overview/cluster-capacity-and-redundancy-management#ssd-net-storage-capacity-calculation" target="_blank">WEKA 官方文档</a></td>
+          </tr>
+          <tr>
+            <td class="vendor-col vendor-gpfs">GPFS ECE</td>
+            <td><code>Net = Raw × D/(D+P) × 0.88</code>（含文件系统开销约 12%）</td>
+            <td><a href="https://www.ibm.com/docs/en/storage-scale-ece/5.1.4?topic=features-raid-codes" target="_blank">IBM 官方 / Oracle OCI 验证</a></td>
+          </tr>
+          <tr>
+            <td class="vendor-col vendor-vast">VAST Data</td>
+            <td><code>Net = Raw × D/(D+P) × 0.91</code>（D=36~146, P=4, 含 9% 预留）</td>
+            <td><a href="https://support.vastdata.com/hc/en-us/articles/360036872354-Understanding-VAST-Capacity" target="_blank">VAST 官方</a></td>
+          </tr>
+          <tr>
+            <td class="vendor-col vendor-ddn">DDN EXAScaler</td>
+            <td><code>Net = Raw × (Drives−2)/Drives × 0.90</code>（硬件 RAID6 8+2）</td>
+            <td><a href="https://itctshop.com/product/ddn-exascaler/" target="_blank">DDN 产品文档</a></td>
+          </tr>
+          <tr>
+            <td class="vendor-col vendor-ceph">Ceph</td>
+            <td><code>Net = Raw × D/(D+P) × 0.85</code>（含 OSD/MON/MDS 开销约 15%）</td>
+            <td><a href="https://docs.ceph.com/en/latest/rados/operations/erasure-code/" target="_blank">Ceph 官方文档</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ========== Core Calculation Logic ==========
+
+const VENDORS = {
+  weka: {
+    name: 'WEKA (NeuralMesh)',
+    cls: 'vendor-weka',
+    desc: '全闪分布式并行文件系统，原生 RDMA，D+P 分布式保护',
+    minNodes: 6,
+    supportsEC: true,
+    supportsRepl: false,
+    calcNetEfficiency(D, P, hotSpare) {
+      return (D / (D + P + hotSpare)) * 0.90;
+    },
+    getArchNotes(nodes, drives, usableTB, rawTB, nvmeBays, nvmeSize, D, P, hotSpare, fd) {
+      const ramPerNode = Math.ceil(Math.max(128, rawTB / nodes * 1024 / 2000 + 80));
+      return [
+        { label: '最低节点数', value: `6 (生产环境推荐 ≥${Math.max(6, nodes)})` },
+        { label: '每节点内存建议', value: `≥ ${ramPerNode} GB (含前端/计算/驱动进程)` },
+        { label: '网络建议', value: 'InfiniBand NDR 400Gbps 或 RoCEv2 200Gbps' },
+        { label: 'CPU 建议', value: `≥ ${Math.max(16, nvmeBays + 8)} 物理核 (1 Drive 进程/盘)` },
+        { label: '故障域建议', value: fd > 0 ? `${fd} 个机架，每架 ${Math.ceil(nodes/fd)} 节点` : `每节点独立故障域，${nodes} 个` },
+        { label: '重建时间', value: '分钟级（全集群并行重建，节点越多越快）' },
+      ];
+    }
+  },
+  gpfs: {
+    name: 'GPFS / IBM Storage Scale ECE',
+    cls: 'vendor-gpfs',
+    desc: '企业级并行文件系统，Reed-Solomon EC，支持 RDMA',
+    minNodes: 4,
+    supportsEC: true,
+    supportsRepl: true,
+    calcNetEfficiency(D, P, hotSpare) {
+      return (D / (D + P)) * 0.88;
+    },
+    getArchNotes(nodes, drives, usableTB, rawTB, nvmeBays, nvmeSize, D, P, hotSpare, fd) {
+      const ramPerNode = Math.ceil(Math.max(128, rawTB / nodes * 0.15 + 64));
+      return [
+        { label: '最低节点数', value: `4 (生产环境推荐 ≥${Math.max(4, nodes)}，与 Quorum 有关)` },
+        { label: '恢复组 (RG)', value: fd > 0 ? `${fd} 个 RG，每 RG ${Math.ceil(nodes/fd)} 节点` : `1 个 RG，${nodes} 节点` },
+        { label: '每节点内存建议', value: `≥ ${ramPerNode} GB` },
+        { label: '网络建议', value: 'InfiniBand HDR 200Gbps 或 NDR 400Gbps (数据面)；10GbE (管理面)' },
+        { label: '元数据策略', value: '建议元数据 3-Way Replica（占容量 2%），数据层用 EC' },
+        { label: '备注', value: '支持 SMB/NFS/S3 协议节点独立部署' },
+      ];
+    }
+  },
+  vast: {
+    name: 'VAST Data',
+    cls: 'vendor-vast',
+    desc: '分解式共享架构 (DASE)，超宽 EC (D+P, P=4)，全局重删压缩',
+    minNodes: 4,
+    supportsEC: true,
+    supportsRepl: false,
+    calcNetEfficiency(D, P, hotSpare) {
+      // VAST uses wide stripes: D = 36~146, P = 4
+      // For smaller clusters D is smaller; we estimate based on total drives
+      return (D / (D + P)) * 0.91;
+    },
+    getArchNotes(nodes, drives, usableTB, rawTB, nvmeBays, nvmeSize, D, P, hotSpare, fd) {
+      // VAST splits into D-Box (storage) and C-Node (compute)
+      const dboxCount = Math.ceil(drives / nvmeBays);
+      const cnodeCount = Math.max(3, Math.ceil(nodes * 0.3));
+      return [
+        { label: 'D-Box (存储节点)', value: `${dboxCount} 台，每台 ${nvmeBays} 盘 × ${nvmeSize}TB` },
+        { label: 'C-Node (计算节点)', value: `${cnodeCount} 台（协议服务 + 元数据）` },
+        { label: '架构模式', value: '分解式共享一切 (DASE)，计算与存储分离' },
+        { label: 'EC 效率', value: `${D}+${P} 超宽条带，保护开销仅 ${(P/(D+P)*100).toFixed(1)}%` },
+        { label: '数据缩减', value: '全局相似性重删+压缩，典型 1.5~3:1（AI/EDA 可更高）' },
+        { label: '网络建议', value: 'NVMe-oF RoCEv2 100/200Gbps 或 InfiniBand' },
+        { label: '备注', value: '仅支持 NVMe SSD；Optane 已停产，推荐 Kioxia FL6 替代' },
+      ];
+    }
+  },
+  ddn: {
+    name: 'DDN EXAScaler (Lustre)',
+    cls: 'vendor-ddn',
+    desc: 'Lustre 商业发行版，硬件 RAID6，GPUDirect Storage',
+    minNodes: 2,
+    supportsEC: true,
+    supportsRepl: false,
+    calcNetEfficiency(D, P, hotSpare) {
+      // DDN typically uses hardware RAID6: 8+2 per enclosure
+      const raidD = 8, raidP = 2;
+      return (raidD / (raidD + raidP)) * 0.90;
+    },
+    getArchNotes(nodes, drives, usableTB, rawTB, nvmeBays, nvmeSize, D, P, hotSpare, fd) {
+      const ossCount = Math.max(2, Math.ceil(nodes * 0.7));
+      const mdsCount = Math.max(2, Math.ceil(nodes * 0.2));
+      return [
+        { label: 'OSS 节点', value: `${ossCount} 台（对象存储服务）` },
+        { label: 'MDS 节点', value: `${mdsCount} 台（元数据服务，建议 HA 配对）` },
+        { label: 'RAID 配置', value: `硬件 RAID6 (8+2)，每 OSS 按 ${nvmeBays} 盘分组` },
+        { label: 'GPUDirect Storage', value: '✅ 原生支持，直通 GPU 显存绕过 CPU' },
+        { label: '网络建议', value: 'InfiniBand NDR 400Gbps (数据面)；25GbE (管理面)' },
+        { label: '备注', value: 'NVIDIA DGX SuperPOD 官方推荐；大文件顺序 IO 优化' },
+      ];
+    }
+  },
+  ceph: {
+    name: 'Ceph (EC Pool)',
+    cls: 'vendor-ceph',
+    desc: '开源分布式存储，纠删码池，需配置 RDMA 支持',
+    minNodes: 3,
+    supportsEC: true,
+    supportsRepl: true,
+    calcNetEfficiency(D, P, hotSpare) {
+      return (D / (D + P)) * 0.85;
+    },
+    getArchNotes(nodes, drives, usableTB, rawTB, nvmeBays, nvmeSize, D, P, hotSpare, fd) {
+      return [
+        { label: 'MON 节点', value: '3~5 台（可与 OSD 混合部署）' },
+        { label: 'OSD 配置', value: `每盘 1 OSD 进程，共 ${drives} OSD` },
+        { label: 'CRUSH Map', value: `建议按 ${fd > 0 ? fd : 'rack'} 配置故障域` },
+        { label: '网络建议', value: 'RoCEv2 100Gbps 或 InfiniBand (需手动配置 RDMA Messenger)' },
+        { label: '备注', value: '开源免费；小文件/随机 IO 性能弱于商业方案；运维复杂度高' },
+      ];
+    }
+  }
+};
+
+function parseRedundancy(val) {
+  // Returns { type: 'ec'|'repl', D: number, P: number, label: string }
+  if (val.endsWith('way')) {
+    const repl = parseInt(val);
+    return { type: 'repl', D: 1, P: repl - 1, label: `${repl}-Way Replication` };
+  }
+  const [d, p] = val.split('+').map(Number);
+  return { type: 'ec', D: d, P: p, label: `${d}+${p} EC` };
+}
+
+function getVAST_D(totalDrives) {
+  // VAST dynamically adjusts stripe width based on cluster size
+  // D ranges from 36 to 146, P is always 4
+  if (totalDrives <= 40) return 36;
+  if (totalDrives <= 80) return 72;
+  if (totalDrives <= 150) return 110;
+  return 146;
+}
+
+function calculate() {
+  const usableTB = parseFloat(document.getElementById('usableTB').value) || 500;
+  const nvmeBays = parseInt(document.getElementById('nvmeBays').value) || 12;
+  const nvmeSize = parseFloat(document.getElementById('nvmeSize').value) || 15.36;
+  const hotSpare = parseInt(document.getElementById('hotSpare').value) || 1;
+  let fd = parseInt(document.getElementById('failureDomains').value) || 0;
+  const redundancy = parseRedundancy(document.getElementById('redundancy').value);
+
+  // Update summary badges
+  const summaryEl = document.getElementById('summaryBadges');
+  summaryEl.innerHTML = `
+    <span class="badge badge-blue">目标可用: ${usableTB.toLocaleString()} TB</span>
+    <span class="badge badge-purple">冗余: ${redundancy.label}</span>
+    <span class="badge badge-green">${nvmeBays} 盘/节点 × ${nvmeSize} TB</span>
+    <span class="badge ${hotSpare > 1 ? 'badge-orange' : 'badge-green'}">热备: ${hotSpare}</span>
+  `;
+
+  const results = [];
+
+  for (const [key, vendor] of Object.entries(VENDORS)) {
+    let D, P, hotSpareUsed;
+
+    if (key === 'vast') {
+      // VAST always uses wide EC; estimate based on cluster size
+      const estimatedTotalDrives = Math.ceil(usableTB / (nvmeSize * 0.85));
+      D = getVAST_D(estimatedTotalDrives);
+      P = 4;
+      hotSpareUsed = 0;
+    } else if (key === 'ddn') {
+      // DDN uses hardware RAID6
+      D = 8; P = 2; hotSpareUsed = 0;
+    } else if (key === 'ceph') {
+      if (redundancy.type === 'repl') {
+        D = 1; P = redundancy.P;
+      } else {
+        D = redundancy.D; P = redundancy.P;
+      }
+      hotSpareUsed = 0;
+    } else {
+      // WEKA and GPFS use the selected redundancy
+      if (redundancy.type === 'repl') {
+        D = 1; P = redundancy.P;
+        hotSpareUsed = (key === 'weka') ? hotSpare : 0;
+      } else {
+        D = redundancy.D; P = redundancy.P;
+        hotSpareUsed = (key === 'weka') ? hotSpare : 0;
+      }
+    }
+
+    // Check if this redundancy scheme is supported
+    const eff = vendor.calcNetEfficiency(D, P, hotSpareUsed);
+    const rawNeeded = usableTB / eff;
+    const drivesNeeded = Math.ceil(rawNeeded / nvmeSize);
+    let nodesNeeded = Math.ceil(drivesNeeded / nvmeBays);
+    // Enforce minimum nodes
+    nodesNeeded = Math.max(vendor.minNodes, nodesNeeded);
+    // Recalculate drives based on node count
+    const actualDrives = nodesNeeded * nvmeBays;
+    const actualRaw = actualDrives * nvmeSize;
+    const actualUsable = actualRaw * eff;
+
+    // Calculate failure domains
+    if (fd === 0) fd = Math.max(1, Math.floor(nodesNeeded / 2));
+    const actualFd = Math.min(fd, nodesNeeded);
+
+    // Network recommendation
+    let network;
+    if (nvmeSize >= 30.72 || rawNeeded > 5000) {
+      network = 'IB NDR 400Gbps';
+    } else if (rawNeeded > 1000) {
+      network = 'IB HDR/NDR 200Gbps';
+    } else {
+      network = 'IB HDR 200Gbps / RoCEv2 100Gbps';
+    }
+
+    results.push({
+      key, vendor, D, P, hotSpareUsed, eff, rawNeeded, drivesNeeded, nodesNeeded,
+      actualDrives, actualRaw, actualUsable, network, fd: actualFd
+    });
+  }
+
+  // Find best (fewest nodes)
+  const minNodes = Math.min(...results.map(r => r.nodesNeeded));
+  results.forEach(r => r.isBest = r.nodesNeeded === minNodes);
+
+  // Render table
+  const tbody = document.getElementById('resultsBody');
+  tbody.innerHTML = results.map(r => `
+    <tr class="${r.isBest ? 'best' : ''}">
+      <td class="vendor-col ${r.vendor.cls}">${r.vendor.name}</td>
+      <td>${r.key === 'vast' ? `${r.D}+${r.P}` : r.key === 'ddn' ? 'RAID6 8+2' : r.key === 'ceph' && redundancy.type === 'repl' ? `${redundancy.P+1}-Way Repl` : `${r.D}+${r.P}`}</td>
+      <td class="highlight">${(r.eff * 100).toFixed(1)}%</td>
+      <td>${r.actualRaw.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+      <td>${r.actualDrives}</td>
+      <td class="highlight">${r.nodesNeeded}</td>
+      <td>${(r.actualRaw / r.nodesNeeded).toFixed(1)}</td>
+      <td>${r.network}</td>
+      <td>${r.isBest ? '<span class="rec-badge rec-best">★ 最优</span>' : '<span class="rec-badge rec-good"> 可行</span>'}</td>
+    </tr>
+  `).join('');
+
+  // Render architecture cards
+  const archGrid = document.getElementById('archGrid');
+  archGrid.innerHTML = results.map(r => {
+    const notes = r.vendor.getArchNotes(r.nodesNeeded, r.actualDrives, usableTB, r.actualRaw, nvmeBays, nvmeSize, r.D, r.P, hotSpare, r.fd);
+    return `
+      <div class="arch-card">
+        <h4 class="${r.vendor.cls}">
+          ${r.isBest ? '★ ' : ''}${r.vendor.name} — ${r.nodesNeeded} 节点方案
+        </h4>
+        <p style="font-size:12px;color:var(--text-secondary);margin:0 0 10px;">${r.vendor.desc}</p>
+        <ul>
+          <li><strong>实际可用容量:</strong> ${r.actualUsable.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} TB (超过目标 ${((r.actualUsable/usableTB - 1)*100).toFixed(0)}%)</li>
+          <li><strong>实际裸容量:</strong> ${r.actualRaw.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} TB</li>
+          <li><strong>配置:</strong> ${r.nodesNeeded} 节点 × ${nvmeBays} 盘 × ${nvmeSize} TB</li>
+          ${notes.map(n => `<li><strong>${n.label}:</strong> ${n.value}</li>`).join('')}
+        </ul>
+        <div class="meter"><div class="meter-fill" style="width:${Math.min(100, (r.actualUsable/r.actualRaw)*100)}%;background:${r.isBest ? 'var(--green)' : 'var(--accent)'};"></div></div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">裸容→可用 效率: ${(r.eff*100).toFixed(1)}%</div>
+      </div>
+    `;
+  }).join('');
+
+  // Render OEM server model table
+  renderOEMTable(nvmeBays, nvmeSize);
+
+  // Render chart
+  renderChart(results);
+}
+
+function renderChart(results) {
+  const canvas = document.getElementById('comparisonChart');
+  const ctx = canvas.getContext('2d');
+
+  // Destroy existing chart
+  if (window._chart) window._chart.destroy();
+
+  window._chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: results.map(r => r.vendor.name),
+      datasets: [
+        {
+          label: '需存储节点数',
+          data: results.map(r => r.nodesNeeded),
+          backgroundColor: results.map(r => r.isBest ? 'rgba(5,150,105,0.7)' : 'rgba(37,99,235,0.6)'),
+          borderColor: results.map(r => r.isBest ? '#059669' : '#2563eb'),
+          borderWidth: 1,
+          borderRadius: 6,
+          order: 1,
+        },
+        {
+          label: '净效率 (%)',
+          data: results.map(r => parseFloat((r.eff * 100).toFixed(1))),
+          type: 'line',
+          borderColor: '#ea580c',
+          backgroundColor: 'rgba(234,88,12,0.1)',
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointBackgroundColor: '#ea580c',
+          tension: 0.2,
+          yAxisID: 'y1',
+          order: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + (ctx.dataset.yAxisID === 'y1' ? '%' : ' 台') } }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: '节点数' },
+          beginAtZero: true,
+          ticks: { stepSize: 1 }
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: '净效率 (%)' },
+          min: 0,
+          max: 100,
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+}
+
+// ========== OEM Server Model Data ==========
+
+const OEM_MODELS = [
+  // Dell
+  { vendor: 'Dell', model: 'PowerEdge R7725xd', form: '2U', bays24U2: 24, baysE3S: 0, maxBays: 24, interface: 'U.2 Gen5 x4', cpu: '2× AMD EPYC 9005', netSlots: '2 OCP 3.0 + 4 PCIe 5.0', scenario: 'WEKA / DDN / VAST 存储节点首推', priceLow: '¥12-18万', priceScaling: '每节点不含盘' },
+  { vendor: 'Dell', model: 'PowerEdge R7625', form: '2U', bays24U2: 24, baysE3S: 0, maxBays: 24, interface: 'U.2 Gen4 x4', cpu: '2× AMD EPYC 9004', netSlots: '2 OCP 3.0 + 4 PCIe 5.0', scenario: '成本敏感型存储节点', priceLow: '¥10-14万', priceScaling: '每节点不含盘' },
+  { vendor: 'Dell', model: 'PowerEdge R760xd2', form: '2U', bays24U2: 0, baysE3S: 0, maxBays: 24, interface: 'SAS/SATA (非全闪)', cpu: '2× Intel Xeon 5th Gen', netSlots: 'OCP 3.0 + 3 PCIe 5.0', scenario: 'HDD+SAS SSD 混合冷存储', priceLow: '¥8-12万', priceScaling: '每节点不含盘' },
+
+  // Supermicro
+  { vendor: 'Supermicro', model: 'SSG-222B-NE3X24R', form: '2U', bays24U2: 0, baysE3S: 24, maxBays: 32, interface: 'E3.S Gen5 x4', cpu: '2× Intel Xeon 6 6700', netSlots: '2 AIOM + 3 PCIe 5.0', scenario: '高性能全闪 WEKA/Ceph 节点', priceLow: '¥10-15万', priceScaling: '每节点不含盘' },
+  { vendor: 'Supermicro', model: 'SSG-229J-5BE36JBF', form: '2U', bays24U2: 36, baysE3S: 0, maxBays: 36, interface: 'U.2 Gen5 x4 + Bluefield-3', cpu: '2× Intel Xeon 5th Gen', netSlots: 'Bluefield-3 DPU + 2 AIOM', scenario: 'NVMe-oF 加速（含 DPU）', priceLow: '¥15-22万', priceScaling: '含 DPU 每节点' },
+  { vendor: 'Supermicro', model: 'ASG-2115S-NE332R', form: '2U', bays24U2: 0, baysE3S: 32, maxBays: 32, interface: 'E3.S Gen5 x4', cpu: '1× AMD EPYC 9005', netSlots: '2 AIOM + 2 PCIe 5.0', scenario: 'AMD 单路高密度存储', priceLow: '¥9-13万', priceScaling: '每节点不含盘' },
+
+  // HPE
+  { vendor: 'HPE', model: 'ProLiant DL380 Gen12', form: '2U', bays24U2: 0, baysE3S: 36, maxBays: 36, interface: 'E3.S Gen5 x4', cpu: '2× Intel Xeon 6', netSlots: 'OCP 3.0 + 3 PCIe 5.0', scenario: '企业级 EC 存储池首选', priceLow: '¥14-20万', priceScaling: '每节点不含盘' },
+  { vendor: 'HPE', model: 'ProLiant DL340 Gen12', form: '1U', bays24U2: 0, baysE3S: 36, maxBays: 36, interface: 'E3.S Gen5 x4', cpu: '2× Intel Xeon 6', netSlots: 'OCP 3.0 + 6 PCIe 5.0', scenario: '1U 高密度节省机架空间', priceLow: '¥12-18万', priceScaling: '每节点不含盘' },
+
+  // Lenovo
+  { vendor: 'Lenovo', model: 'ThinkSystem SR665 V3', form: '2U', bays24U2: 24, baysE3S: 40, maxBays: 40, interface: 'E3.S/U.2 Gen5', cpu: '2× AMD EPYC 9004', netSlots: 'OCP 3.0 + 4 PCIe 5.0', scenario: 'AMD 双路大容量存储', priceLow: '¥11-16万', priceScaling: '每节点不含盘' },
+  { vendor: 'Lenovo', model: 'ThinkSystem SR650 V3', form: '2U', bays24U2: 24, baysE3S: 0, maxBays: 24, interface: 'U.2 Gen5 x4', cpu: '2× Intel Xeon 5th Gen', netSlots: 'OCP 3.0 + 3 PCIe 5.0', scenario: 'Intel 平台标准化部署', priceLow: '¥10-15万', priceScaling: '每节点不含盘' },
+
+  // Inspur
+  { vendor: 'Inspur 浪潮', model: 'NF5280M7', form: '2U', bays24U2: 24, baysE3S: 24, maxBays: 24, interface: 'U.2 / E3.S Gen5', cpu: '2× Intel Xeon 4/5th Gen', netSlots: '2 OCP 3.0 + 14 PCIe 5.0', scenario: '国产化/信创 首选平台', priceLow: '¥8-12万', priceScaling: '每节点不含盘' },
+  { vendor: 'Inspur 浪潮', model: 'NF5680M7', form: '4U', bays24U2: 0, baysE3S: 0, maxBays: 48, interface: 'U.2 Gen5 (GPU+存储)', cpu: '2× Intel Xeon 5th Gen', netSlots: '2 OCP 3.0 + 8 PCIe 5.0', scenario: '4U GPU+NVMe 混合节点', priceLow: '¥18-28万', priceScaling: '含 GPU 插槽每节点' },
+
+  // Huawei
+  { vendor: 'Huawei 华为', model: 'FusionServer 2288H V7', form: '2U', bays24U2: 24, baysE3S: 0, maxBays: 24, interface: 'U.2 Gen5 x4', cpu: '2× Intel Xeon 4/5th Gen', netSlots: 'OCP 3.0 + 4 PCIe 5.0', scenario: '信创 / 自主可控场景', priceLow: '¥9-14万', priceScaling: '每节点不含盘' },
+  { vendor: 'Huawei 华为', model: 'TaiShan 200 (Kunpeng)', form: '2U', bays24U2: 24, baysE3S: 0, maxBays: 24, interface: 'U.2 Gen4 x4', cpu: '2× Kunpeng 920 ARM', netSlots: 'OCP 3.0 + 4 PCIe 4.0', scenario: 'ARM 架构信创部署', priceLow: '¥10-15万', priceScaling: '每节点不含盘' },
+
+  // Gigabyte
+  { vendor: 'Gigabyte', model: 'R282-Z9G', form: '2U', bays24U2: 24, baysE3S: 0, maxBays: 24, interface: 'U.2 Gen4 x4', cpu: '2× AMD EPYC 9004', netSlots: 'OCP 3.0 + 4 PCIe 5.0', scenario: 'ODM 白牌/定制化方案', priceLow: '¥7-11万', priceScaling: '每节点不含盘' },
+];
+
+function renderOEMTable(nvmeBays, nvmeSize) {
+  // Update subtitle
+  document.getElementById('oemSubtitle').textContent =
+    '基于当前参数（' + nvmeBays + ' 盘/节点，' + nvmeSize + ' TB/盘）匹配的厂商机型。对于计算出的节点数，以下型号在物理规格、NVMe 背板、网卡兼容性上均可满足 GPU RDMA 存储部署要求。';
+
+  // Filter models that can accommodate the selected bay count
+  const matched = OEM_MODELS.filter(m => m.maxBays >= nvmeBays);
+  // Sort by relevance: prefer models whose maxBays is closest to nvmeBays (less wasted)
+  matched.sort((a, b) => {
+    const wasteA = a.maxBays - nvmeBays;
+    const wasteB = b.maxBays - nvmeBays;
+    return wasteA - wasteB;
+  });
+
+  const rawPerNode = nvmeBays * nvmeSize;
+
+  const oemBody = document.getElementById('oemBody');
+  if (matched.length === 0) {
+    oemBody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-secondary);">没有找到满足 ' + nvmeBays + ' 盘位的成熟 OEM 型号，建议联系厂商定制方案</td></tr>';
+    return;
+  }
+
+  oemBody.innerHTML = matched.slice(0, 12).map((m, i) => {
+    // Calculate actual bay count used (capped at model max)
+    const actualBays = Math.min(nvmeBays, m.maxBays);
+    const rawCapPerNode = (actualBays * nvmeSize).toFixed(1);
+    const rank = i === 0 ? '<span class="rec-badge rec-best">★ 最佳匹配</span>' : '';
+    return '<tr' + (i === 0 ? ' class="best"' : '') + '>' +
+      '<td style="font-weight:700;">' + m.vendor + '</td>' +
+      '<td>' + rank + ' ' + m.model + '</td>' +
+      '<td style="font-size:12px;">' + m.form + ' / ' + m.interface + '</td>' +
+      '<td class="highlight">' + actualBays + ' / ' + m.maxBays + ' Max</td>' +
+      '<td>' + rawCapPerNode + ' TB</td>' +
+      '<td style="font-size:11px;">' + m.cpu + '</td>' +
+      '<td style="font-size:11px;">' + m.netSlots + '</td>' +
+      '<td style="font-size:11px;">' + m.scenario + '</td>' +
+      '<td style="font-size:11px;white-space:nowrap;">' + m.priceLow + '<br><small>' + m.priceScaling + '</small></td>' +
+      '</tr>';
+  }).join('');
+}
+
+// Initialize
+document.querySelectorAll('#usableTB, #nvmeBays, #nvmeSize, #hotSpare, #failureDomains, #redundancy').forEach(el => {
+  el.addEventListener('input', calculate);
+  el.addEventListener('change', calculate);
+});
+
+document.querySelectorAll('.preset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.preset').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const preset = btn.dataset.preset;
+    const configs = {
+      medium: { usable: 600,  nvmeBays: 24, nvmeSize: 30.72, redundancy: '8+2',  hotSpare: 2 },
+      large:  { usable: 3072, nvmeBays: 24, nvmeSize: 30.72, redundancy: '8+3',  hotSpare: 2 },
+      xlarge: { usable: 10240,nvmeBays: 24, nvmeSize: 61.44, redundancy: '16+3', hotSpare: 3 },
+    };
+    const c = configs[preset];
+    document.getElementById('usableTB').value = c.usable;
+    document.getElementById('nvmeBays').value = c.nvmeBays;
+    document.getElementById('nvmeSize').value = c.nvmeSize;
+    document.getElementById('redundancy').value = c.redundancy;
+    document.getElementById('hotSpare').value = c.hotSpare;
+    calculate();
+  });
+});
+
+// Initialize
+calculate();
+</script>
+</body>
+</html>
