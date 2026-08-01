@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Trending: reverse-skill - AI-Powered Reverse Engineering & Security Skill Router"
+date: 2026-08-01 00:00:00 +0800
+categories: [Security, AI-Tools, Reverse-Engineering]
+tags: [reverse-engineering, penetration-testing, security-research, AI-agents, Claude-Code, skill-routing]
+---
+
+What if your AI coding assistant could automatically detect when you're working on a binary, an APK, or a CTF challenge — and instantly route you to the right tools, methodologies, and workflows? That's precisely what **reverse-skill** delivers. Created by developer zhaoxuya520, this ambitious open-source project is a "skill router pack" purpose-built for cybersecurity work, bridging the gap between AI coding agents and the specialized tooling that reverse engineering and penetration testing demand. It ships with a self-evolving knowledge base that grows smarter with each use, making it more than just a static toolkit — it's a living security companion.
+
+Under the hood, reverse-skill is primarily built in PowerShell with a modular architecture that supports on-demand toolchain bootstrapping. Rather than requiring users to pre-install every possible security tool, the package intelligently detects what's needed for a given task — whether it's binary analysis, frontend JavaScript deobfuscation, or a CTF sandbox environment — and provisions the appropriate toolchain automatically. The skills directory houses a growing collection of methodology-driven workflows, while the CTF-Sandbox-Orchestrator and burp-mcp-full components provide turnkey environments for capture-the-flag competitions and web application testing respectively. With **10,701 ⭐** (+335 today) and 1,652 forks, the community traction speaks volumes about the hunger for AI-native security tooling.
+
+Feature highlights include seamless integration with leading AI clients — Claude Code, Kiro, Cursor, Cline, and others are all supported out of the box. The Kali subsystem provides a ready-made environment for penetration testing operations, while dedicated Burp Suite MCP integration connects web security testing directly into the AI workflow. Dual-language documentation (English and Chinese) broadens accessibility, and the ops contracts system defines clear, repeatable playbooks that agents follow — transforming ad-hoc security tinkering into structured, auditable processes. For CTF players, the sandbox orchestrator spins up challenge environments with minimal friction.
+
+The surge of interest in reverse-skill reflects a broader wave: the convergence of AI agents and cybersecurity is no longer theoretical. As more security researchers and pentesters adopt AI-assisted workflows, purpose-built "skill packs" like this one eliminate the friction of context-switching between AI assistants and specialized tooling. It's a glimpse at what the next generation of security tooling looks like — where the AI agent doesn't just answer questions, but actively participates in the technical work. URL: https://github.com/zhaoxuya520/reverse-skill
