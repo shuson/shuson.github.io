@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Trending: Anthropic-Cybersecurity-Skills - 817 Structured Security Skills to Arm Your AI Agents"
+date: 2026-08-20 00:00:00 +0800
+categories: [Cybersecurity, AI, Open Source]
+tags: [security-automation, threat-hunting, MITRE-ATT&CK, NIST-CSF, AI-agents, agentskills]
+---
+
+Anthropic Cybersecurity Skills is an independent, community-driven library that packages 817 production-grade cybersecurity capabilities into structured skill files that any AI agent can execute. Created by developer Mukul Mahipal (mukul975) and released under Apache 2.0, it's the largest open-source skills library purpose-built for the emerging ecosystem of agentic coding tools — and after being added to the official agentskills.io hub, it has rocketed to GitHub's #1 trending spot. The core pitch is disarmingly simple: a junior security analyst knows which Volatility3 plugin to run on a suspicious memory dump, which Sigma rules catch Kerberoasting, and how to scope a cloud breach across three providers — your AI agent doesn't, unless you give it these skills.
+
+Built primarily in Python with a skill packaging layer that follows the agentskills.io open standard, the repository spans 29 security domains and maps across six industry frameworks: MITRE ATT&CK (805 skill mappings), NIST CSF 2.0 (804), MITRE D3FEND (139), NIST AI RMF (97), MITRE F3 Fight Fraud (94), and MITRE ATLAS (93). Each skill is a self-contained, structured markdown file — agent-parseable, framework-tagged, and organized by domain — so your agent can load exactly what it needs for a given investigation without context-window bloat. The library sits at 29,831 stars ⭐ with 3,535 forks and has been surging on trending all week.
+
+Feature highlights include coverage across threat intelligence, incident response, malware analysis, cloud forensics, OSINT, red-teaming, penetration testing, and DevSecOps pipelines. It works out of the box with Claude Code, GitHub Copilot, OpenAI Codex CLI, Cursor, Gemini CLI, and over 20 other AI platforms — clone the repo, point your agent at the `skills/` directory, and it gains expert-level guidance instantly. Each skill includes a canonical description, MITRE technique IDs, relevant NIST CSF categories, and step-by-step procedure blocks. The project also ships with ATTACK_COVERAGE.md tracking framework alignment, a full CITATION.cff, and community translations including a French README.
+
+Why it's trending: this repo crystallizes the moment where AI agents move from "can your AI write code?" to "can your AI perform a forensic memory dump, trace lateral movement, and map findings to MITRE ATT&CK?" By giving every agent — Claude Code, Copilot, Codex — a shared, standards-backed security skillset, it lowers the barrier from "you need a dedicated SOC team" to "clone this repo and ask your agent to triage the alert." For red teams, blue teams, and everyone in between, it's the skills library the agent ecosystem has been waiting for. URL: https://github.com/mukul975/Anthropic-Cybersecurity-Skills
